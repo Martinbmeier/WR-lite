@@ -12,6 +12,13 @@ options.register( 'isSignal',
                   "True when running over signal MC samples"
                )
 
+options.register( 'nEvents',
+                  -1,
+                  VarParsing.multiplicity.singleton,
+                  VarParsing.varType.int,
+                  "Number of events. Default is all events (-1)"
+               )
+
 options.register( 'genTrainData',
 				  False,
 				  VarParsing.multiplicity.singleton,
@@ -92,11 +99,12 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mcRun2_asymptotic_v3') #
 if not options.isMC: process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_v10')
 
 
-
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.nEvents) )
 process.source = cms.Source ("PoolSource",
-	  fileNames = cms.untracked.vstring (options.inputFiles),
+	  fileNames = cms.untracked.vstring ('root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/079C3FC4-8835-394B-8E54-1C67DFAE7E8D.root',
+ 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/0B4D0775-CC78-904D-A4B0-6B755608ABB5.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/0D86B53B-2397-EE40-9A96-8115D6A754C2.root'),
 )
-
 
 
 process.options = cms.untracked.PSet(
@@ -233,10 +241,8 @@ elif options.era == '2018':
       SkipWarnings = False)
 
 
-
 #process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
 #                           * process.muonSelectionSeq * process.analysis )#* process.printTree)
 process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
                            * process.muonSelectionSeq * process.prefiringweight * process.analysis )#* process.printTree)
-
 
