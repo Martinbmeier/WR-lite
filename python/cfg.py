@@ -240,16 +240,6 @@ elif options.era == '2018':
       PrefiringRateSystematicUncty = cms.double(0.2),
       SkipWarnings = False)
 
-process.printTree = cms.EDAnalyzer("ParticleTreeDrawer",
-                                   src = cms.InputTag("prunedGenParticles"),    
-                                   printP4 = cms.untracked.bool(False),
-                                   printPtEtaPhi = cms.untracked.bool(False),
-                                   printVertex = cms.untracked.bool(False),
-                                   printStatus = cms.untracked.bool(False),
-                                   printIndex = cms.untracked.bool(True),
-#                                   status = cms.untracked.vint32( 3 )
-                                   )
-
 
 #process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
 #                           * process.muonSelectionSeq * process.analysis )#* process.printTree)
