@@ -351,6 +351,9 @@ WR_MASS_PLOT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		math::XYZTLorentzVector jetsPlusLeadLeptonP4Boost;
 		math::XYZTLorentzVector jetsPlusSubLeptonP4Boost;
 		
+		std::string  cSV_bTag1      = "pfDeepCSVJetTags:probb";
+		std::string  cSV_bTag2      = "pfDeepCSVJetTags:probbb";
+		
 		//Get jets with maximum pt, match with gen if not background
 		for(std::vector<pat::Jet>::const_iterator iJet = recoJetsAK4->begin(); iJet != recoJetsAK4->end(); iJet++) {
 			//Make sure jets are not around leptons
@@ -362,7 +365,8 @@ WR_MASS_PLOT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			double NumConst =            iJet->chargedMultiplicity()+iJet->neutralMultiplicity();
 			double MUF      =            iJet->muonEnergyFraction();
 			double EUF      =            iJet->electronEnergyFraction();
-			double CHM      =            iJet->chargedMultiplicity(); 
+			double CHM      =            iJet->chargedMultiplicity();
+			double BJP	=	     iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2); 
 			//APPLYING TIGHT QUALITY CUTS
 			if (NHF > .9) continue;
 			if (NEMF > .9) continue;
@@ -374,6 +378,7 @@ WR_MASS_PLOT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			if (CHM == 0) continue;
 			//if (CEMF > .99) continue;
 			if (CEMF > .90)  continue; 
+			if (BJP < 0.4184) continue;
 			
 			if (jetCount == 0) {
 				leadJet = &(*(iJet));
@@ -728,6 +733,7 @@ WR_MASS_PLOT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 				myRECOevent.leadRecoMuonDR,
 				myRECOevent.leadRecoMuonPt/myRECOevent.fullRecoMassMuon}};
 				
+				
 				//Neural network output
 				double predictOut[1][1] = {{0.0}};
 				
@@ -752,6 +758,7 @@ WR_MASS_PLOT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 				} else {
 					myRECOevent.nnSuperResolvedPickedSubLeadMuon = true;
 				}
+				
 				
 				//Check whether the muons passed reco
 				myRECOevent.checkCutsMuon();
