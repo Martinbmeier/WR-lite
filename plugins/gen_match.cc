@@ -1,3 +1,19 @@
+// -*- C++ -*-
+//
+// Package:    ExoAnalysis/gen_match
+// Class:      gen_match
+//
+/**\class gen_match gen_match.cc ExoAnalysis/gen_match/plugins/gen_match.cc
+ Description: [one line class summary]
+ Implementation:
+     [Notes on implementation]
+*/
+//
+// Original Author:  Andrew Evans
+//         Created:  Mon, 14 Oct 2019 19:43:16 GMT
+//
+//
+
 // system include files
 #include <memory>
 #include <fstream>
@@ -160,92 +176,8 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	
 	myRECOevent.hasPVertex = myEvent.PVselection(vertices);
 	
-	//Extract Gen information for later matching in signal region
-	if(!background){		
-		edm::Handle<std::vector<reco::GenParticle>> genParticles;
-		iEvent.getByToken(m_genParticleToken, genParticles);
-
-		//LOOP OVER GEN PARTICLES
-		//9900024 WR 9900014 NRu 9900012 NRe 9900016 NRt
-		const reco::GenParticle* neutrino = 0;
-		const reco::GenParticle* lepton1   = 0;
-		const reco::GenParticle* lepton2      = 0;
-		std::vector<const reco::GenParticle*> decayQuarks; 
-    
-		for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
-			if( ! iParticle->isHardProcess() ) continue;  //ONLY HARD PROCESS AND NOT INCOMING
-			if( iParticle->status() == 21 ) continue;
-				    std::cout << "STATUS: " << iParticle->status() << " PDGID: " << iParticle->pdgId() << " MOTHER: " << iParticle->mother()->pdgId() << std::endl;
-			if( abs( iParticle->mother()->pdgId() ) <= 6 || abs( iParticle->mother()->pdgId() ) == 9900024 || abs( iParticle->mother()->pdgId()) == 34) {//CAME FROM A QUARK(VIRTUAL WR) OR A WR OR A HEAVY W
-				if( abs( iParticle->pdgId() ) == 13 || abs( iParticle->pdgId() ) == 11 ) //HERE'S A LEPtON
-					lepton1 = &(*iParticle);
-				if( abs( iParticle->pdgId() ) == 9900014 || abs( iParticle->pdgId() ) == 9900012) //HERE'S A RIGHT-HANDED NEUTRINO
-					neutrino = &(*iParticle);
-			}
-			if( (abs( iParticle->mother()->pdgId() ) == 9900014) 
-			 || (abs( iParticle->mother()->pdgId() ) == 9900012)
-			  ) {//CAME FROM A RIGHT-HANDED NEUTRINO
-				if( abs( iParticle->pdgId() ) == 13 || abs( iParticle->pdgId() ) == 11 ) {
-					std::cout << "IN HERE" << std::endl;
-					std::cout << "STATUS: " << iParticle->status() << " PDGID: " << iParticle->pdgId() << " MOTHER: " << iParticle->mother()->pdgId() << std::endl;
-					lepton2 = &(*iParticle);
-				}
-			}
-			if( (abs( iParticle->mother()->pdgId() ) == 9900014) 
-			 || (abs( iParticle->mother()->pdgId() ) == 9900012)
-			 || (abs( iParticle->mother()->pdgId() ) == 34)
-			 || (abs( iParticle->mother()->pdgId() ) == 9900024)
-			  ) {//CAME FROM A RIGHT-HANDED NEUTRINO
-				if( abs( iParticle->pdgId() ) <= 6 ) {//WR DECAY QUARKS
-					std::cout << "IN THERE" << std::endl;
-					std::cout << "STATUS: " << iParticle->status() << " PDGID: " << iParticle->pdgId() << " MOTHER: " << iParticle->mother()->pdgId() << std::endl;
-					decayQuarks.push_back(&(*(iParticle)));
-				}
-			}
-		}
-	
-		if ((neutrino == 0) || (lepton1 == 0) || (lepton2 == 0) || (decayQuarks.size() != 2)) {
-			std::cout << "WARNING: EVENT NOT UNDERSTOOD" << std::endl;
-			for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
-				if( ! iParticle->isHardProcess() ) continue;  //ONLY HARD PROCESS AND NOT INCOMING
-				std::cout << "STATUS: " << iParticle->status() << " PDGID: " << iParticle->pdgId() << " MOTHER: " << iParticle->mother()->pdgId() << std::endl;
-			}
-			return;  
-		}
-		
-		std::cout << "Gen lepton1: " << lepton1->p4() << ", "<< lepton1->pt() << std::endl;
-		std::cout << "Gen lepton2: " << lepton2->p4() << ", "<< lepton2->pt() << std::endl;
-		std::cout << "Gen quark1: " << decayQuarks[0]->p4() << ", "<< decayQuarks[0]->pt() << std::endl;
-		std::cout << "Gen quark2: " << decayQuarks[1]->p4() << ", "<< decayQuarks[1]->pt() << std::endl;
-		
-		//Save gen information to the event object
-		myRECOevent.quark1Eta = decayQuarks[0]->eta();
-		myRECOevent.quark1Phi = decayQuarks[0]->phi();
-		myRECOevent.quark1Mass = decayQuarks[0]->p4().mass();
-		myRECOevent.quark1Pt = decayQuarks[0]->pt();
-
-		myRECOevent.quark2Eta = decayQuarks[1]->eta();
-		myRECOevent.quark2Phi = decayQuarks[1]->phi();
-		myRECOevent.quark2Mass = decayQuarks[1]->p4().mass();
-		myRECOevent.quark2Pt = decayQuarks[1]->pt();
-
-		myRECOevent.lepton1Eta = lepton1->eta();
-		myRECOevent.lepton1Phi = lepton1->phi();
-		myRECOevent.lepton1Mass = lepton1->p4().mass();
-		myRECOevent.lepton1Pt = lepton1->pt();
-		myRECOevent.lepton1Id = lepton1->pdgId();
-		
-		myRECOevent.lepton2Eta = lepton2->eta();
-		myRECOevent.lepton2Phi = lepton2->phi();
-		myRECOevent.lepton2Mass = lepton2->p4().mass();
-		myRECOevent.lepton2Pt = lepton2->pt();
-		myRECOevent.lepton2Id = lepton2->pdgId();
-		
-		myRECOevent.WRMass = (decayQuarks[0]->p4()+decayQuarks[1]->p4()+lepton2->p4()+ lepton1->p4()).mass();
-		myRECOevent.NMass = (decayQuarks[0]->p4()+decayQuarks[1]->p4()+lepton2->p4()).mass();
-		
 	//Extract gen information for background events to determine distribution	
-	} else {
+	
 		edm::Handle<std::vector<reco::GenParticle>> genParticles;
 		iEvent.getByToken(m_genParticleToken, genParticles);
 
@@ -291,11 +223,9 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		} else {
 			myRECOevent.tauGen = true;
 		}	
-	}
 	
-	if(!background && abs(myRECOevent.lepton1Id)!=abs(myRECOevent.lepton2Id)){ //Two different leptons
-		myRECOevent.mixedLeptons = true;    
-	} else { //start doing reco
+	
+ //start doing reco
 	
 		//NOW THAT WE HAVE THE REAL PARTICLES, WE'LL GET THE RECO PARTICLES AND MATCH THEM
 		
@@ -536,8 +466,8 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 				//Check whether the event passes the reco cuts which filter background
 				myRECOevent.checkCutsElectron();
 				
-				//Collect information on matced leptons if background
-				if(!background){
+				//Collect information on matced leptons
+				
 					myRECOevent.matchedElectronleadJsubJRecoMass = (matchedElectron->p4() + leadJet->p4() + subleadJet->p4()).mass();
 					myRECOevent.electron1RecoMass = (leadJet->p4() + subleadJet->p4() + matchedElectronL1->p4()).mass();
 					myRECOevent.electron2RecoMass = (leadJet->p4() + subleadJet->p4() + matchedElectron->p4()).mass();
@@ -601,12 +531,12 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 					if(myRECOevent.nMinusOneFailElectron.size()==0 && m_genTrainData){
 						saveElectronData(&myRECOevent, (matchedElectronL1->p4() + leadJet->p4() + subleadJet->p4()).mass(),(matchedElectron->p4() + leadJet->p4() + subleadJet->p4()).mass());
 					}	
-				}
+				
 			}	
      	}
 			
 		//Perform reco on muons
-		if(background || (abs(myRECOevent.lepton1Id) == 13 && (abs(myRECOevent.lepton2Id) == 13))) {
+		if(abs(myRECOevent.lepton1Id) == 13 && (abs(myRECOevent.lepton2Id) == 13)) {
 			myRECOevent.twoMuons = true;
 			
 			edm::Handle<std::vector<pat::Muon>> highMuons;
@@ -708,49 +638,12 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 				
 				myRECOevent.leadRecoMuonDR = sqrt(dR2(leadMuon->eta(), combinedJetsP4.eta(), leadMuon->phi(), combinedJetsP4.phi()));
 				myRECOevent.leadRecoMuonEtaWR = (leadMuon->p4()+allParticlesP4Boost).eta();
-				
-				//Neural network input
-				double predictIn[1][8] = {{myRECOevent.subRecoMuonEta,
-				myRECOevent.subRecoMuonEtaWR,
-				myRECOevent.subRecoMuonDR,
-				myRECOevent.subRecoMuonPt/myRECOevent.fullRecoMassMuon, 
-				myRECOevent.leadRecoMuonEta,
-				myRECOevent.leadRecoMuonEtaWR,
-				myRECOevent.leadRecoMuonDR,
-				myRECOevent.leadRecoMuonPt/myRECOevent.fullRecoMassMuon}};
-				
-				
-				//Neural network output
-				double predictOut[1][1] = {{0.0}};
-				
-				//Resolved network prediction
-				std::cout << "resolved" << std::endl;
-				networkResolved.predict(&predictIn[0][0], &predictOut[0][0], 1);
-				
-				
-				if(predictOut[0][0]==1.0){
-					myRECOevent.nnResolvedPickedLeadMuon = true;
-				} else {
-					myRECOevent.nnResolvedPickedSubLeadMuon = true;
-				}
-				
-				//Super Resolved network prediction
-				std::cout << "super resolved" << std::endl;
-				networkSuperResolved.predict(&predictIn[0][0], &predictOut[0][0], 1);
-
-				
-				if(predictOut[0][0]==1.0){
-					myRECOevent.nnSuperResolvedPickedLeadMuon = true;
-				} else {
-					myRECOevent.nnSuperResolvedPickedSubLeadMuon = true;
-				}
-				
-				
+		
 				//Check whether the muons passed reco
 				myRECOevent.checkCutsMuon();
 				
 				//Extract information on matched muons if not background
-				if(!background){
+				
 					myRECOevent.matchedMuonleadJsubJRecoMass = (matchedMuon->p4() + leadJet->p4() + subleadJet->p4()).mass();
 					myRECOevent.muon1RecoMass = (matchedMuonL1->p4()+leadJet->p4() + subleadJet->p4()).mass();
 					myRECOevent.muon2RecoMass = (matchedMuon->p4()+leadJet->p4() + subleadJet->p4()).mass();
@@ -812,7 +705,7 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 					if (myRECOevent.nMinusOneFailMuon.size()==0 && m_genTrainData){
 						saveMuonData(&myRECOevent, (matchedMuonL1->p4() + leadJet->p4() + subleadJet->p4()).mass(),(matchedMuon->p4() + leadJet->p4() + subleadJet->p4()).mass());
 					}	
-				}
+				
 			}		
 		}
 		
@@ -832,7 +725,7 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		} else if(background && leadJet != 0 && subleadJet != 0 && leadMuon != 0 && leadElectron != 0 && subleadElectron == 0 && subleadMuon != 0){
 			myRECOevent.extraLeptons = true;
 		}
-	}
+	
 	//Fill the histograms
     m_allEvents.fill(myRECOevent);
 
