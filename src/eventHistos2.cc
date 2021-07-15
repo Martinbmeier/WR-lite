@@ -177,14 +177,16 @@ void eventHistos2::fill(eventBits2& event) {
 int iSize;
 
 if(event.twoMuons){
-	if(!event.failedMatch){
-		m_matchStatus[0]->Fill("matched",1);
+
 		m_numRecoMuons[0]->Fill(event.muonRecoCount);
 		m_numGenMuons[0]->Fill(event.muonGenCount);
 		m_numRecoElectrons[0]->Fill(event.electronRecoCount);
 		m_numGenElectrons[0]->Fill(event.electronGenCount);
 		m_genMinusRecoMuons[0]->Fill(event.muonGenCount-event.muonRecoCount);
 		m_genMinusRecoElectrons[0]->Fill(event.electronGenCount-event.electronRecoCount);
+
+	if(!event.failedMatch){
+		m_matchStatus[0]->Fill("matched",1);
 
 
 		m_genMuonPt[0]->Fill(event.lepton1Pt);
@@ -285,14 +287,17 @@ if(event.twoMuons){
 } 
 	
 if(event.twoElectrons){
-	if(!event.failedMatch){
-		m_matchStatus[1]->Fill("matched",1);
+
 		m_numRecoMuons[1]->Fill(event.muonRecoCount);
 		m_numGenMuons[1]->Fill(event.muonGenCount);
 		m_numRecoElectrons[1]->Fill(event.electronRecoCount);
 		m_numGenElectrons[1]->Fill(event.electronGenCount);
 		m_genMinusRecoMuons[1]->Fill(event.muonGenCount-event.muonRecoCount);
 		m_genMinusRecoElectrons[1]->Fill(event.electronGenCount-event.electronRecoCount);
+
+	if(!event.failedMatch){
+		m_matchStatus[1]->Fill("matched",1);
+
 
 		m_genElectronPt[1]->Fill(event.lepton1Pt);
 		m_genElectronPt[1]->Fill(event.lepton2Pt);
@@ -386,14 +391,15 @@ if(event.twoElectrons){
 
 	
 if(event.muonElectron){
-	if(!event.failedMatch){
-		m_matchStatus[2]->Fill("matched",1);
 		m_numRecoMuons[2]->Fill(event.muonRecoCount);
 		m_numGenMuons[2]->Fill(event.muonGenCount);
 		m_numRecoElectrons[2]->Fill(event.electronRecoCount);
 		m_numGenElectrons[2]->Fill(event.electronGenCount);
 		m_genMinusRecoMuons[2]->Fill(event.muonGenCount-event.muonRecoCount);
 		m_genMinusRecoElectrons[2]->Fill(event.electronGenCount-event.electronRecoCount);
+	if(!event.failedMatch){
+		m_matchStatus[2]->Fill("matched",1);
+
 
 
 		if(abs(event.lepton1Id)==13){
@@ -496,14 +502,15 @@ if(event.muonElectron){
 }
 
 if(event.muonTau){
-	if(!event.failedMatch){
-		m_matchStatus[3]->Fill("matched",1);
 		m_numRecoMuons[3]->Fill(event.muonRecoCount);
 		m_numGenMuons[3]->Fill(event.muonGenCount);
 		m_numRecoElectrons[3]->Fill(event.electronRecoCount);
 		m_numGenElectrons[3]->Fill(event.electronGenCount);
 		m_genMinusRecoMuons[3]->Fill(event.muonGenCount-event.muonRecoCount);
 		m_genMinusRecoElectrons[3]->Fill(event.electronGenCount-event.electronRecoCount);
+	if(!event.failedMatch){
+		m_matchStatus[3]->Fill("matched",1);
+
 
 		if(abs(event.lepton1Id)==13){
 			m_genMuonPt[3]->Fill(event.lepton1Pt);
@@ -572,14 +579,15 @@ if(event.muonTau){
 }
 
 if(event.electronTau){
-	if(!event.failedMatch){
-		m_matchStatus[4]->Fill("matched",1);
 		m_numRecoMuons[4]->Fill(event.muonRecoCount);
 		m_numGenMuons[4]->Fill(event.muonGenCount);
 		m_numRecoElectrons[4]->Fill(event.electronRecoCount);
 		m_numGenElectrons[4]->Fill(event.electronGenCount);
 		m_genMinusRecoMuons[4]->Fill(event.muonGenCount-event.muonRecoCount);
 		m_genMinusRecoElectrons[4]->Fill(event.electronGenCount-event.electronRecoCount);
+	if(!event.failedMatch){
+		m_matchStatus[4]->Fill("matched",1);
+
 
 		if(abs(event.lepton1Id)==11){
 			m_genElectronPt[4]->Fill(event.lepton1Pt);
