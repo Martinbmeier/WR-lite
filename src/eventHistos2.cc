@@ -49,7 +49,7 @@ void eventHistos2::book(TFileDirectory histoFolder, int nDirectory) {
 	m_unmatchedGenPhi[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedGenPhi","Phi of unmatched gen lepton", 100,-3.4,3.4)};
 	m_unmatchedGenPhi[nDirectory]->GetXaxis()-> SetTitle("phi (radians)");
 
-	m_unmatchedDR[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedDR","smallest delta R of unmatched lepton", 100,0,5)};
+	m_unmatchedRecoDR[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedDR","smallest delta R of unmatched lepton", 100,0,5)};
 
 	gStyle->SetOptStat("omen");
 
