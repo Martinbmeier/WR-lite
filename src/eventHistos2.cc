@@ -36,8 +36,8 @@ void eventHistos2::book(TFileDirectory histoFolder, int nDirectory) {
 	m_numGenMuons[nDirectory] = {m_histoFolder.make<TH1D>("numGenMuons","num gen", 10,0,10)};
 	m_numGenElectrons[nDirectory] = {m_histoFolder.make<TH1D>("numGenElectrons","num gen", 10,0,10)};
 
-	m_genMinusRecoMuons = {m_histoFolder.make<TH1D>("genMinusRecoMuons","gen-reco", 10,-5,5)};
-	m_genMinusRecoElectrons = {m_histoFolder.make<TH1D>("genMinusRecoElectrons","gen-reco", 10,-5,5)};
+	m_genMinusRecoMuons[nDirectory] = {m_histoFolder.make<TH1D>("genMinusRecoMuons","gen-reco", 10,-5,5)};
+	m_genMinusRecoElectrons[nDirectory] = {m_histoFolder.make<TH1D>("genMinusRecoElectrons","gen-reco", 10,-5,5)};
 
 	m_unmatchedPt[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedPt","Pt of unmatched lepton", 100,0,500)};
 	m_unmatchedPt[nDirectory]->GetXaxis()-> SetTitle("Pt (GeV)");

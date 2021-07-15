@@ -283,8 +283,7 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	int mu2Match = 0;
 	int el1Match = 0;
 	int el2Match = 0;
-	myRECOevent.muonRecoCount = 0;
-	myRECOevent.electronRecoCount = 0;
+
 
 	const pat::Muon* matchedMuon1;
 	const pat::Muon* matchedMuon2;
