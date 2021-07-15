@@ -20,29 +20,29 @@ options.register( 'nEvents',
                )
 
 options.register( 'genTrainData',
-				  False,
-				  VarParsing.multiplicity.singleton,
-				  VarParsing.varType.bool,
-				  "True when generating a training set for neural network"
-				   )	   
-		   
+                  False,
+                  VarParsing.multiplicity.singleton,
+                  VarParsing.varType.bool,
+                  "True when generating a training set for neural network"
+                   )       
+           
 options.register( 'trainFile',
-				  'nn.txt',
-				  VarParsing.multiplicity.singleton,
-				  VarParsing.varType.string,
-				  "Name of file for training set for neural network"
-				   )
+                  'nn.txt',
+                  VarParsing.multiplicity.singleton,
+                  VarParsing.varType.string,
+                  "Name of file for training set for neural network"
+                   )
 options.register ('gitTag',
-				  'applePie',
-				  VarParsing.multiplicity.singleton,
-				  VarParsing.varType.string,
-				  "Git Tag")
+                  'applePie',
+                  VarParsing.multiplicity.singleton,
+                  VarParsing.varType.string,
+                  "Git Tag")
 
 options.register( 'isMC',
-				  True,
-				  VarParsing.multiplicity.singleton,
-				  VarParsing.varType.bool,
-				  "True if is MC dataset")
+                  True,
+                  VarParsing.multiplicity.singleton,
+                  VarParsing.varType.bool,
+                  "True if is MC dataset")
 
 options.register( 'ISmcatnlo',
                   False,
@@ -70,11 +70,11 @@ options.register( 'era',
                   "Year of Run II")
 
 options.register( 'checkZ',
-		  True,
-		  VarParsing.multiplicity.singleton,
-		  VarParsing.varType.bool,
-		  "True when running over Drell-Yan MC samples"
-	       )
+          True,
+          VarParsing.multiplicity.singleton,
+          VarParsing.varType.bool,
+          "True when running over Drell-Yan MC samples"
+           )
 options.parseArguments()
 
 #LOCAL VARIABLE DEFINITIONS
@@ -101,11 +101,26 @@ if not options.isMC: process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataR
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.nEvents) )
 process.source = cms.Source ("PoolSource",
-	  fileNames = cms.untracked.vstring ('root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/079C3FC4-8835-394B-8E54-1C67DFAE7E8D.root',
+      fileNames = cms.untracked.vstring ('root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/079C3FC4-8835-394B-8E54-1C67DFAE7E8D.root',
  'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/0B4D0775-CC78-904D-A4B0-6B755608ABB5.root',
-'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/0D86B53B-2397-EE40-9A96-8115D6A754C2.root'),
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/0D86B53B-2397-EE40-9A96-8115D6A754C2.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/0F1A6FA9-1D64-3E4D-B6CE-69EC5C1462C9.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/1C576984-A8C6-B348-97FB-EEDC216ABDBD.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/2498CC8E-233D-EE4B-91E1-467862BB453A.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/29C48882-452F-C14F-AFC9-C107D0623F83.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/3AA76E9B-B61B-0647-957D-B698FA7C972A.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/52713434-77E4-EA4F-822F-3B3AE54C4E03.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/80E49E44-DFA3-C945-A509-521815C9808B.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/9E03FC31-C3F0-7641-B2CB-09E05C120375.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/A0218B26-3D0D-AD4B-8492-2D4192006B42.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/A6AFF609-D827-3846-9C49-56941A63A4D1.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/A75E8694-953F-FF43-B6C1-3DF07860CB4F.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/C768B41A-863B-8C4F-85C8-D190C6B5A014.root ') 
 )
 
+#process.source = cms.Source ("PoolSource",
+#     fileNames = cms.untracked.vstring ('file:/hdfs/cms/user/evans908/wrSkims/TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/skimmedOut_1.root')
+#)
 
 process.options = cms.untracked.PSet(
     SkipEvent = cms.untracked.vstring('ProductNotFound')
@@ -135,8 +150,8 @@ process.removeBadAndCloneGlobalMuons = cms.EDProducer("MuonRefPruner",
 )
 
 process.tunePMuons = cms.EDProducer("TunePMuonProducer",
-		src = cms.InputTag("removeBadAndCloneGlobalMuons")
-		#src = cms.InputTag("slimmedMuons")
+        src = cms.InputTag("removeBadAndCloneGlobalMuons")
+        #src = cms.InputTag("slimmedMuons")
 )
 
 ### muon ID and isolation
@@ -167,9 +182,9 @@ process.printTree = cms.EDAnalyzer("ParticleTreeDrawer",
                                    printP4 = cms.untracked.bool(False),
                                    printPtEtaPhi = cms.untracked.bool(False),
                                    printVertex = cms.untracked.bool(False),
-                                   printStatus = cms.untracked.bool(False),
+                                   printStatus = cms.untracked.bool(True),
                                    printIndex = cms.untracked.bool(True),
-#                                   status = cms.untracked.vint32( 3 )
+                                   #status = cms.untracked.vint32( 3 )
                                    )
 
 #process.p = cms.Path(
@@ -182,34 +197,48 @@ process.muonSelectionSeq = cms.Sequence(cms.ignore(process.badGlobalMuonTagger) 
 muonPaths = cms.vstring("HLT_Mu50_v", "HLT_TkMu50_v")
 electronPaths = cms.vstring("HLT_Ele27_WPTight_Gsf_v", "HLT_Photon175_v")
 if options.era == '2016':
-	muonPaths = cms.vstring("HLT_Mu50_v", "HLT_TkMu50_v")
-	electronPaths = cms.vstring("HLT_Ele27_WPTight_Gsf_v", "HLT_Ele115_CaloIdVT_GsfTrkIdT_v", "HLT_Photon175_v")
+    muonPaths = cms.vstring("HLT_Mu50_v", "HLT_TkMu50_v")
+    electronPaths = cms.vstring("HLT_Ele27_WPTight_Gsf_v", "HLT_Ele115_CaloIdVT_GsfTrkIdT_v", "HLT_Photon175_v")
 elif options.era == '2017':
-	muonPaths = cms.vstring("HLT_Mu50_v", "HLT_OldMu100", "HLT_TkMu100")
-	electronPaths = cms.vstring("HLT_Ele35_WPTight_Gsf_v","HLT_Photon200_v","HLT_Ele115_CaloIdVT_GsfTrkIdT_v")
+    muonPaths = cms.vstring("HLT_Mu50_v", "HLT_OldMu100", "HLT_TkMu100")
+    electronPaths = cms.vstring("HLT_Ele35_WPTight_Gsf_v","HLT_Photon200_v","HLT_Ele115_CaloIdVT_GsfTrkIdT_v")
 elif options.era == '2018':
-	muonPaths = cms.vstring("HLT_Mu50", "HLT_OldMu100", "HLT_TkMu100")
-	electronPaths = cms.vstring("HLT_Ele32WPTight_Gsf_v","HLT_Photon200_v","HLT_Ele115_CaloIdVT_GsfTrkIdT_v")
+    muonPaths = cms.vstring("HLT_Mu50", "HLT_OldMu100", "HLT_TkMu100")
+    electronPaths = cms.vstring("HLT_Ele32WPTight_Gsf_v","HLT_Photon200_v","HLT_Ele115_CaloIdVT_GsfTrkIdT_v")
 
-process.analysis = cms.EDAnalyzer('WR_MASS_PLOT',
-						tracks = cms.untracked.InputTag('ctfWithMaterialTracks'),
-						genParticles = cms.InputTag("prunedGenParticles"),
-						AK4recoCHSJets = cms.InputTag("slimmedJets"),
-						highMuons = cms.InputTag("tuneIDMuons"),
-						highElectrons = cms.InputTag("heepElectrons"),
-						genInfo = cms.InputTag("generator"),
-						vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
-						trainFile = cms.untracked.string(options.trainFile),
-						isSignal = cms.untracked.bool(options.isSignal),
-						genTrainData = cms.untracked.bool(options.genTrainData)
+#process.analysis = cms.EDAnalyzer('WR_MASS_PLOT',
+#                       tracks = cms.untracked.InputTag('ctfWithMaterialTracks'),
+#                       genParticles = cms.InputTag("prunedGenParticles"),
+#                       AK4recoCHSJets = cms.InputTag("slimmedJets"),
+#                       highMuons = cms.InputTag("tuneIDMuons"),
+#                       highElectrons = cms.InputTag("heepElectrons"),
+#                       genInfo = cms.InputTag("generator"),
+#                       vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+#                       trainFile = cms.untracked.string(options.trainFile),
+#                       isSignal = cms.untracked.bool(options.isSignal),
+#                       genTrainData = cms.untracked.bool(options.genTrainData)
+#)
+
+process.analysis = cms.EDAnalyzer('gen_match',
+                        tracks = cms.untracked.InputTag('ctfWithMaterialTracks'),
+                        genParticles = cms.InputTag("prunedGenParticles"),
+                        AK4recoCHSJets = cms.InputTag("slimmedJets"),
+                        highMuons = cms.InputTag("tuneIDMuons"),
+                        highElectrons = cms.InputTag("heepElectrons"),
+                        trigResults = cms.InputTag("TriggerResults","","HLT"),
+                        genInfo = cms.InputTag("generator"),
+                        vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+                        trainFile = cms.untracked.string(options.trainFile),
+                        isSignal = cms.untracked.bool(options.isSignal),
+                        genTrainData = cms.untracked.bool(options.genTrainData),
+                        electronPathsToPass = electronPaths
 )
-
 
 
 process.load('FWCore.Modules.printContent_cfi')
 
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
-	
+    
 process.selectedElectrons = cms.EDFilter("PATElectronSelector",
     src = cms.InputTag("slimmedElectrons"),
     cut = cms.string("pt>5 && abs(eta)")
@@ -241,8 +270,8 @@ elif options.era == '2018':
       SkipWarnings = False)
 
 
-#process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
-#                           * process.muonSelectionSeq * process.analysis )#* process.printTree)
 process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
-                           * process.muonSelectionSeq * process.prefiringweight * process.analysis * process.printTree)
+                           * process.muonSelectionSeq * process.analysis)# * process.printTree)
+#process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
+#                           * process.muonSelectionSeq * process.prefiringweight * process.analysis * process.printTree)
 
