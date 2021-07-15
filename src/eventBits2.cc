@@ -44,12 +44,14 @@ eventBits2::eventBits2() {
 	lepton1Mass=-1000;
 	lepton1Pt=-1000;
 	lepton1Id=0;
+	lepton1Matched=false;
 
 	lepton2Eta=-1000;
 	lepton2Phi=-1000;
 	lepton2Mass=-1000;
 	lepton2Pt=-1000;
 	lepton2Id=0;
+	lepton2Matched=false;
 
 	muonGenCount=0;
 	electronGenCount=0;
@@ -146,12 +148,14 @@ void eventBits2::clear() {
 	lepton1Mass=-1000;
 	lepton1Pt=-1000;
 	lepton1Id=0;
+	lepton1Matched=false;
 
 	lepton2Eta=-1000;
 	lepton2Phi=-1000;
 	lepton2Mass=-1000;
 	lepton2Pt=-1000;
 	lepton2Id=0;
+	lepton2Matched=false;
 
 	muonGenCount=0;
 	electronGenCount=0;

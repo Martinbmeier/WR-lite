@@ -350,6 +350,7 @@ if(myRECOevent.twoMuons){
 
 		if(mu1Match == 0 && match1DR < 0.3 && match1DR < match2DR) {
 			mu1Match++;
+			myRECOevent.lepton1Matched=true;
 			matchedMuon1 = &(*(iMuon));
 			myRECOevent.Muon1dR=match1DR;
 			if(matchedMuon1->pdgId()==myRECOevent.lepton1Id){ myRECOevent.Muon1chargeMatch = true ;}
@@ -363,6 +364,7 @@ if(myRECOevent.twoMuons){
 		if(mu2Match == 0 && match2DR < 0.3 && match2DR < match1DR)  {
 			matchedMuon2 = &(*(iMuon));
 			mu2Match++; 
+			myRECOevent.lepton2Matched=true;
 			myRECOevent.Muon2dR=match2DR;
 			if(matchedMuon2->pdgId()==myRECOevent.lepton2Id){ myRECOevent.Muon2chargeMatch = true ;}
     		else{ myRECOevent.Muon2chargeMatch = false ;}
@@ -410,6 +412,7 @@ if(myRECOevent.twoElectrons){
 
 		if(el1Match == 0 && match1DR < 0.3 && match1DR<match2DR ) {
 			el1Match++;
+			myRECOevent.lepton1Matched=true;
 			matchedElectron1 = &(*(iElectron));
 			myRECOevent.Electron1dR=match1DR;
 			if(matchedElectron1->pdgId()==myRECOevent.lepton1Id){ myRECOevent.Electron1chargeMatch = true ;}
@@ -423,6 +426,7 @@ if(myRECOevent.twoElectrons){
 		if(el2Match == 0 && match2DR < 0.3 && match2DR<match1DR)  {
 			matchedElectron2 = &(*(iElectron));
 			el2Match++; 
+			myRECOevent.lepton2Matched=true;
 			myRECOevent.Electron2dR=match2DR;
 			if(matchedElectron2->pdgId()==myRECOevent.lepton2Id){ myRECOevent.Electron2chargeMatch = true ;}
     		else{ myRECOevent.Electron2chargeMatch = false ;}
@@ -469,6 +473,7 @@ if(myRECOevent.muonElectron  || myRECOevent.muonTau  || myRECOevent.electronTau 
 			match1DR = sqrt(dR2(iMuon->eta(), myRECOevent.lepton1Eta, iMuon->phi(), myRECOevent.lepton1Phi));
 			if(mu1Match == 0 && match1DR < 0.3) {
 				mu1Match++;
+				myRECOevent.lepton1Matched=true;
 				matchedMuon1 = &(*(iMuon));
 				myRECOevent.Muon1dR=match1DR;
 				if(matchedMuon1->pdgId()==myRECOevent.lepton1Id){ myRECOevent.Muon1chargeMatch = true ;}
@@ -486,6 +491,7 @@ if(myRECOevent.muonElectron  || myRECOevent.muonTau  || myRECOevent.electronTau 
 			if(mu1Match == 0 && match2DR < 0.3)  {
 				matchedMuon1 = &(*(iMuon));
 				mu1Match++; 
+				myRECOevent.lepton2Matched=true;
 				myRECOevent.Muon1dR=match2DR;
 				if(matchedMuon1->pdgId()==myRECOevent.lepton2Id){ myRECOevent.Muon1chargeMatch = true ;}
     			else{ myRECOevent.Muon2chargeMatch = false ;}
@@ -531,6 +537,7 @@ if(myRECOevent.muonElectron  || myRECOevent.muonTau  || myRECOevent.electronTau 
 
 				if(el1Match == 0 && match1DR < 0.3) {
 					el1Match++;
+					myRECOevent.lepton1Matched=true;
 					matchedElectron1 = &(*(iElectron));
 					myRECOevent.Electron1dR=match1DR;
 					if(matchedElectron1->pdgId()==myRECOevent.lepton1Id){ myRECOevent.Electron1chargeMatch = true ;}
@@ -547,6 +554,7 @@ if(myRECOevent.muonElectron  || myRECOevent.muonTau  || myRECOevent.electronTau 
 				if(el1Match == 0 && match2DR < 0.3)  {
 					matchedElectron1 = &(*(iElectron));
 					el1Match++; 
+					myRECOevent.lepton2Matched=true;
 					myRECOevent.Electron1dR=match2DR;
 					if(matchedElectron1->pdgId()==myRECOevent.lepton2Id){ myRECOevent.Electron1chargeMatch = true ;}
     				else{ myRECOevent.Electron1chargeMatch = false ;}

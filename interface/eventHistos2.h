@@ -40,9 +40,15 @@ class eventHistos2 {
 	//1D
 
 	std::vector<TH1D*> m_matchStatus = std::vector<TH1D*>(5);
-	std::vector<TH1D*> m_unmatchedPhi = std::vector<TH1D*>(5);
-	std::vector<TH1D*> m_unmatchedEta = std::vector<TH1D*>(5);
-	std::vector<TH1D*> m_unmatchedPt = std::vector<TH1D*>(5);
+
+	std::vector<TH1D*> m_unmatchedRecoPhi = std::vector<TH1D*>(5);
+	std::vector<TH1D*> m_unmatchedRecoEta = std::vector<TH1D*>(5);
+	std::vector<TH1D*> m_unmatchedRecoPt = std::vector<TH1D*>(5);
+
+	std::vector<TH1D*> m_unmatchedGenPhi = std::vector<TH1D*>(5);
+	std::vector<TH1D*> m_unmatchedGenEta = std::vector<TH1D*>(5);
+	std::vector<TH1D*> m_unmatchedGenPt = std::vector<TH1D*>(5);
+
 	std::vector<TH1D*> m_unmatchedDR = std::vector<TH1D*>(5);
 
 	std::vector<TH1D*> m_numRecoMuons = std::vector<TH1D*>(5);

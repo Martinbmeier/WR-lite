@@ -20,11 +20,7 @@ void eventHistos2::book(TFileDirectory histoFolder, int nDirectory) {
 	gStyle->SetOptStat("omen");
 	m_histoFolder=histoFolder;
 
-	//m_histoFolder.cd();
-
-	//Gen Histos
-	
-	//1D
+	//Unmatchded lepton histos
 	
 	m_matchStatus[nDirectory] = {m_histoFolder.make<TH1D>("matchStatus","were there successful gen-reco matches in this event?", 2,1,2)};
 	m_matchStatus[nDirectory]->GetXaxis()->SetBinLabel(1,"matched");
@@ -39,14 +35,25 @@ void eventHistos2::book(TFileDirectory histoFolder, int nDirectory) {
 	m_genMinusRecoMuons[nDirectory] = {m_histoFolder.make<TH1D>("genMinusRecoMuons","gen-reco", 10,-5,5)};
 	m_genMinusRecoElectrons[nDirectory] = {m_histoFolder.make<TH1D>("genMinusRecoElectrons","gen-reco", 10,-5,5)};
 
-	m_unmatchedPt[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedPt","Pt of unmatched lepton", 100,0,500)};
-	m_unmatchedPt[nDirectory]->GetXaxis()-> SetTitle("Pt (GeV)");
-	m_unmatchedEta[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedEta","Eta of unmatched lepton", 100,-3.4,3.4)};
-	m_unmatchedEta[nDirectory]->GetXaxis()-> SetTitle("eta (radians)");
-	m_unmatchedPhi[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedPhi","Phi of unmatched lepton", 100,-3.4,3.4)};
-	m_unmatchedPhi[nDirectory]->GetXaxis()-> SetTitle("phi (radians)");
+	m_unmatchedRecoPt[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedRecoPt","Pt of unmatched lepton", 100,0,500)};
+	m_unmatchedRecoPt[nDirectory]->GetXaxis()-> SetTitle("Pt (GeV)");
+	m_unmatchedRecoEta[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedRecoEta","Eta of unmatched lepton", 100,-3.4,3.4)};
+	m_unmatchedRecoEta[nDirectory]->GetXaxis()-> SetTitle("eta (radians)");
+	m_unmatchedRecoPhi[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedRecoPhi","Phi of unmatched lepton", 100,-3.4,3.4)};
+	m_unmatchedRecoPhi[nDirectory]->GetXaxis()-> SetTitle("phi (radians)");
+
+	m_unmatchedGenPt[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedGenPt","Pt of unmatched gen lepton", 100,0,500)};
+	m_unmatchedGenPt[nDirectory]->GetXaxis()-> SetTitle("Pt (GeV)");
+	m_unmatchedGenEta[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedGenEta","Eta of unmatched gen lepton", 100,-3.4,3.4)};
+	m_unmatchedGenEta[nDirectory]->GetXaxis()-> SetTitle("eta (radians)");
+	m_unmatchedGenPhi[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedGenPhi","Phi of unmatched gen lepton", 100,-3.4,3.4)};
+	m_unmatchedGenPhi[nDirectory]->GetXaxis()-> SetTitle("phi (radians)");
+
 	m_unmatchedDR[nDirectory] = {m_histoFolder.make<TH1D>("unmatchedDR","smallest delta R of unmatched lepton", 100,0,5)};
+
 	gStyle->SetOptStat("omen");
+
+	//Muon Histos
 
 	m_genRecoMuonPtRatio[nDirectory] = {m_histoFolder.make<TH1D>("genRecoMuonPtRatio" , "ratio of gen pt to reco pt for muons" , 50 , 0 , 5 )};
 	gStyle->SetOptStat("omen");
@@ -264,24 +271,33 @@ if(event.twoMuons){
 	if(event.failedMatch && !event.failedGenPtEta){
 		m_matchStatus[0]->Fill("unmatched",1);
 
+		m_unmatchedGenPt[0]->Fill(event.lepton1Pt);
+		m_unmatchedGenPt[0]->Fill(event.lepton2Pt);
+
+		m_unmatchedGenEta[0]->Fill(event.lepton1Eta);
+		m_unmatchedGenEta[0]->Fill(event.lepton2Eta);
+
+		m_unmatchedGenPhi[0]->Fill(event.lepton1Phi);
+		m_unmatchedGenPhi[0]->Fill(event.lepton2Phi);
+
 		iSize=event.unmatchedPhi.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedPhi[0]->Fill(event.unmatchedPhi[iValue]);
+			m_unmatchedRecoPhi[0]->Fill(event.unmatchedPhi[iValue]);
 		}
 
 		iSize=event.unmatchedEta.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedEta[0]->Fill(event.unmatchedEta[iValue]);
+			m_unmatchedRecoEta[0]->Fill(event.unmatchedEta[iValue]);
 		}
 
 		iSize=event.unmatchedPt.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedPt[0]->Fill(event.unmatchedPt[iValue]);
+			m_unmatchedRecoPt[0]->Fill(event.unmatchedPt[iValue]);
 		}
 
 		iSize=event.unmatchedDR.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedDR[0]->Fill(event.unmatchedDR[iValue]);
+			m_unmatchedRecoDR[0]->Fill(event.unmatchedDR[iValue]);
 		}
 	}
 } 
@@ -366,22 +382,22 @@ if(event.twoElectrons){
 		m_matchStatus[1]->Fill("unmatched",1);
 		iSize=event.unmatchedPhi.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedPhi[1]->Fill(event.unmatchedPhi[iValue]);
+			m_unmatchedRecoPhi[1]->Fill(event.unmatchedPhi[iValue]);
 		}
 
 		iSize=event.unmatchedEta.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedEta[1]->Fill(event.unmatchedEta[iValue]);
+			m_unmatchedRecoEta[1]->Fill(event.unmatchedEta[iValue]);
 		}
 
 		iSize=event.unmatchedPt.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedPt[1]->Fill(event.unmatchedPt[iValue]);
+			m_unmatchedRecoPt[1]->Fill(event.unmatchedPt[iValue]);
 		}
 
 		iSize=event.unmatchedDR.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedDR[1]->Fill(event.unmatchedDR[iValue]);
+			m_unmatchedRecoDR[1]->Fill(event.unmatchedDR[iValue]);
 		}
 
 
@@ -480,22 +496,22 @@ if(event.muonElectron){
 
 		iSize=event.unmatchedPhi.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedPhi[2]->Fill(event.unmatchedPhi[iValue]);
+			m_unmatchedRecoPhi[2]->Fill(event.unmatchedPhi[iValue]);
 		}
 
 		iSize=event.unmatchedEta.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedEta[2]->Fill(event.unmatchedEta[iValue]);
+			m_unmatchedRecoEta[2]->Fill(event.unmatchedEta[iValue]);
 		}
 
 		iSize=event.unmatchedPt.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedPt[2]->Fill(event.unmatchedPt[iValue]);
+			m_unmatchedRecoPt[2]->Fill(event.unmatchedPt[iValue]);
 		}
 
 		iSize=event.unmatchedDR.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedDR[2]->Fill(event.unmatchedDR[iValue]);
+			m_unmatchedRecoDR[2]->Fill(event.unmatchedDR[iValue]);
 		}
 
 	}
@@ -557,22 +573,22 @@ if(event.muonTau){
 
 		iSize=event.unmatchedPhi.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedPhi[3]->Fill(event.unmatchedPhi[iValue]);
+			m_unmatchedRecoPhi[3]->Fill(event.unmatchedPhi[iValue]);
 		}
 
 		iSize=event.unmatchedEta.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedEta[3]->Fill(event.unmatchedEta[iValue]);
+			m_unmatchedRecoEta[3]->Fill(event.unmatchedEta[iValue]);
 		}
 
 		iSize=event.unmatchedPt.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedPt[3]->Fill(event.unmatchedPt[iValue]);
+			m_unmatchedRecoPt[3]->Fill(event.unmatchedPt[iValue]);
 		}
 
 		iSize=event.unmatchedDR.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedDR[3]->Fill(event.unmatchedDR[iValue]);
+			m_unmatchedRecoDR[3]->Fill(event.unmatchedDR[iValue]);
 		}
 
 	}
@@ -634,22 +650,22 @@ if(event.electronTau){
 
 		iSize=event.unmatchedPhi.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedPhi[4]->Fill(event.unmatchedPhi[iValue]);
+			m_unmatchedRecoPhi[4]->Fill(event.unmatchedPhi[iValue]);
 		}
 
 		iSize=event.unmatchedEta.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedEta[4]->Fill(event.unmatchedEta[iValue]);
+			m_unmatchedRecoEta[4]->Fill(event.unmatchedEta[iValue]);
 		}
 
 		iSize=event.unmatchedPt.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedPt[4]->Fill(event.unmatchedPt[iValue]);
+			m_unmatchedRecoPt[4]->Fill(event.unmatchedPt[iValue]);
 		}
 
 		iSize=event.unmatchedDR.size();
 		for(int iValue=0; iValue<iSize; iValue++){
-			m_unmatchedDR[4]->Fill(event.unmatchedDR[iValue]);
+			m_unmatchedRecoDR[4]->Fill(event.unmatchedDR[iValue]);
 		}	
 	}
 }

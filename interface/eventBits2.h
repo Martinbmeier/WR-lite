@@ -54,12 +54,14 @@ public:
 	double lepton1Mass;
 	double lepton1Pt;
 	int lepton1Id;
+	bool lepton1Matched;
 
 	double lepton2Eta;
 	double lepton2Phi;
 	double lepton2Mass;
 	double lepton2Pt;
 	int lepton2Id;
+	bool lepton2Matched;
 
 	int muonGenCount;
 	int electronGenCount;
