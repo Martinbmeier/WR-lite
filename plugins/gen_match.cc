@@ -220,7 +220,7 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 			if( ! iParticle->isHardProcess() ) continue;  //ONLY HARD PROCESS AND NOT INCOMING
 			if( abs( iParticle->pdgId() ) == 13 || abs( iParticle->pdgId() ) == 11 || abs( iParticle->pdgId() ) == 15) {//HERE'S A LEPtON
-				if(fabs(iParticle->eta()) > 2.4 && iParticle->pt() < 10){
+				if(fabs(iParticle->eta()) > 2.4 || iParticle->pt() < 10){
 					if(lepton1Cuts==0){
 						lepton1Cuts=1;
 					} else if(lepton2Cuts==0){
