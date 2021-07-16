@@ -271,14 +271,19 @@ if(event.twoMuons){
 	if(event.failedMatch && !event.failedGenPtEta){
 		m_matchStatus[0]->Fill("unmatched",1);
 
-		m_unmatchedGenPt[0]->Fill(event.lepton1Pt);
-		m_unmatchedGenPt[0]->Fill(event.lepton2Pt);
+		if(!event.lepton1Matched){
+			m_unmatchedGenPt[0]->Fill(event.lepton1Pt);
+			m_unmatchedGenEta[0]->Fill(event.lepton1Eta);
+			m_unmatchedGenPhi[0]->Fill(event.lepton1Phi);
+		}
 
-		m_unmatchedGenEta[0]->Fill(event.lepton1Eta);
-		m_unmatchedGenEta[0]->Fill(event.lepton2Eta);
-
-		m_unmatchedGenPhi[0]->Fill(event.lepton1Phi);
-		m_unmatchedGenPhi[0]->Fill(event.lepton2Phi);
+		if(!event.lepton2Matched){
+			m_unmatchedGenPt[0]->Fill(event.lepton2Pt);
+			m_unmatchedGenEta[0]->Fill(event.lepton2Eta);
+			m_unmatchedGenPhi[0]->Fill(event.lepton2Phi);
+		}
+		
+		
 
 		iSize=event.unmatchedPhi.size();
 		for(int iValue=0; iValue<iSize; iValue++){
@@ -380,6 +385,19 @@ if(event.twoElectrons){
 	}
 	if(event.failedMatch && !event.failedGenPtEta){
 		m_matchStatus[1]->Fill("unmatched",1);
+
+		if(!event.lepton1Matched){
+			m_unmatchedGenPt[1]->Fill(event.lepton1Pt);
+			m_unmatchedGenEta[1]->Fill(event.lepton1Eta);
+			m_unmatchedGenPhi[1]->Fill(event.lepton1Phi);
+		}
+
+		if(!event.lepton2Matched){
+			m_unmatchedGenPt[1]->Fill(event.lepton2Pt);
+			m_unmatchedGenEta[1]->Fill(event.lepton2Eta);
+			m_unmatchedGenPhi[1]->Fill(event.lepton2Phi);
+		}
+
 		iSize=event.unmatchedPhi.size();
 		for(int iValue=0; iValue<iSize; iValue++){
 			m_unmatchedRecoPhi[1]->Fill(event.unmatchedPhi[iValue]);
@@ -494,6 +512,18 @@ if(event.muonElectron){
 	if(event.failedMatch && !event.failedGenPtEta){
 		m_matchStatus[2]->Fill("unmatched",1);
 
+		if(!event.lepton1Matched){
+			m_unmatchedGenPt[2]->Fill(event.lepton1Pt);
+			m_unmatchedGenEta[2]->Fill(event.lepton1Eta);
+			m_unmatchedGenPhi[2]->Fill(event.lepton1Phi);
+		}
+
+		if(!event.lepton2Matched){
+			m_unmatchedGenPt[2]->Fill(event.lepton2Pt);
+			m_unmatchedGenEta[2]->Fill(event.lepton2Eta);
+			m_unmatchedGenPhi[2]->Fill(event.lepton2Phi);
+		}
+
 		iSize=event.unmatchedPhi.size();
 		for(int iValue=0; iValue<iSize; iValue++){
 			m_unmatchedRecoPhi[2]->Fill(event.unmatchedPhi[iValue]);
@@ -571,6 +601,18 @@ if(event.muonTau){
 	if(event.failedMatch && !event.failedGenPtEta){
 		m_matchStatus[3]->Fill("unmatched",1);
 
+		if(!event.lepton1Matched){
+			m_unmatchedGenPt[3]->Fill(event.lepton1Pt);
+			m_unmatchedGenEta[3]->Fill(event.lepton1Eta);
+			m_unmatchedGenPhi[3]->Fill(event.lepton1Phi);
+		}
+
+		if(!event.lepton2Matched){
+			m_unmatchedGenPt[3]->Fill(event.lepton2Pt);
+			m_unmatchedGenEta[3]->Fill(event.lepton2Eta);
+			m_unmatchedGenPhi[3]->Fill(event.lepton2Phi);
+		}
+
 		iSize=event.unmatchedPhi.size();
 		for(int iValue=0; iValue<iSize; iValue++){
 			m_unmatchedRecoPhi[3]->Fill(event.unmatchedPhi[iValue]);
@@ -647,6 +689,18 @@ if(event.electronTau){
 	}
 	if(event.failedMatch && !event.failedGenPtEta){
 		m_matchStatus[4]->Fill("unmatched",1);
+
+		if(!event.lepton1Matched){
+			m_unmatchedGenPt[4]->Fill(event.lepton1Pt);
+			m_unmatchedGenEta[4]->Fill(event.lepton1Eta);
+			m_unmatchedGenPhi[4]->Fill(event.lepton1Phi);
+		}
+
+		if(!event.lepton2Matched){
+			m_unmatchedGenPt[4]->Fill(event.lepton2Pt);
+			m_unmatchedGenEta[4]->Fill(event.lepton2Eta);
+			m_unmatchedGenPhi[4]->Fill(event.lepton2Phi);
+		}
 
 		iSize=event.unmatchedPhi.size();
 		for(int iValue=0; iValue<iSize; iValue++){
