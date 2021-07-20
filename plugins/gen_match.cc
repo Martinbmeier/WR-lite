@@ -97,11 +97,14 @@ class gen_match : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		bool tWfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event& , eventBits2& );
 		//double transverseSphericity(math::XYZTLorentzVector p1, math::XYZTLorentzVector p2, math::XYZTLorentzVector p3);
-		//void saveElectronData(eventBits2 * myRECOevent, double matched1Mass, double matched2Mass);
-		//void saveMuonData(eventBits2 * myRECOevent, double matched1Mass, double matched2Mass);
+		//void saveElectronData(eventBits2 * iCut[ii], double matched1Mass, double matched2Mass);
+		//void saveMuonData(eventBits2 * iCut[ii], double matched1Mass, double matched2Mass);
 		
 		
-		eventHistos2 m_allEvents;
+		eventHistos2 m_cuts1;
+		//eventHistos2 m_cuts2;
+		//eventHistos2 m_cuts3;
+		//eventHistos2 m_cuts4;
 
 		//neuralNet networkResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/Resolved");
 		//neuralNet networkSuperResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/SuperResolved");
@@ -180,21 +183,23 @@ gen_match::~gen_match()
 void
 gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-	eventBits2 myRECOevent;
-	eventInfo myEvent;
+
+	  eventBits2 cuts1; //pt > 10 , eta < 2.4
+	  eventBits2 cuts2; //pt > 10 , eta < 2.4 , isHighPtMuon
+	  eventBits2 cuts3; //pt > 10 , eta < 2.4 , isolationR03
+	  eventBits2 cuts4; //pt > 10 , eta < 2.4 , isHighPtMuon, isolationR03
+
+	  std::vector<eventBits2> iCut; 
+	  iCut.push_back(cuts1);
+	  iCut.push_back(cuts2);
+	  iCut.push_back(cuts3);
+	  iCut.push_back(cuts4);
+
+   
+   eventInfo myEvent; 
 	
 	edm::Handle<GenEventInfoProduct> eventInfo;
 	iEvent.getByToken(m_genEventInfoToken, eventInfo);
-  
-	myRECOevent.count = eventInfo->weight()/fabs(eventInfo->weight());
-	myRECOevent.eventWeight = eventInfo->weight();
-	
-	
-	edm::Handle<std::vector<reco::Vertex>> vertices;
-	iEvent.getByToken(m_offlineVerticesToken, vertices);
-	if(!vertices.isValid()) {
-		throw cms::Exception("Vertex collection not valid!");
-	}
 
 	edm::Handle<std::vector<pat::Muon>> highMuons;
 	iEvent.getByToken(m_highMuonToken, highMuons);
@@ -205,7 +210,40 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	edm::Handle<std::vector<reco::GenParticle>> genParticles;
 	iEvent.getByToken(m_genParticleToken, genParticles);
 
-	myRECOevent.hasPVertex = myEvent.PVselection(vertices);
+	std::vector<pat::Muon> prunedMuons;
+
+for(int ii=0; ii<4; ii++){
+
+	prunedMuons.clear();
+
+	for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
+		if(ii==0){
+			if(fabs(iMuon->eta()) < 2.4 && iMuon->tunePMuonBestTrack()->pt() > 10 ){ prunedMuons.push_back(*iMuon);}
+		}
+		if(ii==1){
+			if(fabs(iMuon->eta()) < 2.4 && iMuon->tunePMuonBestTrack()->pt() > 10 && (iMuon->isHighPtMuon(*myEvent.PVertex))){ prunedMuons.push_back(*iMuon);}
+		}
+		if(ii==2){
+			if(fabs(iMuon->eta()) < 2.4 && iMuon->tunePMuonBestTrack()->pt() > 10 && (iMuon->isolationR03().sumPt/iMuon->pt() < .1)){ prunedMuons.push_back(*iMuon);}
+		}
+		if(ii==3){
+			if(fabs(iMuon->eta()) < 2.4 && iMuon->tunePMuonBestTrack()->pt() > 10 && (iMuon->isHighPtMuon(*myEvent.PVertex)) && (iMuon->isolationR03().sumPt/iMuon->pt() < .1)){ prunedMuons.push_back(*iMuon);}
+		}
+		//const pat::Muon goodMuon = *iMuon;
+		//prunedMuons.push_back(*iMuon);
+	}
+  
+	iCut[ii].count = eventInfo->weight()/fabs(eventInfo->weight());
+	iCut[ii].eventWeight = eventInfo->weight();
+	
+	
+	edm::Handle<std::vector<reco::Vertex>> vertices;
+	iEvent.getByToken(m_offlineVerticesToken, vertices);
+	if(!vertices.isValid()) {
+		throw cms::Exception("Vertex collection not valid!");
+	}
+
+	iCut[ii].hasPVertex = myEvent.PVselection(vertices);
 
 
 // get gen information 
@@ -226,11 +264,11 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 					} else if(lepton2Cuts==0){
 						lepton2Cuts=1;
 					}
-					myRECOevent.failedGenPtEta = true;
+					iCut[ii].failedGenPtEta = true;
 					continue;
 				}
-				if(abs(iParticle->pdgId())==13){myRECOevent.muonGenCount++;}
-				if(abs(iParticle->pdgId())==11){myRECOevent.electronGenCount++;}
+				if(abs(iParticle->pdgId())==13){iCut[ii].muonGenCount++;}
+				if(abs(iParticle->pdgId())==11){iCut[ii].electronGenCount++;}
 				if(lepton1==0){
 					lepton1 = &(*iParticle);
 					lepton1ID = abs(iParticle->pdgId());
@@ -242,32 +280,32 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		}
 
 		if ((lepton1 == 0) || (lepton2 == 0)) {
-			myRECOevent.failedGenPtEta = true; 
+			iCut[ii].failedGenPtEta = true; 
 		} else if((lepton1ID == 11 && lepton2ID == 13) || (lepton1ID == 13 && lepton2ID == 11 )) {
-			myRECOevent.muonElectron = true;
+			iCut[ii].muonElectron = true;
 		} else if(lepton1ID == 11 && lepton2ID == 11){
-			myRECOevent.twoElectrons = true;
+			iCut[ii].twoElectrons = true;
 		} else if(lepton1ID == 13 && lepton2ID == 13){
-			myRECOevent.twoMuons = true;
+			iCut[ii].twoMuons = true;
 		} else if((lepton1ID == 11 && lepton2ID == 15) || (lepton1ID == 15 && lepton2ID == 11)) {
-			myRECOevent.electronTau = true;
+			iCut[ii].electronTau = true;
 		} else if((lepton1ID == 13 && lepton2ID == 15 ) || ( lepton1ID == 15 && lepton2ID == 13)) {
-			myRECOevent.muonTau = true;
+			iCut[ii].muonTau = true;
 		}
 
 		//gen values
-		if(!myRECOevent.failedGenPtEta){
-		myRECOevent.lepton1Eta = lepton1->eta();
-		myRECOevent.lepton1Phi = lepton1->phi();
-		myRECOevent.lepton1Mass = lepton1->p4().mass();
-		myRECOevent.lepton1Pt = lepton1->pt();
-		myRECOevent.lepton1Id = lepton1->pdgId();
+		if(!iCut[ii].failedGenPtEta){
+		iCut[ii].lepton1Eta = lepton1->eta();
+		iCut[ii].lepton1Phi = lepton1->phi();
+		iCut[ii].lepton1Mass = lepton1->p4().mass();
+		iCut[ii].lepton1Pt = lepton1->pt();
+		iCut[ii].lepton1Id = lepton1->pdgId();
 		
-		myRECOevent.lepton2Eta = lepton2->eta();
-		myRECOevent.lepton2Phi = lepton2->phi();
-		myRECOevent.lepton2Mass = lepton2->p4().mass();
-		myRECOevent.lepton2Pt = lepton2->pt();
-		myRECOevent.lepton2Id = lepton2->pdgId();
+		iCut[ii].lepton2Eta = lepton2->eta();
+		iCut[ii].lepton2Phi = lepton2->phi();
+		iCut[ii].lepton2Mass = lepton2->p4().mass();
+		iCut[ii].lepton2Pt = lepton2->pt();
+		iCut[ii].lepton2Id = lepton2->pdgId();
 		}
 
 
@@ -276,20 +314,11 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	edm::Handle<std::vector<pat::Jet>> recoJetsAK4;  
 	iEvent.getByToken(m_AK4recoCHSJetsToken, recoJetsAK4);  
+
+
 	//const pat::Jet* leadJet = 0;
 	//const pat::Jet* subleadJet = 0;
 	int jetCount = 0;
-	int mu1Match = 0;
-	int mu2Match = 0;
-	int el1Match = 0;
-	int el2Match = 0;
-
-
-	const pat::Muon* matchedMuon1;
-	const pat::Muon* matchedMuon2;
-
-	const pat::Electron* matchedElectron1;
-	const pat::Electron* matchedElectron2;
 
 	//bool twoBjets = false;
 
@@ -298,15 +327,15 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		for(std::vector<pat::Jet>::const_iterator iJet = recoJetsAK4->begin(); iJet != recoJetsAK4->end(); iJet++) {
 			//Make sure jets are not around leptons
 			//if ( fabs(iJet->eta()) > 2.4) continue;
-			double NHF  =                iJet->neutralHadronEnergyFraction();
-			double NEMF =                iJet->neutralEmEnergyFraction();
-			double CHF  =                iJet->chargedHadronEnergyFraction();
-			double CEMF =                iJet->chargedEmEnergyFraction();
-			double NumConst =            iJet->chargedMultiplicity()+iJet->neutralMultiplicity();
-			double MUF      =            iJet->muonEnergyFraction();
-			double EUF      =            iJet->electronEnergyFraction();
-			double CHM      =            iJet->chargedMultiplicity(); 
-			double BJP	=	     iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2); 
+			double NHF  =           iJet->neutralHadronEnergyFraction();
+			double NEMF =           iJet->neutralEmEnergyFraction();
+			double CHF  =           iJet->chargedHadronEnergyFraction();
+			double CEMF =           iJet->chargedEmEnergyFraction();
+			double NumConst =       iJet->chargedMultiplicity()+iJet->neutralMultiplicity();
+			double MUF      =       iJet->muonEnergyFraction();
+			double EUF      =       iJet->electronEnergyFraction();
+			double CHM      =       iJet->chargedMultiplicity(); 
+			double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2); 
 			//APPLYING TIGHT QUALITY CUTS
 			if (NHF > .9) continue;
 			if (NEMF > .9) continue;
@@ -331,71 +360,86 @@ gen_match::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			//m_eventType->Fill("2 tagged b jets",1);
 		}
 
+	int mu1Match = 0;
+	int mu2Match = 0;
+	int el1Match = 0;
+	//int el2Match = 0;
+
+	const pat::Muon* matchedMuon1;
+	const pat::Muon* matchedMuon2;
+
+	const pat::Electron* matchedElectron1;
+	//const pat::Electron* matchedElectron2;
+
+
+
 //muon reconstruction
 
-if(myRECOevent.twoMuons){
+if(iCut[ii].twoMuons){
 
 	double match1DR = 1000;
 	double match2DR = 1000;
 
-   for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
+   for(std::vector<pat::Muon>::const_iterator iMuon = prunedMuons.begin(); iMuon != prunedMuons.end(); iMuon++){
 
-   	if(fabs(iMuon->eta()) > 2.4 || iMuon->tunePMuonBestTrack()->pt() < 10 || !(iMuon->isHighPtMuon(*myEvent.PVertex)) || (iMuon->isolationR03().sumPt/iMuon->pt() > .1)){ continue;}// || !(iMuon->isHighPtMuon(*myEvent.PVertex)) || (iMuon->isolationR03().sumPt/iMuon->pt() > .1)){ continue;} //preliminary cu
 
-   	myRECOevent.muonRecoCount++;
+   	//if(fabs(iMuon->eta()) > 2.4 || iMuon->tunePMuonBestTrack()->pt() < 10 || !(iMuon->isHighPtMuon(*myEvent.PVertex)) || (iMuon->isolationR03().sumPt/iMuon->pt() > .1)){ continue;}// || !(iMuon->isHighPtMuon(*myEvent.PVertex)) || (iMuon->isolationR03().sumPt/iMuon->pt() > .1)){ continue;} //preliminary cu
 
-		match1DR = sqrt(dR2(iMuon->eta(), myRECOevent.lepton1Eta, iMuon->phi(), myRECOevent.lepton1Phi));
-		match2DR = sqrt(dR2(iMuon->eta(), myRECOevent.lepton2Eta, iMuon->phi(), myRECOevent.lepton2Phi));
-		//myRECOevent.recoMuonCount++;
+   	iCut[ii].muonRecoCount++;
+
+		match1DR = sqrt(dR2(iMuon->eta(), iCut[ii].lepton1Eta, iMuon->phi(), iCut[ii].lepton1Phi));
+		match2DR = sqrt(dR2(iMuon->eta(), iCut[ii].lepton2Eta, iMuon->phi(), iCut[ii].lepton2Phi));
+		//iCut[ii].recoMuonCount++;
 
 		if(mu1Match == 0 && match1DR < 0.3 && match1DR < match2DR) {
 			mu1Match++;
-			myRECOevent.lepton1Matched=true;
+			iCut[ii].lepton1Matched=true;
 			matchedMuon1 = &(*(iMuon));
-			myRECOevent.Muon1dR=match1DR;
-			if(matchedMuon1->pdgId()==myRECOevent.lepton1Id){ myRECOevent.Muon1chargeMatch = true ;}
-    		else{ myRECOevent.Muon1chargeMatch = false ;}
-			myRECOevent.Muon1PtRatio = myRECOevent.lepton1Pt/matchedMuon1->pt();
-			myRECOevent.Muon1TW=tWfinder(iEvent,lepton1);
-			myRECOevent.Muon1Pt=matchedMuon1->pt();
-			myRECOevent.Muon1Eta=matchedMuon1->eta();
-			myRECOevent.Muon1Phi=matchedMuon1->phi();
+			iCut[ii].Muon1dR=match1DR;
+			if(matchedMuon1->pdgId()==iCut[ii].lepton1Id){ iCut[ii].Muon1chargeMatch = true ;}
+    		else{ iCut[ii].Muon1chargeMatch = false ;}
+			iCut[ii].Muon1PtRatio = iCut[ii].lepton1Pt/matchedMuon1->pt();
+			iCut[ii].Muon1TW=tWfinder(iEvent,lepton1);
+			iCut[ii].Muon1Pt=matchedMuon1->pt();
+			iCut[ii].Muon1Eta=matchedMuon1->eta();
+			iCut[ii].Muon1Phi=matchedMuon1->phi();
 		}
 		if(mu2Match == 0 && match2DR < 0.3 && match2DR < match1DR)  {
 			matchedMuon2 = &(*(iMuon));
 			mu2Match++; 
-			myRECOevent.lepton2Matched=true;
-			myRECOevent.Muon2dR=match2DR;
-			if(matchedMuon2->pdgId()==myRECOevent.lepton2Id){ myRECOevent.Muon2chargeMatch = true ;}
-    		else{ myRECOevent.Muon2chargeMatch = false ;}
-			myRECOevent.Muon2PtRatio = myRECOevent.lepton2Pt/matchedMuon2->pt();
-			myRECOevent.Muon2TW=tWfinder(iEvent,lepton2);
-			myRECOevent.Muon2Pt=matchedMuon2->pt();
-			myRECOevent.Muon2Eta=matchedMuon2->eta();
-			myRECOevent.Muon2Phi=matchedMuon2->phi();
+			iCut[ii].lepton2Matched=true;
+			iCut[ii].Muon2dR=match2DR;
+			if(matchedMuon2->pdgId()==iCut[ii].lepton2Id){ iCut[ii].Muon2chargeMatch = true ;}
+    		else{ iCut[ii].Muon2chargeMatch = false ;}
+			iCut[ii].Muon2PtRatio = iCut[ii].lepton2Pt/matchedMuon2->pt();
+			iCut[ii].Muon2TW=tWfinder(iEvent,lepton2);
+			iCut[ii].Muon2Pt=matchedMuon2->pt();
+			iCut[ii].Muon2Eta=matchedMuon2->eta();
+			iCut[ii].Muon2Phi=matchedMuon2->phi();
 		}
 		if(mu2Match==0 && mu1Match==0){		
-			myRECOevent.unmatchedPhi.push_back(iMuon->phi());
-			myRECOevent.unmatchedEta.push_back(iMuon->eta());
-			myRECOevent.unmatchedPt.push_back(iMuon->pt());
+			iCut[ii].unmatchedPhi.push_back(iMuon->phi());
+			iCut[ii].unmatchedEta.push_back(iMuon->eta());
+			iCut[ii].unmatchedPt.push_back(iMuon->pt());
 			if(match1DR<match2DR){
-				myRECOevent.unmatchedDR.push_back(match1DR);
+				iCut[ii].unmatchedDR.push_back(match1DR);
 			}
-			else{myRECOevent.unmatchedDR.push_back(match2DR);}
+			else{iCut[ii].unmatchedDR.push_back(match2DR);}
 	}
 	}
-	if(mu1Match==0 || mu2Match==0 || myRECOevent.failedGenPtEta ){
-		myRECOevent.failedMatch=true;
+	if(mu1Match==0 || mu2Match==0 || iCut[ii].failedGenPtEta ){
+		iCut[ii].failedMatch=true;
 	}
 
    
 }
 
+/*
 //electron reconstruction
-if(myRECOevent.twoElectrons){
+if(iCut[ii].twoElectrons){
 
-	myRECOevent.electronTrigger=false;
-   if (passElectronTrig(iEvent, myRECOevent)){ myRECOevent.electronTrigger=true;}
+	iCut[ii].electronTrigger=false;
+   if (passElectronTrig(iEvent, iCut[ii])){ iCut[ii].electronTrigger=true;}
 
    double match1DR = 1000;
 	double match2DR = 1000;
@@ -405,188 +449,195 @@ if(myRECOevent.twoElectrons){
 		if(fabs(iElectron->eta()) > 2.4) {continue;}
 		if(iElectron->pt() < 10 ) {continue;}
 
-		myRECOevent.electronRecoCount++;
+		iCut[ii].electronRecoCount++;
 
-    	match1DR = sqrt(dR2(iElectron->eta(), myRECOevent.lepton1Eta, iElectron->phi(), myRECOevent.lepton1Phi));
-		match2DR = sqrt(dR2(iElectron->eta(), myRECOevent.lepton2Eta, iElectron->phi(), myRECOevent.lepton2Phi));
+    	match1DR = sqrt(dR2(iElectron->eta(), iCut[ii].lepton1Eta, iElectron->phi(), iCut[ii].lepton1Phi));
+		match2DR = sqrt(dR2(iElectron->eta(), iCut[ii].lepton2Eta, iElectron->phi(), iCut[ii].lepton2Phi));
 
 		if(el1Match == 0 && match1DR < 0.3 && match1DR<match2DR ) {
 			el1Match++;
-			myRECOevent.lepton1Matched=true;
+			iCut[ii].lepton1Matched=true;
 			matchedElectron1 = &(*(iElectron));
-			myRECOevent.Electron1dR=match1DR;
-			if(matchedElectron1->pdgId()==myRECOevent.lepton1Id){ myRECOevent.Electron1chargeMatch = true ;}
-    		else{ myRECOevent.Electron1chargeMatch = false ;}
-			myRECOevent.Electron1PtRatio = myRECOevent.lepton1Pt/matchedElectron1->pt();
-			myRECOevent.Electron1TW=tWfinder(iEvent,lepton1);
-			myRECOevent.Electron1Pt=matchedElectron1->pt();
-			myRECOevent.Electron1Eta=matchedElectron1->eta();
-			myRECOevent.Electron1Phi=matchedElectron1->phi();
+			iCut[ii].Electron1dR=match1DR;
+			if(matchedElectron1->pdgId()==iCut[ii].lepton1Id){ iCut[ii].Electron1chargeMatch = true ;}
+    		else{ iCut[ii].Electron1chargeMatch = false ;}
+			iCut[ii].Electron1PtRatio = iCut[ii].lepton1Pt/matchedElectron1->pt();
+			iCut[ii].Electron1TW=tWfinder(iEvent,lepton1);
+			iCut[ii].Electron1Pt=matchedElectron1->pt();
+			iCut[ii].Electron1Eta=matchedElectron1->eta();
+			iCut[ii].Electron1Phi=matchedElectron1->phi();
 		}
 		if(el2Match == 0 && match2DR < 0.3 && match2DR<match1DR)  {
 			matchedElectron2 = &(*(iElectron));
 			el2Match++; 
-			myRECOevent.lepton2Matched=true;
-			myRECOevent.Electron2dR=match2DR;
-			if(matchedElectron2->pdgId()==myRECOevent.lepton2Id){ myRECOevent.Electron2chargeMatch = true ;}
-    		else{ myRECOevent.Electron2chargeMatch = false ;}
-			myRECOevent.Electron2PtRatio = myRECOevent.lepton2Pt/matchedElectron2->pt();
-			myRECOevent.Electron2TW=tWfinder(iEvent,lepton2);
-			myRECOevent.Electron2Pt=matchedElectron2->pt();
-			myRECOevent.Electron2Eta=matchedElectron2->eta();
-			myRECOevent.Electron2Phi=matchedElectron2->phi();
+			iCut[ii].lepton2Matched=true;
+			iCut[ii].Electron2dR=match2DR;
+			if(matchedElectron2->pdgId()==iCut[ii].lepton2Id){ iCut[ii].Electron2chargeMatch = true ;}
+    		else{ iCut[ii].Electron2chargeMatch = false ;}
+			iCut[ii].Electron2PtRatio = iCut[ii].lepton2Pt/matchedElectron2->pt();
+			iCut[ii].Electron2TW=tWfinder(iEvent,lepton2);
+			iCut[ii].Electron2Pt=matchedElectron2->pt();
+			iCut[ii].Electron2Eta=matchedElectron2->eta();
+			iCut[ii].Electron2Phi=matchedElectron2->phi();
 		}
 		if(el1Match==0 && el2Match==0){		
-			myRECOevent.unmatchedPhi.push_back(iElectron->phi());
-			myRECOevent.unmatchedEta.push_back(iElectron->eta());
-			myRECOevent.unmatchedPt.push_back(iElectron->pt());
+			iCut[ii].unmatchedPhi.push_back(iElectron->phi());
+			iCut[ii].unmatchedEta.push_back(iElectron->eta());
+			iCut[ii].unmatchedPt.push_back(iElectron->pt());
 			if(match1DR<match2DR){
-				myRECOevent.unmatchedDR.push_back(match1DR);
+				iCut[ii].unmatchedDR.push_back(match1DR);
 			}
-			else{myRECOevent.unmatchedDR.push_back(match2DR);}
+			else{iCut[ii].unmatchedDR.push_back(match2DR);}
 		}
 
 	}
 
-	if(el1Match==0 || el2Match==0 || myRECOevent.failedGenPtEta ){
-	myRECOevent.failedMatch=true;
+	if(el1Match==0 || el2Match==0 || iCut[ii].failedGenPtEta ){
+	iCut[ii].failedMatch=true;
 	}
 
 }
-
+*/
 
 //muon/electron reconstruction
 
 //muon
-if(myRECOevent.muonElectron  || myRECOevent.muonTau  || myRECOevent.electronTau ) {
+if(iCut[ii].muonElectron  || iCut[ii].muonTau) {  //|| iCut[ii].electronTau ) {
 
 	double match1DR = 1000;
 	double match2DR = 1000;
 
-	if(!myRECOevent.electronTau){
-   for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
+	if(!iCut[ii].electronTau){
+   for(std::vector<pat::Muon>::const_iterator iMuon = prunedMuons.begin(); iMuon != prunedMuons.end(); iMuon++){
 
-   	if(fabs(iMuon->eta()) > 2.4 || iMuon->tunePMuonBestTrack()->pt() < 10 || !(iMuon->isHighPtMuon(*myEvent.PVertex)) || (iMuon->isolationR03().sumPt/iMuon->pt() > .1)){ continue;} //preliminary cut
-   	myRECOevent.muonRecoCount++;
+   	//if(fabs(iMuon->eta()) > 2.4 || iMuon->tunePMuonBestTrack()->pt() < 10 || !(iMuon->isHighPtMuon(*myEvent.PVertex)) || (iMuon->isolationR03().sumPt/iMuon->pt() > .1)){ continue;} //preliminary cut
+   	iCut[ii].muonRecoCount++;
 
    	if( abs(lepton1ID)==13){
-			match1DR = sqrt(dR2(iMuon->eta(), myRECOevent.lepton1Eta, iMuon->phi(), myRECOevent.lepton1Phi));
+			match1DR = sqrt(dR2(iMuon->eta(), iCut[ii].lepton1Eta, iMuon->phi(), iCut[ii].lepton1Phi));
 			if(mu1Match == 0 && match1DR < 0.3) {
 				mu1Match++;
-				myRECOevent.lepton1Matched=true;
+				iCut[ii].lepton1Matched=true;
 				matchedMuon1 = &(*(iMuon));
-				myRECOevent.Muon1dR=match1DR;
-				if(matchedMuon1->pdgId()==myRECOevent.lepton1Id){ myRECOevent.Muon1chargeMatch = true ;}
-    			else{ myRECOevent.Muon1chargeMatch = false ;}
-				myRECOevent.Muon1PtRatio = myRECOevent.lepton1Pt/matchedMuon1->pt();
-				myRECOevent.Muon1TW=tWfinder(iEvent,lepton1);
-				myRECOevent.Muon1Pt=matchedMuon1->pt();
-				myRECOevent.Muon1Eta=matchedMuon1->eta();
-				myRECOevent.Muon1Phi=matchedMuon1->phi();
+				iCut[ii].Muon1dR=match1DR;
+				if(matchedMuon1->pdgId()==iCut[ii].lepton1Id){ iCut[ii].Muon1chargeMatch = true ;}
+    			else{ iCut[ii].Muon1chargeMatch = false ;}
+				iCut[ii].Muon1PtRatio = iCut[ii].lepton1Pt/matchedMuon1->pt();
+				iCut[ii].Muon1TW=tWfinder(iEvent,lepton1);
+				iCut[ii].Muon1Pt=matchedMuon1->pt();
+				iCut[ii].Muon1Eta=matchedMuon1->eta();
+				iCut[ii].Muon1Phi=matchedMuon1->phi();
 			}
 
 		}
 		else if(abs(lepton2ID)==13){
-			match2DR = sqrt(dR2(iMuon->eta(), myRECOevent.lepton2Eta, iMuon->phi(), myRECOevent.lepton2Phi));
+			match2DR = sqrt(dR2(iMuon->eta(), iCut[ii].lepton2Eta, iMuon->phi(), iCut[ii].lepton2Phi));
 			if(mu1Match == 0 && match2DR < 0.3)  {
 				matchedMuon1 = &(*(iMuon));
 				mu1Match++; 
-				myRECOevent.lepton2Matched=true;
-				myRECOevent.Muon1dR=match2DR;
-				if(matchedMuon1->pdgId()==myRECOevent.lepton2Id){ myRECOevent.Muon1chargeMatch = true ;}
-    			else{ myRECOevent.Muon2chargeMatch = false ;}
-				myRECOevent.Muon1PtRatio = myRECOevent.lepton2Pt/matchedMuon1->pt();
-				myRECOevent.Muon1TW=tWfinder(iEvent,lepton2);
-				myRECOevent.Muon1Pt=matchedMuon1->pt();
-				myRECOevent.Muon1Eta=matchedMuon1->eta();
-				myRECOevent.Muon1Phi=matchedMuon1->phi();
+				iCut[ii].lepton2Matched=true;
+				iCut[ii].Muon1dR=match2DR;
+				if(matchedMuon1->pdgId()==iCut[ii].lepton2Id){ iCut[ii].Muon1chargeMatch = true ;}
+    			else{ iCut[ii].Muon2chargeMatch = false ;}
+				iCut[ii].Muon1PtRatio = iCut[ii].lepton2Pt/matchedMuon1->pt();
+				iCut[ii].Muon1TW=tWfinder(iEvent,lepton2);
+				iCut[ii].Muon1Pt=matchedMuon1->pt();
+				iCut[ii].Muon1Eta=matchedMuon1->eta();
+				iCut[ii].Muon1Phi=matchedMuon1->phi();
 			}
 		}
 		
 		if(mu1Match==0){
-		myRECOevent.unmatchedPhi.push_back(iMuon->phi());
-		myRECOevent.unmatchedEta.push_back(iMuon->eta());
-		myRECOevent.unmatchedPt.push_back(iMuon->pt());
+		iCut[ii].unmatchedPhi.push_back(iMuon->phi());
+		iCut[ii].unmatchedEta.push_back(iMuon->eta());
+		iCut[ii].unmatchedPt.push_back(iMuon->pt());
 		if( abs(lepton1ID)==13){
-		myRECOevent.unmatchedDR.push_back(match1DR);
+		iCut[ii].unmatchedDR.push_back(match1DR);
 		}
-		else{myRECOevent.unmatchedDR.push_back(match2DR);}
-		}
-
+		else{iCut[ii].unmatchedDR.push_back(match2DR);}
 		}
 
-		if(mu1Match==0 || myRECOevent.failedGenPtEta ){
-			myRECOevent.failedMatch=true;
+		}
+
+		if(mu1Match==0 || iCut[ii].failedGenPtEta ){
+			iCut[ii].failedMatch=true;
 		}
 	}
 
 	//electron
-	if(!myRECOevent.muonTau){
-	myRECOevent.electronTrigger=false;
-   if (passElectronTrig(iEvent, myRECOevent)){ myRECOevent.electronTrigger=true; }
+	if(!iCut[ii].muonTau){
+	iCut[ii].electronTrigger=false;
+   if (passElectronTrig(iEvent, iCut[ii])){ iCut[ii].electronTrigger=true; }
 
 
 	//for all reco electrons, loop through gen electrons to find spatial matches
 	for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
 		if(fabs(iElectron->eta()) > 2.4) {continue;}
 		if(iElectron->pt() < 10 ) {continue;}
-		myRECOevent.electronRecoCount++;
+		iCut[ii].electronRecoCount++;
 
 		if(abs(lepton1ID)==11){
-			double match1DR = sqrt(dR2(iElectron->eta(), myRECOevent.lepton1Eta, iElectron->phi(), myRECOevent.lepton1Phi));
+			double match1DR = sqrt(dR2(iElectron->eta(), iCut[ii].lepton1Eta, iElectron->phi(), iCut[ii].lepton1Phi));
 
 				if(el1Match == 0 && match1DR < 0.3) {
 					el1Match++;
-					myRECOevent.lepton1Matched=true;
+					iCut[ii].lepton1Matched=true;
 					matchedElectron1 = &(*(iElectron));
-					myRECOevent.Electron1dR=match1DR;
-					if(matchedElectron1->pdgId()==myRECOevent.lepton1Id){ myRECOevent.Electron1chargeMatch = true ;}
-    				else{ myRECOevent.Electron1chargeMatch = false ;}
-					myRECOevent.Electron1PtRatio = myRECOevent.lepton1Pt/matchedElectron1->pt();
-					myRECOevent.Electron1TW=tWfinder(iEvent,lepton1);
-					myRECOevent.Electron1Pt=matchedElectron1->pt();
-					myRECOevent.Electron1Eta=matchedElectron1->eta();
-					myRECOevent.Electron1Phi=matchedElectron1->phi();
+					iCut[ii].Electron1dR=match1DR;
+					if(matchedElectron1->pdgId()==iCut[ii].lepton1Id){ iCut[ii].Electron1chargeMatch = true ;}
+    				else{ iCut[ii].Electron1chargeMatch = false ;}
+					iCut[ii].Electron1PtRatio = iCut[ii].lepton1Pt/matchedElectron1->pt();
+					iCut[ii].Electron1TW=tWfinder(iEvent,lepton1);
+					iCut[ii].Electron1Pt=matchedElectron1->pt();
+					iCut[ii].Electron1Eta=matchedElectron1->eta();
+					iCut[ii].Electron1Phi=matchedElectron1->phi();
 				}
 		}
 		else if(abs(lepton2ID)==11){
-			double match2DR = sqrt(dR2(iElectron->eta(), myRECOevent.lepton2Eta, iElectron->phi(), myRECOevent.lepton2Phi));
+			double match2DR = sqrt(dR2(iElectron->eta(), iCut[ii].lepton2Eta, iElectron->phi(), iCut[ii].lepton2Phi));
 				if(el1Match == 0 && match2DR < 0.3)  {
 					matchedElectron1 = &(*(iElectron));
 					el1Match++; 
-					myRECOevent.lepton2Matched=true;
-					myRECOevent.Electron1dR=match2DR;
-					if(matchedElectron1->pdgId()==myRECOevent.lepton2Id){ myRECOevent.Electron1chargeMatch = true ;}
-    				else{ myRECOevent.Electron1chargeMatch = false ;}
-					myRECOevent.Electron1PtRatio = myRECOevent.lepton2Pt/matchedElectron1->pt();
-					myRECOevent.Electron1TW=tWfinder(iEvent,lepton2);
-					myRECOevent.Electron1Pt=matchedElectron1->pt();
-					myRECOevent.Electron1Eta=matchedElectron1->eta();
-					myRECOevent.Electron1Phi=matchedElectron1->phi();
+					iCut[ii].lepton2Matched=true;
+					iCut[ii].Electron1dR=match2DR;
+					if(matchedElectron1->pdgId()==iCut[ii].lepton2Id){ iCut[ii].Electron1chargeMatch = true ;}
+    				else{ iCut[ii].Electron1chargeMatch = false ;}
+					iCut[ii].Electron1PtRatio = iCut[ii].lepton2Pt/matchedElectron1->pt();
+					iCut[ii].Electron1TW=tWfinder(iEvent,lepton2);
+					iCut[ii].Electron1Pt=matchedElectron1->pt();
+					iCut[ii].Electron1Eta=matchedElectron1->eta();
+					iCut[ii].Electron1Phi=matchedElectron1->phi();
 				}
 		}
 		if(el1Match==0){
-			myRECOevent.unmatchedPhi.push_back(iElectron->phi());
-			myRECOevent.unmatchedEta.push_back(iElectron->eta());
-			myRECOevent.unmatchedPt.push_back(iElectron->pt());
+			iCut[ii].unmatchedPhi.push_back(iElectron->phi());
+			iCut[ii].unmatchedEta.push_back(iElectron->eta());
+			iCut[ii].unmatchedPt.push_back(iElectron->pt());
 			if( abs(lepton1ID)==11){
-			myRECOevent.unmatchedDR.push_back(match1DR);
+			iCut[ii].unmatchedDR.push_back(match1DR);
 			}
-			else{myRECOevent.unmatchedDR.push_back(match2DR);}
+			else{iCut[ii].unmatchedDR.push_back(match2DR);}
 			}
 
 	}
-	if(el1Match==0 || myRECOevent.failedGenPtEta ){
-	myRECOevent.failedMatch=true;
+	if(el1Match==0 || iCut[ii].failedGenPtEta ){
+	iCut[ii].failedMatch=true;
 	}
 
 	}	
+	}
+
+m_cuts1.fill(iCut[ii],ii);
+}
+//m_cuts1.fill(cuts1,0);
+//m_cuts1.fill(cuts2,1);
+//m_cuts1.fill(cuts3,2);
+//m_cuts1.fill(cuts4,3);
+
+//std::cout << iCut[ii]Muon1Pt<<std::endl;
+
 }
 
-
-m_allEvents.fill(myRECOevent);
-
-}
 
 
 //HELPERS
@@ -642,7 +693,7 @@ bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
 		return false;}
 }
 
-bool gen_match::passElectronTrig(const edm::Event& iEvent, eventBits2& myRECOevent) {
+bool gen_match::passElectronTrig(const edm::Event& iEvent, eventBits2& iCut) {
   bool passTriggers = false;
 
   //std::cout <<"checking electron trigger paths "<<std::endl;
@@ -663,8 +714,8 @@ bool gen_match::passElectronTrig(const edm::Event& iEvent, eventBits2& myRECOeve
       }
     }
   }
-  //if(passTriggers) myRECOevent.electronTrigger = 1.;
-  //else myRECOevent.electronTrigger = 0.;
+  //if(passTriggers) iCut[ii].electronTrigger = 1.;
+  //else iCut[ii].electronTrigger = 0.;
 
   return passTriggers;
 }
@@ -675,11 +726,34 @@ void
 gen_match::beginJob() {
 	edm::Service<TFileService> fs; 
 
-	m_allEvents.book(fs->mkdir("twoMuons"),0);
-	m_allEvents.book(fs->mkdir("twoElectrons"),1);
-	m_allEvents.book(fs->mkdir("muonElectron"),2);
-	m_allEvents.book(fs->mkdir("muonTau"),3);
-	m_allEvents.book(fs->mkdir("electronTau"),4);
+	fs->mkdir("cuts1");
+	fs->mkdir("cuts2");
+	fs->mkdir("cuts3");
+	fs->mkdir("cuts4");
+
+	m_cuts1.book(fs->mkdir("cuts1/twoMuons"),0,0);
+	//m_iCut[ii].book(fs->mkdir("twoElectrons"),1);
+	m_cuts1.book(fs->mkdir("cuts1/muonElectron"),0,1);
+	m_cuts1.book(fs->mkdir("cuts1/muonTau"),0,2);
+	//m_iCut[ii].book(fs->mkdir("electronTau"),4);
+
+	m_cuts1.book(fs->mkdir("cuts2/twoMuons"),1,0);
+	//m_cuts2.book(fs->mkdir("twoElectrons"),6);
+	m_cuts1.book(fs->mkdir("cuts2/muonElectron"),1,1);
+	m_cuts1.book(fs->mkdir("cuts2/muonTau"),1,2);
+	//m_cuts2.book(fs->mkdir("electronTau")9);
+
+	m_cuts1.book(fs->mkdir("cuts3/twoMuons"),2,0);
+	//m_cuts3.book(fs->mkdir("twoElectrons"),11);
+	m_cuts1.book(fs->mkdir("cuts3/muonElectron"),2,1);
+	m_cuts1.book(fs->mkdir("cuts3/muonTau"),2,2);
+	//m_cuts3.book(fs->mkdir("electronTau"),14);
+
+	m_cuts1.book(fs->mkdir("cuts4/twoMuons"),3,0);
+	//m_cuts4.book(fs->mkdir("twoElectrons"),16);
+	m_cuts1.book(fs->mkdir("cuts4/muonElectron"),3,1);
+	m_cuts1.book(fs->mkdir("cuts4/muonTau"),3,2);
+	//m_cuts4.book(fs->mkdir("electronTau"),19);
 
 }
 
