@@ -183,13 +183,13 @@ void eventHistos2::book(TFileDirectory histoFolder, int nCut, int genType) {
 //General histogram filling
 void eventHistos2::fill(eventBits2& event, int cutNumber) {
 
-	//m_countHisto->Fill("count", event.count);
-
 int iSize;
 int n;
 
 if(event.twoMuons){
-	n=0;
+	for(j=0;j<2;j++){
+	if(j==0){n=0;}
+	if(j==1){n=3;}
 
 		m_numRecoMuons[cutNumber][n]->Fill(event.muonRecoCount);
 		m_numGenMuons[cutNumber][n]->Fill(event.muonGenCount);
@@ -313,6 +313,7 @@ if(event.twoMuons){
 			m_unmatchedRecoDR[cutNumber][n]->Fill(event.unmatchedDR[iValue]);
 		}
 	}
+}
 } 
 /*	
 if(event.twoElectrons){
@@ -436,8 +437,10 @@ if(event.twoElectrons){
 
 	
 if(event.muonElectron){
-	n=1;
+for(j=0;j<2;j++){
 
+	if(j==0){n=1;}
+	if(j==1){n=3;}
 		m_numRecoMuons[cutNumber][n]->Fill(event.muonRecoCount);
 		m_numGenMuons[cutNumber][n]->Fill(event.muonGenCount);
 		m_numRecoElectrons[cutNumber][n]->Fill(event.electronRecoCount);
@@ -561,9 +564,13 @@ if(event.muonElectron){
 
 	}
 }
+}
 
 if(event.muonTau){
-	n=2;
+	for(j=0;j<2;j++){
+
+	if(j==0){n=2;}
+	if(j==1){n=3;}
 
 		m_numRecoMuons[cutNumber][n]->Fill(event.muonRecoCount);
 		m_numGenMuons[cutNumber][n]->Fill(event.muonGenCount);
@@ -653,6 +660,7 @@ if(event.muonTau){
 		}
 
 	}
+}
 }
 
 /*

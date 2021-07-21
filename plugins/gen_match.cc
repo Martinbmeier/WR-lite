@@ -101,10 +101,8 @@ class gen_match : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		//void saveMuonData(eventBits2 * iCut[ii], double matched1Mass, double matched2Mass);
 		
 		
-		eventHistos2 m_cuts1;
-		//eventHistos2 m_cuts2;
-		//eventHistos2 m_cuts3;
-		//eventHistos2 m_cuts4;
+		eventHistos2 m_histoMaker;
+
 
 		//neuralNet networkResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/Resolved");
 		//neuralNet networkSuperResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/SuperResolved");
@@ -627,12 +625,12 @@ if(iCut[ii].muonElectron  || iCut[ii].muonTau) {  //|| iCut[ii].electronTau ) {
 	}	
 	}
 
-m_cuts1.fill(iCut[ii],ii);
+m_histoMaker.fill(iCut[ii],ii);
 }
-//m_cuts1.fill(cuts1,0);
-//m_cuts1.fill(cuts2,1);
-//m_cuts1.fill(cuts3,2);
-//m_cuts1.fill(cuts4,3);
+//m_histoMaker.fill(cuts1,0);
+//m_histoMaker.fill(cuts2,1);
+//m_histoMaker.fill(cuts3,2);
+//m_histoMaker.fill(cuts4,3);
 
 //std::cout << iCut[ii]Muon1Pt<<std::endl;
 
@@ -731,28 +729,32 @@ gen_match::beginJob() {
 	fs->mkdir("cuts3");
 	fs->mkdir("cuts4");
 
-	m_cuts1.book(fs->mkdir("cuts1/twoMuons"),0,0);
+	m_histoMaker.book(fs->mkdir("cuts1/twoMuons"),0,0);
 	//m_iCut[ii].book(fs->mkdir("twoElectrons"),1);
-	m_cuts1.book(fs->mkdir("cuts1/muonElectron"),0,1);
-	m_cuts1.book(fs->mkdir("cuts1/muonTau"),0,2);
+	m_histoMaker.book(fs->mkdir("cuts1/muonElectron"),0,1);
+	m_histoMaker.book(fs->mkdir("cuts1/muonTau"),0,2);
+	m_histoMaker.book(fs->mkdir("cuts1/allEvents"),0,3);
 	//m_iCut[ii].book(fs->mkdir("electronTau"),4);
 
-	m_cuts1.book(fs->mkdir("cuts2/twoMuons"),1,0);
+	m_histoMaker.book(fs->mkdir("cuts2/twoMuons"),1,0);
 	//m_cuts2.book(fs->mkdir("twoElectrons"),6);
-	m_cuts1.book(fs->mkdir("cuts2/muonElectron"),1,1);
-	m_cuts1.book(fs->mkdir("cuts2/muonTau"),1,2);
+	m_histoMaker.book(fs->mkdir("cuts2/muonElectron"),1,1);
+	m_histoMaker.book(fs->mkdir("cuts2/muonTau"),1,2);
+	m_histoMaker.book(fs->mkdir("cuts2/allEvents"),1,3);
 	//m_cuts2.book(fs->mkdir("electronTau")9);
 
-	m_cuts1.book(fs->mkdir("cuts3/twoMuons"),2,0);
+	m_histoMaker.book(fs->mkdir("cuts3/twoMuons"),2,0);
 	//m_cuts3.book(fs->mkdir("twoElectrons"),11);
-	m_cuts1.book(fs->mkdir("cuts3/muonElectron"),2,1);
-	m_cuts1.book(fs->mkdir("cuts3/muonTau"),2,2);
+	m_histoMaker.book(fs->mkdir("cuts3/muonElectron"),2,1);
+	m_histoMaker.book(fs->mkdir("cuts3/muonTau"),2,2);
+	m_histoMaker.book(fs->mkdir("cuts3/allEvents"),2,3);
 	//m_cuts3.book(fs->mkdir("electronTau"),14);
 
-	m_cuts1.book(fs->mkdir("cuts4/twoMuons"),3,0);
+	m_histoMaker.book(fs->mkdir("cuts4/twoMuons"),3,0);
 	//m_cuts4.book(fs->mkdir("twoElectrons"),16);
-	m_cuts1.book(fs->mkdir("cuts4/muonElectron"),3,1);
-	m_cuts1.book(fs->mkdir("cuts4/muonTau"),3,2);
+	m_histoMaker.book(fs->mkdir("cuts4/muonElectron"),3,1);
+	m_histoMaker.book(fs->mkdir("cuts4/muonTau"),3,2);
+	m_histoMaker.book(fs->mkdir("cuts4/allEvents"),3,3);
 	//m_cuts4.book(fs->mkdir("electronTau"),19);
 
 }
