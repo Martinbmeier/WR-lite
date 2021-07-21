@@ -187,7 +187,7 @@ int iSize;
 int n;
 
 if(event.twoMuons){
-	for(j=0;j<2;j++){
+	for(int j=0;j<2;j++){
 	if(j==0){n=0;}
 	if(j==1){n=3;}
 
@@ -437,7 +437,7 @@ if(event.twoElectrons){
 
 	
 if(event.muonElectron){
-for(j=0;j<2;j++){
+for(int j=0;j<2;j++){
 
 	if(j==0){n=1;}
 	if(j==1){n=3;}
@@ -567,7 +567,7 @@ for(j=0;j<2;j++){
 }
 
 if(event.muonTau){
-	for(j=0;j<2;j++){
+	for(int j=0;j<2;j++){
 
 	if(j==0){n=2;}
 	if(j==1){n=3;}
