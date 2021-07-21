@@ -254,7 +254,8 @@ for(int ii=0; ii<4; ii++){
 		const reco::GenParticle* lepton2   = 0;
 
 		for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
-			if( ! iParticle->isHardProcess() ) continue;  //ONLY HARD PROCESS AND NOT INCOMING
+			if( ! iParticle->isHardProcess() ){ continue; }  //ONLY HARD PROCESS AND NOT INCOMING
+			if(!tWfinder(iEvent,iParticle)){ continue; }		//Only final state muons and electrons from t->W
 			if( abs( iParticle->pdgId() ) == 13 || abs( iParticle->pdgId() ) == 11 || abs( iParticle->pdgId() ) == 15) {//HERE'S A LEPtON
 				if(fabs(iParticle->eta()) > 2.4 || iParticle->pt() < 10){
 					if(lepton1Cuts==0){
@@ -397,7 +398,7 @@ if(iCut[ii].twoMuons){
 			if(matchedMuon1->pdgId()==iCut[ii].lepton1Id){ iCut[ii].Muon1chargeMatch = true ;}
     		else{ iCut[ii].Muon1chargeMatch = false ;}
 			iCut[ii].Muon1PtRatio = iCut[ii].lepton1Pt/matchedMuon1->pt();
-			iCut[ii].Muon1TW=tWfinder(iEvent,lepton1);
+			//iCut[ii].Muon1TW=tWfinder(iEvent,lepton1);
 			iCut[ii].Muon1Pt=matchedMuon1->pt();
 			iCut[ii].Muon1Eta=matchedMuon1->eta();
 			iCut[ii].Muon1Phi=matchedMuon1->phi();
@@ -410,7 +411,7 @@ if(iCut[ii].twoMuons){
 			if(matchedMuon2->pdgId()==iCut[ii].lepton2Id){ iCut[ii].Muon2chargeMatch = true ;}
     		else{ iCut[ii].Muon2chargeMatch = false ;}
 			iCut[ii].Muon2PtRatio = iCut[ii].lepton2Pt/matchedMuon2->pt();
-			iCut[ii].Muon2TW=tWfinder(iEvent,lepton2);
+			//iCut[ii].Muon2TW=tWfinder(iEvent,lepton2);
 			iCut[ii].Muon2Pt=matchedMuon2->pt();
 			iCut[ii].Muon2Eta=matchedMuon2->eta();
 			iCut[ii].Muon2Phi=matchedMuon2->phi();
@@ -521,7 +522,7 @@ if(iCut[ii].muonElectron  || iCut[ii].muonTau) {  //|| iCut[ii].electronTau ) {
 				if(matchedMuon1->pdgId()==iCut[ii].lepton1Id){ iCut[ii].Muon1chargeMatch = true ;}
     			else{ iCut[ii].Muon1chargeMatch = false ;}
 				iCut[ii].Muon1PtRatio = iCut[ii].lepton1Pt/matchedMuon1->pt();
-				iCut[ii].Muon1TW=tWfinder(iEvent,lepton1);
+				//iCut[ii].Muon1TW=tWfinder(iEvent,lepton1);
 				iCut[ii].Muon1Pt=matchedMuon1->pt();
 				iCut[ii].Muon1Eta=matchedMuon1->eta();
 				iCut[ii].Muon1Phi=matchedMuon1->phi();
@@ -538,7 +539,7 @@ if(iCut[ii].muonElectron  || iCut[ii].muonTau) {  //|| iCut[ii].electronTau ) {
 				if(matchedMuon1->pdgId()==iCut[ii].lepton2Id){ iCut[ii].Muon1chargeMatch = true ;}
     			else{ iCut[ii].Muon2chargeMatch = false ;}
 				iCut[ii].Muon1PtRatio = iCut[ii].lepton2Pt/matchedMuon1->pt();
-				iCut[ii].Muon1TW=tWfinder(iEvent,lepton2);
+				//iCut[ii].Muon1TW=tWfinder(iEvent,lepton2);
 				iCut[ii].Muon1Pt=matchedMuon1->pt();
 				iCut[ii].Muon1Eta=matchedMuon1->eta();
 				iCut[ii].Muon1Phi=matchedMuon1->phi();
@@ -585,7 +586,7 @@ if(iCut[ii].muonElectron  || iCut[ii].muonTau) {  //|| iCut[ii].electronTau ) {
 					if(matchedElectron1->pdgId()==iCut[ii].lepton1Id){ iCut[ii].Electron1chargeMatch = true ;}
     				else{ iCut[ii].Electron1chargeMatch = false ;}
 					iCut[ii].Electron1PtRatio = iCut[ii].lepton1Pt/matchedElectron1->pt();
-					iCut[ii].Electron1TW=tWfinder(iEvent,lepton1);
+					//iCut[ii].Electron1TW=tWfinder(iEvent,lepton1);
 					iCut[ii].Electron1Pt=matchedElectron1->pt();
 					iCut[ii].Electron1Eta=matchedElectron1->eta();
 					iCut[ii].Electron1Phi=matchedElectron1->phi();
@@ -601,7 +602,7 @@ if(iCut[ii].muonElectron  || iCut[ii].muonTau) {  //|| iCut[ii].electronTau ) {
 					if(matchedElectron1->pdgId()==iCut[ii].lepton2Id){ iCut[ii].Electron1chargeMatch = true ;}
     				else{ iCut[ii].Electron1chargeMatch = false ;}
 					iCut[ii].Electron1PtRatio = iCut[ii].lepton2Pt/matchedElectron1->pt();
-					iCut[ii].Electron1TW=tWfinder(iEvent,lepton2);
+					//iCut[ii].Electron1TW=tWfinder(iEvent,lepton2);
 					iCut[ii].Electron1Pt=matchedElectron1->pt();
 					iCut[ii].Electron1Eta=matchedElectron1->eta();
 					iCut[ii].Electron1Phi=matchedElectron1->phi();
@@ -654,19 +655,21 @@ double gen_match::dPhi(double phi1, double phi2) {
 //check if a lepton can be traced back to a W boson and then to a top
 bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lepton) {
 
-		edm::Handle<std::vector<reco::GenParticle>> genParticles;
-		iEvent.getByToken(m_genParticleToken, genParticles);
+		//edm::Handle<std::vector<reco::GenParticle>> genParticles;
+		//iEvent.getByToken(m_genParticleToken, genParticles);
 
     		bool ttbar=false;
     		int iStatus = 0;
-    		//std::cout << "starting lepton: ";
-			//std::cout << genParticles->at(bestidx).pdgId()<<std::endl;
+
+    		if(abs(lepton->pdgID())!=15 && lepton->status()!=1){
+    			if(abs(lepton->daughter())==11 || abs(lepton->daughter())==13){return false;} //the lepton is not the final state lepton, it decays into another muon or electron
+			}
+
     		const reco::Candidate* iParticle = lepton->mother();
-    		//std::cout << "parent lepton: ";
-    		//std::cout << iParticle->pdgId()<<std::endl;
 
     		//while(iParticle->pdgId()!=2212){
-    		while(iStatus!=4){
+
+    		while(iStatus!=4){  //status=4 is the initial proton
     			iStatus = iParticle->status();
     			
     			if(abs(iParticle->pdgId())==24){ //found W
