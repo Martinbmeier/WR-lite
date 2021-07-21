@@ -188,13 +188,6 @@ void eventHistos2::fill(eventBits2& event, int cutNumber) {
 int iSize;
 int n;
 
-//if(cutNumber==0){m=0;}
-//if(cutNumber==1){m=3;}
-//if(cutNumber==2){m=6;}
-//if(cutNumber==3){m=9;}
-
-	
-
 if(event.twoMuons){
 	n=0;
 
