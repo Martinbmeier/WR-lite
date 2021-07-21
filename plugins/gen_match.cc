@@ -662,7 +662,13 @@ bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
     		int iStatus = 0;
 
     		if(abs(lepton->pdgId())!=15 && lepton->status()!=1){
-    			if(abs(lepton->daughter())==11 || abs(lepton->daughter())==13){return false;} //the lepton is not the final state lepton, it decays into another muon or electron
+    			int n = lepton.numberOfDaughters();
+    			     for(size_t j = 0; j < n; ++ j) {
+       			  const Candidate * d = p.daughter( j );
+       			  int dauId = d->pdgId();
+			
+    			if(abs(dauId)==11 || abs(dauId)==13){return false;} //the lepton is not the final state lepton, it decays into another muon or electron
+				}
 			}
 
     		const reco::Candidate* iParticle = lepton->mother();
