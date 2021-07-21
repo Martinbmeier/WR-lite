@@ -662,7 +662,7 @@ bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
     		int iStatus = 0;
 
     		if(abs(lepton->pdgId())!=15 && lepton->status()!=1){
-    			int n = lepton.numberOfDaughters();
+    			int n = lepton->numberOfDaughters();
     			     for(size_t j = 0; j < n; ++ j) {
        			  const Candidate * d = p.daughter( j );
        			  int dauId = d->pdgId();
