@@ -255,7 +255,7 @@ for(int ii=0; ii<4; ii++){
 
 		for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 			if( ! iParticle->isHardProcess() ){ continue; }  //ONLY HARD PROCESS AND NOT INCOMING
-			if(!tWfinder(iEvent,iParticle)){ continue; }		//Only final state muons and electrons from t->W
+			if(!tWfinder(iEvent,*iParticle)){ continue; }		//Only final state muons and electrons from t->W
 			if( abs( iParticle->pdgId() ) == 13 || abs( iParticle->pdgId() ) == 11 || abs( iParticle->pdgId() ) == 15) {//HERE'S A LEPtON
 				if(fabs(iParticle->eta()) > 2.4 || iParticle->pt() < 10){
 					if(lepton1Cuts==0){
@@ -661,7 +661,7 @@ bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
     		bool ttbar=false;
     		int iStatus = 0;
 
-    		if(abs(lepton->pdgID())!=15 && lepton->status()!=1){
+    		if(abs(lepton->pdgId())!=15 && lepton->status()!=1){
     			if(abs(lepton->daughter())==11 || abs(lepton->daughter())==13){return false;} //the lepton is not the final state lepton, it decays into another muon or electron
 			}
 
