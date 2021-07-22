@@ -663,10 +663,15 @@ bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
 
     		if(abs(lepton->pdgId())!=15 && lepton->status()!=1){
     			int n = lepton->numberOfDaughters();
+    			std::cout<<"number of daughters: ";
+    			std::cout<<n<<std::endl;
+    			std::cout<<"pdgIDs: ";
     			   for(int j = 0; j < n; ++ j) {
        				int dauId = abs(lepton->daughter(j)->pdgId());
+       				std::cout<<dauID;
+       				std::cout<<", ";
 			
-    					if(dauId==11 || dauId==13){return false;} //the lepton is not the final state lepton, it decays into another muon or electron
+    					if(dauId==11 || dauId==13){return false; std::cout<<"FAILED"<<std::endl; std::cout<<"------------------------------"<<std::endl} //the lepton is not the final state lepton, it decays into another muon or electron
 					}
 			}
 
