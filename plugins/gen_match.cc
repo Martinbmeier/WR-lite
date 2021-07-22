@@ -659,8 +659,8 @@ bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
 		//iEvent.getByToken(m_genParticleToken, genParticles);
 
     		bool ttbar=false;
-    		//int iStatus = 0;
-
+    		int iStatus = 0;
+/*
     		if((abs(lepton->pdgId())==11 || abs(lepton->pdgId())==13 ) && lepton->status()!=1){
     			int n = lepton->numberOfDaughters();
     			std::cout<<lepton->pdgId();
@@ -675,19 +675,19 @@ bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
     					if(dauId==11 || dauId==13){std::cout<<"FAILED"<<std::endl; std::cout<<"------------------------------"<<std::endl; return false;} //the lepton is not the final state lepton, it decays into another muon or electron
 					}
 			}
-
+*/
     		const reco::Candidate* iParticle = lepton->mother();
 
-    		while(iParticle->pdgId()!=2212){
+    		//while(iParticle->pdgId()!=2212){
 
-    		//while(iStatus!=4){  //status=4 is the initial proton
-    			//iStatus = iParticle->status();
+    		while(iStatus!=4){  //status=4 is the initial proton
+    			iStatus = iParticle->status();
     			
     			if(abs(iParticle->pdgId())==24){ //found W
-    				while(iParticle->pdgId()!=2212){
-    				//while(iStatus!=4){
+    				//while(iParticle->pdgId()!=2212){
+    				while(iStatus!=4){
     				iParticle = iParticle->mother();
-    				//iStatus = iParticle->status();
+    				iStatus = iParticle->status();
 
     			   	if(abs(iParticle->pdgId())==6){ ttbar=true; 
     			   		break;
