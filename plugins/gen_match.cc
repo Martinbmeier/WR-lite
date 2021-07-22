@@ -672,14 +672,14 @@ bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
 
     		const reco::Candidate* iParticle = lepton->mother();
 
-    		//while(iParticle->pdgId()!=2212){
+    		while(iParticle->pdgId()!=2212){
 
-    		while(iStatus!=4){  //status=4 is the initial proton
+    		//while(iStatus!=4){  //status=4 is the initial proton
     			iStatus = iParticle->status();
     			
     			if(abs(iParticle->pdgId())==24){ //found W
-    				//while(iParticle->pdgId()!=2212){
-    				while(iStatus!=4){
+    				while(iParticle->pdgId()!=2212){
+    				//while(iStatus!=4){
     				iParticle = iParticle->mother();
     				iStatus = iParticle->status();
 
