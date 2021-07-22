@@ -670,7 +670,7 @@ bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
     			std::cout<<"pdgIDs -> "<<std::endl;
     			   for(int j = 0; j < n; ++ j) {
        				int dauId = abs(lepton->daughter(j)->pdgId());
-       				std::cout<<dauId<<endl;
+       				std::cout<<dauId<<std::endl;
 			
     					if(dauId==11 || dauId==13){std::cout<<"FAILED"<<std::endl; std::cout<<"------------------------------"<<std::endl; return false;} //the lepton is not the final state lepton, it decays into another muon or electron
 					}
