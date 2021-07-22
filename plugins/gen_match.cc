@@ -661,19 +661,38 @@ bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
 
     		bool ttbar=false;
     		int iStatus = 0;
+    		double parentPt;
+			double parentPhi;
+			double parentEta;
+			double daughterPt;
+			double daughterPhi;
+			double daughterEta;
 
     		if((abs(lepton->pdgId())==11 || abs(lepton->pdgId())==13 ) && lepton->status()!=1){
     			int n = lepton->numberOfDaughters();
-    			//std::cout<<lepton->pdgId();
-    			//std::cout<<" -> ";
-    			//std::cout<<"number of daughters: ";
-    			//std::cout<<n<<std::endl;
-    			//std::cout<<"pdgIDs -> "<<std::endl;
+    			parentPt = lepton->pt();
+    			parentPhi = lepton->phi();
+    			parentEta = lepton->eta();
+    			std::cout<<lepton->pdgId();
+    			std::cout<<" -> ";
+    			std::cout<<"number of daughters: ";
+    			std::cout<<n<<std::endl;
+    			std::cout<<"pdgIDs -> "<<std::endl;
     			   for(int j = 0; j < n; ++ j) {
        				int dauId = abs(lepton->daughter(j)->pdgId());
-       				//std::cout<<dauId<<std::endl;
+       				daughterPt = lepton->daughter(j)->pt();
+       				daughterPhi = lepton->daughter(j)->phi();
+       				daughterEta = lepton->daughter(j)->eta();
+       				std::cout<<dauId<<std::endl;
 			
-    					if(dauId==11 || dauId==13){return false; }//std::cout<<"FAILED"<<std::endl; std::cout<<"------------------------------"<<std::endl; } //the lepton is not the final state lepton, it decays into another muon or electron
+    					if(dauId==11 || dauId==13){
+    					std::cout<<"motherPt/daughterPt = ";
+    					std::cout<<parentPt/daughterPt<<std::endl;
+    					std::cout<<"motherPhi/daughterPhi = ";
+    					std::cout<<parentPhi/daughterPhi<<std::endl;
+    					std::cout<<"motherEta/daughterEta = ";
+    					std::cout<<parentEta/daughterEta<<std::endl;
+    					std::cout<<"FAILED"<<std::endl; std::cout<<"------------------------------"<<std::endl; return false; } //the lepton is not the final state lepton, it decays into another muon or electron
 					}
 			}
 
