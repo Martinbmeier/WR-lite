@@ -256,7 +256,6 @@ for(int ii=0; ii<4; ii++){
 		for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 			if( ! iParticle->isHardProcess() ){ continue; }  //ONLY HARD PROCESS AND NOT INCOMING
 			if( abs( iParticle->pdgId() ) == 13 || abs( iParticle->pdgId() ) == 11 || abs( iParticle->pdgId() ) == 15) {//HERE'S A LEPtON
-				if(!tWfinder(iEvent, &(*iParticle))){ continue; }		//Only final state muons and electrons from t->W
 				if(fabs(iParticle->eta()) > 2.4 || iParticle->pt() < 10){
 					if(lepton1Cuts==0){
 						lepton1Cuts=1;
@@ -266,8 +265,10 @@ for(int ii=0; ii<4; ii++){
 					iCut[ii].failedGenPtEta = true;
 					continue;
 				}
+
 				if(abs(iParticle->pdgId())==13){iCut[ii].muonGenCount++;}
 				if(abs(iParticle->pdgId())==11){iCut[ii].electronGenCount++;}
+				if(!tWfinder(iEvent, &(*iParticle))){ continue; }		//Only final state muons and electrons from t->W
 				if(lepton1==0){
 					lepton1 = &(*iParticle);
 					lepton1ID = abs(iParticle->pdgId());
