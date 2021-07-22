@@ -659,7 +659,7 @@ bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
 		//iEvent.getByToken(m_genParticleToken, genParticles);
 
     		bool ttbar=false;
-    		int iStatus = 0;
+    		//int iStatus = 0;
 
     		if(abs(lepton->pdgId())!=15 && lepton->status()!=1){
     			int n = lepton->numberOfDaughters();
@@ -668,10 +668,10 @@ bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
     			std::cout<<"pdgIDs: ";
     			   for(int j = 0; j < n; ++ j) {
        				int dauId = abs(lepton->daughter(j)->pdgId());
-       				std::cout<<dauID;
+       				std::cout<<dauId;
        				std::cout<<", ";
 			
-    					if(dauId==11 || dauId==13){return false; std::cout<<"FAILED"<<std::endl; std::cout<<"------------------------------"<<std::endl} //the lepton is not the final state lepton, it decays into another muon or electron
+    					if(dauId==11 || dauId==13){return false; std::cout<<"FAILED"<<std::endl; std::cout<<"------------------------------"<<std::endl;} //the lepton is not the final state lepton, it decays into another muon or electron
 					}
 			}
 
