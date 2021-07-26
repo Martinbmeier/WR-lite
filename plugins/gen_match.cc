@@ -34,6 +34,7 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Utilities/interface/InputTag.h"
 #include "FWCore/Utilities/interface/EDGetToken.h"
+#include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/Math/interface/deltaR.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
@@ -250,10 +251,21 @@ for(int ii=0; ii<4; ii++){
 		int lepton1ID = 0;
 		int lepton2ID = 0;
 
+		int n;
+
+		bool lepton1matched = false;
+		bool lepton2matched = false;
+
+
+		const reco::Candidate* ileptonCandidate = 0;
+
 		const reco::GenParticle* lepton1   = 0;
 		const reco::GenParticle* lepton2   = 0;
+		const reco::Candidate* lepton1candidate = 0;
+		const reco::Candidate* lepton2candidate = 0;
 
 		for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
+			ileptonCandidate = 0;
 			if( ! iParticle->isHardProcess() ){ continue; }  //ONLY HARD PROCESS AND NOT INCOMING
 			if( abs( iParticle->pdgId() ) == 13 || abs( iParticle->pdgId() ) == 11 || abs( iParticle->pdgId() ) == 15) {//HERE'S A LEPtON
 				if(fabs(iParticle->eta()) > 2.4 || iParticle->pt() < 10){
@@ -268,18 +280,48 @@ for(int ii=0; ii<4; ii++){
 
 				if(abs(iParticle->pdgId())==13){iCut[ii].muonGenCount++;}
 				if(abs(iParticle->pdgId())==11){iCut[ii].electronGenCount++;}
-				if(!tWfinder(iEvent, &(*iParticle))){ continue; }		//Only final state muons and electrons from t->W
-				if(lepton1==0){
-					lepton1 = &(*iParticle);
-					lepton1ID = abs(iParticle->pdgId());
-				} else if(lepton2==0){
-					lepton2 = &(*iParticle);
-					lepton2ID = abs(iParticle->pdgId());
+
+				if(!tWfinder(iEvent, &(*iParticle))){ continue; }		//Only muons and electrons from t->W
+
+
+    			if((abs(iParticle->pdgId())==11 || abs(iParticle->pdgId())==13 ) && iParticle->status()!=1){ //find daughter leptons if not the final state lepton
+    				n = iParticle->numberOfDaughters();
+    			   for(int j = 0; j < n; ++ j) {
+       				int dauId = abs(iParticle->daughter(j)->pdgId());
+    					if(dauId==abs(iParticle->pdgId())){ 
+    						ileptonCandidate = iParticle->daughter(j); 
+    						}
+					}
+				}
+
+				if(!lepton1matched){
+					if(ileptonCandidate==0){
+						lepton1 = &(*iParticle);
+						lepton1ID = abs(iParticle->pdgId());
+						lepton1matched=true;
+					}
+					else if(ileptonCandidate!=0){
+						lepton1candidate = &(*ileptonCandidate);
+						lepton1ID  = abs(ileptonCandidate->pdgId());
+						lepton1matched=true;
+					}
+
+				} else if(!lepton2matched){
+					if(ileptonCandidate==0){
+						lepton2 = &(*iParticle);
+						lepton2ID = abs(iParticle->pdgId());
+						lepton2matched=true;
+					}
+					else if(ileptonCandidate!=0){
+						lepton2candidate = &(*ileptonCandidate);
+						lepton2ID  = abs(ileptonCandidate->pdgId());
+						lepton2matched=true;
+					}
 				}
 			}
 		}
 
-		if ((lepton1 == 0) || (lepton2 == 0)) {
+		if (!lepton1matched || !lepton2matched) {
 			iCut[ii].failedGenPtEta = true; 
 		} else if((lepton1ID == 11 && lepton2ID == 13) || (lepton1ID == 13 && lepton2ID == 11 )) {
 			iCut[ii].muonElectron = true;
@@ -295,17 +337,34 @@ for(int ii=0; ii<4; ii++){
 
 		//gen values
 		if(!iCut[ii].failedGenPtEta){
+		if(lepton1!=0){
 		iCut[ii].lepton1Eta = lepton1->eta();
 		iCut[ii].lepton1Phi = lepton1->phi();
 		iCut[ii].lepton1Mass = lepton1->p4().mass();
 		iCut[ii].lepton1Pt = lepton1->pt();
 		iCut[ii].lepton1Id = lepton1->pdgId();
-		
+		}
+		else{
+		iCut[ii].lepton1Eta = lepton1candidate->eta();
+		iCut[ii].lepton1Phi = lepton1candidate->phi();
+		iCut[ii].lepton1Mass = lepton1candidate->p4().mass();
+		iCut[ii].lepton1Pt = lepton1candidate->pt();
+		iCut[ii].lepton1Id = lepton1candidate->pdgId();
+		}
+		if(lepton2!=0){
 		iCut[ii].lepton2Eta = lepton2->eta();
 		iCut[ii].lepton2Phi = lepton2->phi();
 		iCut[ii].lepton2Mass = lepton2->p4().mass();
 		iCut[ii].lepton2Pt = lepton2->pt();
 		iCut[ii].lepton2Id = lepton2->pdgId();
+		}
+		else{
+		iCut[ii].lepton2Eta = lepton2candidate->eta();
+		iCut[ii].lepton2Phi = lepton2candidate->phi();
+		iCut[ii].lepton2Mass = lepton2candidate->p4().mass();
+		iCut[ii].lepton2Pt = lepton2candidate->pt();
+		iCut[ii].lepton2Id = lepton2candidate->pdgId();
+		}
 		}
 
 
@@ -629,12 +688,7 @@ if(iCut[ii].muonElectron  || iCut[ii].muonTau) {  //|| iCut[ii].electronTau ) {
 
 m_histoMaker.fill(iCut[ii],ii);
 }
-//m_histoMaker.fill(cuts1,0);
-//m_histoMaker.fill(cuts2,1);
-//m_histoMaker.fill(cuts3,2);
-//m_histoMaker.fill(cuts4,3);
 
-//std::cout << iCut[ii]Muon1Pt<<std::endl;
 
 }
 
@@ -656,45 +710,8 @@ double gen_match::dPhi(double phi1, double phi2) {
 //check if a lepton can be traced back to a W boson and then to a top
 bool gen_match::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lepton) {
 
-		//edm::Handle<std::vector<reco::GenParticle>> genParticles;
-		//iEvent.getByToken(m_genParticleToken, genParticles);
-
     		bool ttbar=false;
-    		int iStatus = 0;
-    		double parentPt;
-			double parentPhi;
-			double parentEta;
-			double daughterPt;
-			double daughterPhi;
-			double daughterEta;
-
-    		if((abs(lepton->pdgId())==11 || abs(lepton->pdgId())==13 ) && lepton->status()!=1){
-    			int n = lepton->numberOfDaughters();
-    			parentPt = lepton->pt();
-    			parentPhi = lepton->phi();
-    			parentEta = lepton->eta();
-    			std::cout<<lepton->pdgId();
-    			std::cout<<" -> ";
-    			std::cout<<"number of daughters: ";
-    			std::cout<<n<<std::endl;
-    			std::cout<<"pdgIDs -> "<<std::endl;
-    			   for(int j = 0; j < n; ++ j) {
-       				int dauId = abs(lepton->daughter(j)->pdgId());
-       				daughterPt = lepton->daughter(j)->pt();
-       				daughterPhi = lepton->daughter(j)->phi();
-       				daughterEta = lepton->daughter(j)->eta();
-       				std::cout<<dauId<<std::endl;
-			
-    					if(dauId==11 || dauId==13){
-    					std::cout<<"motherPt/daughterPt = ";
-    					std::cout<<parentPt/daughterPt<<std::endl;
-    					std::cout<<"motherPhi/daughterPhi = ";
-    					std::cout<<parentPhi/daughterPhi<<std::endl;
-    					std::cout<<"motherEta/daughterEta = ";
-    					std::cout<<parentEta/daughterEta<<std::endl;
-    					std::cout<<"FAILED"<<std::endl; std::cout<<"------------------------------"<<std::endl; return false; } //the lepton is not the final state lepton, it decays into another muon or electron
-					}
-			}
+    		int iStatus;
 
     		const reco::Candidate* iParticle = lepton->mother();
 
@@ -764,33 +781,25 @@ gen_match::beginJob() {
 	fs->mkdir("cuts4");
 
 	m_histoMaker.book(fs->mkdir("cuts1/twoMuons"),0,0);
-	//m_iCut[ii].book(fs->mkdir("twoElectrons"),1);
 	m_histoMaker.book(fs->mkdir("cuts1/muonElectron"),0,1);
 	m_histoMaker.book(fs->mkdir("cuts1/muonTau"),0,2);
 	m_histoMaker.book(fs->mkdir("cuts1/allEvents"),0,3);
-	//m_iCut[ii].book(fs->mkdir("electronTau"),4);
 
 	m_histoMaker.book(fs->mkdir("cuts2/twoMuons"),1,0);
-	//m_cuts2.book(fs->mkdir("twoElectrons"),6);
 	m_histoMaker.book(fs->mkdir("cuts2/muonElectron"),1,1);
 	m_histoMaker.book(fs->mkdir("cuts2/muonTau"),1,2);
 	m_histoMaker.book(fs->mkdir("cuts2/allEvents"),1,3);
-	//m_cuts2.book(fs->mkdir("electronTau")9);
 
 	m_histoMaker.book(fs->mkdir("cuts3/twoMuons"),2,0);
-	//m_cuts3.book(fs->mkdir("twoElectrons"),11);
 	m_histoMaker.book(fs->mkdir("cuts3/muonElectron"),2,1);
 	m_histoMaker.book(fs->mkdir("cuts3/muonTau"),2,2);
 	m_histoMaker.book(fs->mkdir("cuts3/allEvents"),2,3);
-	//m_cuts3.book(fs->mkdir("electronTau"),14);
 
 	m_histoMaker.book(fs->mkdir("cuts4/twoMuons"),3,0);
-	//m_cuts4.book(fs->mkdir("twoElectrons"),16);
 	m_histoMaker.book(fs->mkdir("cuts4/muonElectron"),3,1);
 	m_histoMaker.book(fs->mkdir("cuts4/muonTau"),3,2);
 	m_histoMaker.book(fs->mkdir("cuts4/allEvents"),3,3);
-	//m_cuts4.book(fs->mkdir("electronTau"),19);
-
+	
 }
 
 
