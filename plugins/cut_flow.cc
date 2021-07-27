@@ -300,7 +300,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 	//muon reco
 
 		double leadMuonpT = 0;
-		double newLeadMuonpt;
+		double newLeadMuonpT;
 
    	for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
 
