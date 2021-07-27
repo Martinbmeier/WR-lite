@@ -310,11 +310,11 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
    		
    		newLeadMuonpT=iMuon->pt();
 
-   		if(newLeadMuonpt>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*iMuon);}
+   		if(newLeadMuonpT>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*iMuon);}
 
 		}
 
-		std::cout<<leadMuon->passed("TkIsoLoose")<<std::endl;
+		//std::cout<<leadMuon->passed(TkIsoLoose)<<std::endl;
 
 		//iBit.Muon1Pt=leadMuonpT;
 
@@ -334,7 +334,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				newLeadElectronpT=iElectron->pt();
    			//newLeadElectronp4=iElectron->p4();
 
-   			if(newLeadElectronpt>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*iElectron);}
+   			if(newLeadElectronpT>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*iElectron);}
 
 			}
 
