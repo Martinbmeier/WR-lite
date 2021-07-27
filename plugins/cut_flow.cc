@@ -242,12 +242,14 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	int btagcount = 0;
 
+	bool btagged;
+
 
 	//Get jets with maximum pt
 		for(std::vector<pat::Jet>::const_iterator iJet = recoJetsAK4->begin(); iJet != recoJetsAK4->end(); iJet++) {
 			//Make sure jets are not around leptons
 			//if ( fabs(iJet->eta()) > 2.4) continue;
-			btagged=false;
+
 			double NHF  =           iJet->neutralHadronEnergyFraction();
 			double NEMF =           iJet->neutralEmEnergyFraction();
 			double CHF  =           iJet->chargedHadronEnergyFraction();
@@ -271,11 +273,6 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			if(BJP < 0.4184){
 				btagcount++;
 			}		
-			if (jetCount == 0) {
-				//leadJet = &(*(iJet));
-			} else if (jetCount == 1) {
-				//subleadJet = &(*(iJet));
-			}
 			jetCount++;
 		}
 
@@ -303,8 +300,9 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 	//muon reco
 
 		double leadMuonpT = 0;
+		double newLeadMuonpt;
 
-   	for(std::vector<pat::Muon>::const_iterator iMuon = highMuons.begin(); iMuon != highMuons.end(); iMuon++){
+   	for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
 
    		//if(fabs(iMuon->eta()) > 2.4 || iMuon->tunePMuonBestTrack()->pt() < 10 || !(iMuon->isHighPtMuon(*myEvent.PVertex)) || (iMuon->isolationR03().sumPt/iMuon->pt() > .1)){ continue;} //preliminary cut
    		if(iMuon->isHighPtMuon(*myEvent.PVertex)){oneMuonHighpT=true;}
@@ -312,11 +310,11 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
    		
    		newLeadMuonpT=iMuon->pt();
 
-   		if(newLeadMuonpt>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=iMuon;}
+   		if(newLeadMuonpt>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*iMuon);}
 
 		}
 
-		std::cout<<leadMuon->Selector("TkIsoLoose")<<std::endl;
+		std::cout<<leadMuon->passed(Selector("TkIsoLoose"))<<std::endl;
 
 		//iBit.Muon1Pt=leadMuonpT;
 
@@ -325,6 +323,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 	//electron reco
 
 		double leadElectronpT = 0;
+		double newLeadElectronpt;
 
 			//for all reco electrons, loop through gen electrons to find spatial matches
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
@@ -335,7 +334,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				newLeadElectronpT=iElectron->pt();
    			newLeadElectronp4=iElectron->p4();
 
-   			if(newLeadElectronpt>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=iElectron;}
+   			if(newLeadElectronpt>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*iElectron);}
 
 			}
 
