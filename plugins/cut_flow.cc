@@ -240,8 +240,6 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	//const pat::Jet* subleadJet = 0;
 	int jetCount = 0;
 
-	bool oneBjet = false;
-	bool twoBjets = false;
 	int btagcount = 0;
 
 
@@ -303,9 +301,6 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 //muon/electron reconstruction
 
 	//muon reco
-
-		double match1DR = 1000;
-		double match2DR = 1000;
 
 		double leadMuonpT = 0;
 
