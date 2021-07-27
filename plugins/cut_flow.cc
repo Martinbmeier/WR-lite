@@ -332,7 +332,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				oneHeepElectron=true;
 
 				newLeadElectronpT=iElectron->pt();
-   			newLeadElectronp4=iElectron->p4();
+   			//newLeadElectronp4=iElectron->p4();
 
    			if(newLeadElectronpt>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*iElectron);}
 
