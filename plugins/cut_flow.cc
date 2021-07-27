@@ -242,7 +242,7 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	int btagcount = 0;
 
-	bool btagged;
+	//bool btagged;
 
 
 	//Get jets with maximum pt
@@ -314,7 +314,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		}
 
-		std::cout<<leadMuon->passed(Selector("TkIsoLoose"))<<std::endl;
+		std::cout<<leadMuon->passed("TkIsoLoose")<<std::endl;
 
 		//iBit.Muon1Pt=leadMuonpT;
 
@@ -323,7 +323,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 	//electron reco
 
 		double leadElectronpT = 0;
-		double newLeadElectronpt;
+		double newLeadElectronpT;
 
 			//for all reco electrons, loop through gen electrons to find spatial matches
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
