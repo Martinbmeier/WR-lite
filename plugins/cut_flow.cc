@@ -124,6 +124,9 @@ class cut_flow : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		
 		std::string m_dataSaveFile;
 
+		bool m_isSignal;
+		bool m_genTrainData;
+
 		std::string  cSV_bTag1      = "pfDeepCSVJetTags:probb";
 		std::string  cSV_bTag2      = "pfDeepCSVJetTags:probbb";
 
