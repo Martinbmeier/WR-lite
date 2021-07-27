@@ -299,8 +299,9 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	//muon reco
 
-		double leadMuonpT = 0;
+		double leadMuonpT = -1000;
 		double newLeadMuonpT;
+		//int muCount=0;
 
    	for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
 
@@ -322,7 +323,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	//electron reco
 
-		double leadElectronpT = 0;
+		double leadElectronpT = -1000;
 		double newLeadElectronpT;
 
 			//for all reco electrons, loop through gen electrons to find spatial matches
