@@ -318,6 +318,8 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		}
 
+		std::cout<<leadMuon->Selector("TkIsoLoose")<<std::endl;
+
 		//iBit.Muon1Pt=leadMuonpT;
 
 		

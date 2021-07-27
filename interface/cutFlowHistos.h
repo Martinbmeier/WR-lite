@@ -31,7 +31,7 @@ class cutFlowHistos {
 	
 	TFileDirectory m_histoFolder;
 
-	std::vector<TH1D*> m_recoMuonPt(10);
+	std::vector<TH1D*> m_recoMuonPt{10};
 
    
 };
