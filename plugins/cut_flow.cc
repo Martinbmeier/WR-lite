@@ -318,7 +318,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		}
 
-		//std::cout<<leadMuon->passed(reco::Muon::TkIsoLoose)<<std::endl;
+		std::cout<<leadMuon->passed(reco::Muon::TkIsoLoose)<<std::endl;
 
 		//iBit.Muon1Pt=leadMuonpT;
 
@@ -341,8 +341,6 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
    			if(newLeadElectronpT>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*iElectron);}
 
 			}
-
-			//iBit.Electron1Pt=leadElectronpT;
 
 
 			if(oneHeepElectron && oneMuonHighpT && twoJets){
