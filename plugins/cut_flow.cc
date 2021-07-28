@@ -347,14 +347,13 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 			if(oneHeepElectron && oneMuonHighpT && twoJets){
 				double dileptonSeparation=sqrt(dR2(leadMuon->eta(), leadElectron->eta(), leadMuon->phi(), leadElectron->phi()));
-			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), leadMuon->eta(), Jet1->phi(), leadMuon->phi()));
-			   double muonJet2Sep=sqrt(dR2(Jet2->eta(), leadMuon->eta(), Jet2->phi(), leadMuon->phi()));
-			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), leadElectron->eta(), Jet1->phi(), leadElectron->phi()));
-				double electronJet2Sep=sqrt(dR2(Jet2->eta(), leadElectron->eta(), Jet2->phi(), leadElectron->phi()));
-				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
-				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} //check for lepton separation
-			}
-
+			   //double muonJet1Sep=sqrt(dR2(Jet1->eta(), leadMuon->eta(), Jet1->phi(), leadMuon->phi()));
+			   //double muonJet2Sep=sqrt(dR2(Jet2->eta(), leadMuon->eta(), Jet2->phi(), leadMuon->phi()));
+			   //double electronJet1Sep=sqrt(dR2(Jet1->eta(), leadElectron->eta(), Jet1->phi(), leadElectron->phi()));
+				//double electronJet2Sep=sqrt(dR2(Jet2->eta(), leadElectron->eta(), Jet2->phi(), leadElectron->phi()));
+				//double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
+				//if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} //check for lepton separation
+			} 
 			if((leadElectron->p4()+leadMuon->p4()).mass()>150){dileptonMass=true;} //check for dilepton mass
 
 		
