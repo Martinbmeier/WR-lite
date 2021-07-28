@@ -244,8 +244,8 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	//bool btagged;
 
-	//const pat::Jet* Jet1;
-	//const pat::Jet* Jet2;
+	const pat::Jet* Jet1;
+	const pat::Jet* Jet2;
 
 
 	//Get jets with maximum pt
@@ -274,8 +274,8 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			//if (CEMF > .99) continue;
 			if (CEMF > .90)  continue;
 			if(BJP > 0.4184){ btagcount++; }		
-			//if(jetCount==0){Jet1=&(*iJet);}
-			//if(jetCount>0){Jet2=&(*iJet);}
+			if(jetCount==0){Jet1=&(*iJet);}
+			if(jetCount>0){Jet2=&(*iJet);}
 			jetCount++;
 		}
 
