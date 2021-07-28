@@ -244,6 +244,9 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	//bool btagged;
 
+	const pat::Jet* Jet1 = 0;
+	const pat::Jet* Jet2 = 0;
+
 
 	//Get jets with maximum pt
 		for(std::vector<pat::Jet>::const_iterator iJet = recoJetsAK4->begin(); iJet != recoJetsAK4->end(); iJet++) {
@@ -270,9 +273,9 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			if (CHM == 0) continue;
 			//if (CEMF > .99) continue;
 			if (CEMF > .90)  continue;
-			if(BJP < 0.4184){
-				btagcount++;
-			}		
+			if(BJP > 0.4184){ btagcount++; }		
+			if(jetCount==0){Jet1=&(*iJet);}
+			if(jetCount>0){Jet2=&(*iJet);}
 			jetCount++;
 		}
 
@@ -283,9 +286,9 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 
-	const pat::Muon* leadMuon;
+	const pat::Muon* leadMuon = 0;
 
-	const pat::Electron* leadElectron;
+	const pat::Electron* leadElectron = 0;
 
 
 
@@ -315,7 +318,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		}
 
-		//std::cout<<leadMuon->passed(TkIsoLoose)<<std::endl;
+		std::cout<<leadMuon->passed(reco::Muon::TkIsoLoose)<<std::endl;
 
 		//iBit.Muon1Pt=leadMuonpT;
 
@@ -341,7 +344,16 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 			//iBit.Electron1Pt=leadElectronpT;
 
-			if(sqrt(dR2(leadMuon->eta(), leadElectron->eta(), leadMuon->phi(), leadElectron->phi()))>0.4){angularSeparation=true;} //check for lepton separation
+
+			if(oneHeepElectron && oneMuonHighpT && twoJets){
+				double dileptonSeparation=sqrt(dR2(leadMuon->eta(), leadElectron->eta(), leadMuon->phi(), leadElectron->phi()));
+			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), leadMuon->eta(), Jet1->phi(), leadMuon->phi()));
+			   double muonJet2Sep=sqrt(dR2(Jet2->eta(), leadMuon->eta(), Jet2->phi(), leadMuon->phi()));
+			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), leadElectron->eta(), Jet1->phi(), leadElectron->phi()));
+				double electronJet2Sep=sqrt(dR2(Jet2->eta(), leadElectron->eta(), Jet2->phi(), leadElectron->phi()));
+				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
+				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} //check for lepton separation
+			}
 
 			if((leadElectron->p4()+leadMuon->p4()).mass()>150){dileptonMass=true;} //check for dilepton mass
 
