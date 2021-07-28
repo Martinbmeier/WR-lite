@@ -318,10 +318,8 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		}
 
-		std::cout<<leadMuon->passed(reco::Muon::TkIsoLoose)<<std::endl;
-
-		//iBit.Muon1Pt=leadMuonpT;
-
+		if(leadMuon->passed(reco::Muon::TkIsoLoose)){muonIsolation1=true;}
+		if(leadMuon->passed(reco::Muon::TkIsoTight)){muonIsolation1=true; muonIsolation2=true; }
 		
 
 	//electron reco
