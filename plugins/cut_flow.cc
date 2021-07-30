@@ -356,7 +356,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 		
 	m_eventsWeight->Fill(0.5, eventCount);
 
-	m_histoMaker.fill(leadMuonpT,0,eventWeight)
+	m_histoMaker.fill(leadMuonpT,0,eventWeight);
 
 	if(electronTrigger){
 		m_histoMaker.fill(leadMuonpT,1,eventWeight);
