@@ -105,6 +105,7 @@ class cut_flow : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		
 		
 		cutFlowHistos m_histoMaker;
+		TH1F* m_eventsWeight;
 
 
 		//neuralNet networkResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/Resolved");
@@ -213,8 +214,8 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	iEvent.getByToken(m_genParticleToken, genParticles);
 	
   
-	iBit.count = eventInfo->weight()/fabs(eventInfo->weight());
-	iBit.eventWeight = eventInfo->weight();
+	double eventCount = eventInfo->weight()/fabs(eventInfo->weight());
+	double eventWeight = eventInfo->weight();
 	
 	
 	edm::Handle<std::vector<reco::Vertex>> vertices;
@@ -260,8 +261,8 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			double NumConst =       iJet->chargedMultiplicity()+iJet->neutralMultiplicity();
 			double MUF      =       iJet->muonEnergyFraction();
 			double EUF      =       iJet->electronEnergyFraction();
-			double CHM      =       iJet->chargedMultiplicity(); 
-			double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2); 
+			double CHM      =       iJet->chargedMultiplicity();
+			double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2);
 			//APPLYING TIGHT QUALITY CUTS
 			if (NHF > .9) continue;
 			if (NEMF > .9) continue;
@@ -280,7 +281,7 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		}
 
 		if(jetCount>1){twoJets=true;}
-		if(btagcount==1){oneBTag=true;}
+		if(btagcount>0){oneBTag=true;}
 		if(btagcount>1){twoBTag=true;}
 
 
@@ -353,27 +354,30 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			if((leadElectron->p4()+leadMuon->p4()).mass()>150){dileptonMass=true;} //check for dilepton mass
 
 		
-	
+	m_eventsWeight->Fill(0.5, eventCount);
+
+	m_histoMaker.fill(leadMuonpT,0)
+
 	if(electronTrigger){
-		m_histoMaker.fill(leadMuonpT,0);
+		m_histoMaker.fill(leadMuonpT,1);
 		if(oneHeepElectron){
-			m_histoMaker.fill(leadMuonpT,1);
+			m_histoMaker.fill(leadMuonpT,2);
 			if(oneMuonHighpT){
-				m_histoMaker.fill(leadMuonpT,2);
+				m_histoMaker.fill(leadMuonpT,3);
 				if(twoJets){
-					m_histoMaker.fill(leadMuonpT,3);
+					m_histoMaker.fill(leadMuonpT,4);
 					if(angularSeparation){
-						m_histoMaker.fill(leadMuonpT,4);
+						m_histoMaker.fill(leadMuonpT,5);
 						if(dileptonMass){
-							m_histoMaker.fill(leadMuonpT,5);
+							m_histoMaker.fill(leadMuonpT,6);
 							if(oneBTag){
-								m_histoMaker.fill(leadMuonpT,6);
+								m_histoMaker.fill(leadMuonpT,7);
 								if(twoBTag){
-									m_histoMaker.fill(leadMuonpT,7);
+									m_histoMaker.fill(leadMuonpT,8);
 									if(muonIsolation1){
-										m_histoMaker.fill(leadMuonpT,8);
+										m_histoMaker.fill(leadMuonpT,9);
 										if(muonIsolation2)
-											m_histoMaker.fill(leadMuonpT,9);
+											m_histoMaker.fill(leadMuonpT,10);
 									}
 								}
 							}
@@ -491,6 +495,12 @@ cut_flow::beginJob() {
 	m_histoMaker.book(fs->mkdir("cuts9"),8);
 
 	m_histoMaker.book(fs->mkdir("cuts10"),9);
+
+	m_histoMaker.book(fs->mkdir("cuts11"),10);
+
+	TH1F *m_eventsWeight = new TH1F("eventsWeight","number of events weighted", 1, 0.0, 1);
+
+
 
 	
 }
