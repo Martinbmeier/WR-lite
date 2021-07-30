@@ -31,10 +31,10 @@ void cutFlowHistos::book(TFileDirectory histoFolder, int nCut) {
 }
 
 //General histogram filling
-void cutFlowHistos::fill(double pT, int cutNumber) {
+void cutFlowHistos::fill(double pT, int cutNumber, double weight) {
 	
 
-		m_recoMuonPt[cutNumber]->Fill(pT);
+		m_recoMuonPt[cutNumber]->Fill(pT, weight);
 
 
 

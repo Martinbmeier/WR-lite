@@ -22,7 +22,7 @@ class cutFlowHistos {
 	cutFlowHistos();
 	//void book(TFileDirectory histoFolder);
 	void book(TFileDirectory histoFolder, int nCut);
-	void fill(double pT, int cutNumber);
+	void fill(double pT, int cutNumber, double weight);
 	//cutFlowHistos() : m_histoFolder(5) {}
 
 
