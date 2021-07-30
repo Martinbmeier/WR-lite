@@ -105,7 +105,7 @@ class cut_flow : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		
 		
 		cutFlowHistos m_histoMaker;
-		TH1F* m_eventsWeight;
+		TH1D m_eventsWeight;
 
 
 		//neuralNet networkResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/Resolved");
@@ -498,7 +498,7 @@ cut_flow::beginJob() {
 
 	m_histoMaker.book(fs->mkdir("cuts11"),10);
 
-	TH1F m_eventsWeight = new TH1F("eventsWeight","number of events weighted", 1, 0.0, 1);
+	TH1F m_eventsWeight = new TH1D("eventsWeight","number of events weighted", 1, 0.0, 1);
 
 
 
