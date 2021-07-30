@@ -498,7 +498,7 @@ cut_flow::beginJob() {
 
 	m_histoMaker.book(fs->mkdir("cuts11"),10);
 
-	TH1D m_eventsWeight = new TH1D("eventsWeight","number of events weighted", 1, 0.0, 1);
+	TH1D* m_eventsWeight = new TH1D("eventsWeight","number of events weighted", 1, 0.0, 1);
 
 
 
