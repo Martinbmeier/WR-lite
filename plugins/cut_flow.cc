@@ -214,7 +214,7 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	iEvent.getByToken(m_genParticleToken, genParticles);
 	
   
-	double eventCount = eventInfo->weight()/fabs(eventInfo->weight());
+	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
 	double eventWeight = eventInfo->weight();
 	
 	
@@ -498,7 +498,7 @@ cut_flow::beginJob() {
 
 	m_histoMaker.book(fs->mkdir("cuts11"),10);
 
-	TH1F *m_eventsWeight = new TH1F("eventsWeight","number of events weighted", 1, 0.0, 1);
+	TH1F m_eventsWeight = new TH1F("eventsWeight","number of events weighted", 1, 0.0, 1);
 
 
 

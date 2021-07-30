@@ -34,7 +34,7 @@ void cutFlowHistos::book(TFileDirectory histoFolder, int nCut) {
 void cutFlowHistos::fill(double pT, int cutNumber, double weight) {
 	
 
-		m_recoMuonPt[cutNumber]->Fill(pT, weight);
+		m_recoMuonPt[cutNumber]->Fill(pT,weight);
 
 
 
