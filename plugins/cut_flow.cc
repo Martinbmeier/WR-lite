@@ -475,6 +475,7 @@ cut_flow::beginJob() {
 
 	edm::Service<TFileService> fs; 
 
+	TFileDirectory countFolder = fs->mkdir("event_count");
 	
 	m_histoMaker.book(fs->mkdir("cuts1"),0);
 
@@ -498,7 +499,7 @@ cut_flow::beginJob() {
 
 	m_histoMaker.book(fs->mkdir("cuts11"),10);
 
-	m_eventsWeight = {m_histoFolder.make<TH1D>("eventsWeight","number of events weighted", 1, 0.0, 1)};
+	m_eventsWeight = countFolder.make<TH1D>("eventsWeight","number of events weighted", 1, 0.0, 1);
 
 
 
