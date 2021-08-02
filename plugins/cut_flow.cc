@@ -354,7 +354,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			if((leadElectron->p4()+leadMuon->p4()).mass()>150){dileptonMass=true;} //check for dilepton mass
 
 		
-	m_eventsWeight.Fill(0.5, eventCount);
+	m_eventsWeight->Fill(0.5, eventCount);
 
 	m_histoMaker.fill(leadMuonpT,0,eventWeight);
 
