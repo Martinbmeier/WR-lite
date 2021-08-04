@@ -185,9 +185,13 @@ cut_flow2::~cut_flow2()
 void
 cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-	bool oneElectronMuon=false;  //cut1
-	bool electronTrigger=false;  //cut2
-	bool oneHeepElectron=false;  //cut3
+
+
+	bool oneElectronMuon=false; 
+
+	bool electronTrigger=false;  //cut1
+	bool oneHeepElectron=false;  //cut2
+	bool oneMuonHighpT=false;    //cut3
 	bool twoJets=false;				   //cut4
 	bool angularSeparation=false;//cut5
 	bool dileptonMass=false;		 //cut6
@@ -291,13 +295,13 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
-	if(abs(iParticle->PdgId())==13){
+	if(abs(iParticle->pdgId())==13){
 		if(!tWfinder(iEvent, &(*iParticle))){ continue; }
 		genMuon = true;
 		newGenMuonPt=iParticle->pt();
 		if(newGenMuonPt>leadGenMuonPt){leadGenMuonPt=newGenMuonPt;}//leadGenMuon=&(*iParticle);}
 	}
-	if(abs(iParticle->PdgId)==11){genElectron=true;}
+	if(abs(iParticle->pdgId())==11){genElectron=true;}
 }
 
 if(genElectron==true && genMuon==true){oneElectronMuon=true;}
@@ -367,28 +371,28 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 		
 	m_eventsWeight->Fill(0.5, eventCount);
 
-
-
-	if(oneElectronMuon){
-		m_histoMaker.fill(leadGenMuonPt,0,eventWeight);
-		if(electronTrigger){
-			m_histoMaker.fill(leadGenMuonPt,1,eventWeight);
-			if(oneHeepElectron){
-				m_histoMaker.fill(leadGenMuonPt,2,eventWeight);
+if(oneElectronMuon){
+	m_histoMaker.fill(leadGenMuonPt,0,eventWeight);
+	if(electronTrigger){
+		m_histoMaker.fill(leadGenMuonPt,1,eventWeight);
+		if(oneHeepElectron){
+			m_histoMaker.fill(leadGenMuonPt,2,eventWeight);
+			if(oneMuonHighpT){
+				m_histoMaker.fill(leadGenMuonPt,3,eventWeight);
 				if(twoJets){
-					m_histoMaker.fill(leadGenMuonPt,3,eventWeight);
+					m_histoMaker.fill(leadGenMuonPt,4,eventWeight);
 					if(angularSeparation){
-						m_histoMaker.fill(leadGenMuonPt,4,eventWeight);
+						m_histoMaker.fill(leadGenMuonPt,5,eventWeight);
 						if(dileptonMass){
-							m_histoMaker.fill(leadGenMuonPt,5,eventWeight);
+							m_histoMaker.fill(leadGenMuonPt,6,eventWeight);
 							if(oneBTag){
-								m_histoMaker.fill(leadGenMuonPt,6,eventWeight);
+								m_histoMaker.fill(leadGenMuonPt,7,eventWeight);
 								if(twoBTag){
-									m_histoMaker.fill(leadGenMuonPt,7,eventWeight);
+									m_histoMaker.fill(leadGenMuonPt,8,eventWeight);
 									if(muonIsolation1){
-										m_histoMaker.fill(leadGenMuonPt,8,eventWeight);
+										m_histoMaker.fill(leadGenMuonPt,9,eventWeight);
 										if(muonIsolation2)
-											m_histoMaker.fill(leadGenMuonPt,9,eventWeight);
+											m_histoMaker.fill(leadGenMuonPt,10,eventWeight);
 									}
 								}
 							}
@@ -398,6 +402,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			}
 		}
 	}
+}
 
 
 }
@@ -507,6 +512,8 @@ cut_flow2::beginJob() {
 	m_histoMaker.book(fs->mkdir("cuts9"),8);
 
 	m_histoMaker.book(fs->mkdir("cuts10"),9);
+
+	m_histoMaker.book(fs->mkdir("cuts10"),10);
 
 
 	m_eventsWeight = {countFolder.make<TH1D>("eventsWeight","number of events weighted", 1, 0.0, 1)};
