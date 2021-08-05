@@ -295,6 +295,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
+	if( ! iParticle->isHardProcess() ){ continue; }
 	if(abs(iParticle->pdgId())==13){
 		//if(!tWfinder(iEvent, &(*iParticle))){ continue; }
 		genMuon = true;
