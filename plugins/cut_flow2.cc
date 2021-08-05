@@ -296,7 +296,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 	if(abs(iParticle->pdgId())==13){
-		if(!tWfinder(iEvent, &(*iParticle))){ continue; }
+		//if(!tWfinder(iEvent, &(*iParticle))){ continue; }
 		genMuon = true;
 		newGenMuonPt=iParticle->pt();
 		if(newGenMuonPt>leadGenMuonPt){leadGenMuonPt=newGenMuonPt;}//leadGenMuon=&(*iParticle);}
@@ -513,7 +513,7 @@ cut_flow2::beginJob() {
 
 	m_histoMaker.book(fs->mkdir("cuts10"),9);
 
-	m_histoMaker.book(fs->mkdir("cuts10"),10);
+	m_histoMaker.book(fs->mkdir("cuts11"),10);
 
 
 	m_eventsWeight = {countFolder.make<TH1D>("eventsWeight","number of events weighted", 1, 0.0, 1)};
