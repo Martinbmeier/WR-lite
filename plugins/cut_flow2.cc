@@ -187,7 +187,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
 
-	bool oneElectronMuon=false; 
+	//bool oneElectronMuon=false; 
 
 	bool electronTrigger=false;  //cut1
 	bool oneHeepElectron=false;  //cut2
@@ -286,7 +286,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 //gen lepton info
-
+/*
 	double leadGenMuonPt=-1000;
 	double newGenMuonPt;
 
@@ -307,7 +307,8 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 if(genElectron==true && genMuon==true){oneElectronMuon=true;}
 //cut flow things
-
+*/
+		
 //check electron trigger
 if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
