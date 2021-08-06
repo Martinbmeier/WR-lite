@@ -243,8 +243,8 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	int jetCount = 0;
 	int btagcount = 0;
 
-	const pat::Jet* Jet1;
-	const pat::Jet* Jet2;
+	const pat::Jet* Jet1=0;
+	const pat::Jet* Jet2=0;
 
 
 	//Get jets with maximum pt
@@ -316,7 +316,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	//muon reco
 
-	  const pat::Muon* leadMuon;
+	  const pat::Muon* leadMuon=0;
 
 		double leadMuonpT = -1000;
 		double newLeadMuonpT;
@@ -340,7 +340,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	//electron reco
 
-		const pat::Electron* leadElectron;
+		const pat::Electron* leadElectron=0;
 
 		double leadElectronpT = -1000;
 		double newLeadElectronpT;
