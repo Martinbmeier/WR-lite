@@ -252,8 +252,8 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	double jet2Phi;
 	double jet1Eta;
 	double jet2Eta;
-	double jet1Pt;
-	double jet2Pt;
+	//double jet1Pt;
+	//double jet2Pt;
 
 
 	//Get jets with maximum pt
@@ -282,8 +282,8 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			//if (CEMF > .99) continue;
 			if (CEMF > .90)  continue;
 			if(BJP > 0.4184){ btagcount++; }		
-			if(jetCount==0){jet1Phi=iJet->phi(); jet1Eta=iJet->eta(); jet1Pt=iJet->pt();}
-			if(jetCount>0){jet2Phi=iJet->phi(); jet2Eta=iJet->eta(); jet2Pt=iJet->pt();}
+			if(jetCount==0){jet1Phi=iJet->phi(); jet1Eta=iJet->eta();}// jet1Pt=iJet->pt();}
+			if(jetCount>0){jet2Phi=iJet->phi(); jet2Eta=iJet->eta();}// jet2Pt=iJet->pt();}
 			jetCount++;
 		}
 
@@ -326,7 +326,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		}
 
-		if(leadMuon->passed(reco::Muon::TkIsoLoose)){muonIsolation1=true;}
+		if(leadMuon->passed(reco::Muon::TkIsoLoose)){muonIsolation1=true; }
 		if(leadMuon->passed(reco::Muon::TkIsoTight)){muonIsolation1=true; muonIsolation2=true; }
 		
 
