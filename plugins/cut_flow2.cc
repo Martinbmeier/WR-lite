@@ -243,8 +243,8 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	int jetCount = 0;
 	int btagcount = 0;
 
-	const pat::Jet* Jet1=0;
-	const pat::Jet* Jet2=0;
+	const pat::Jet* Jet1;
+	const pat::Jet* Jet2;
 
 
 
