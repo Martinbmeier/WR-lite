@@ -248,10 +248,10 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	//const pat::Jet* Jet1;
 	//const pat::Jet* Jet2;
 
-	double jet1Phi;
-	double jet2Phi;
-	double jet1Eta;
-	double jet2Eta;
+	//double jet1Phi;
+	//double jet2Phi;
+	//double jet1Eta;
+	//double jet2Eta;
 	//double jet1Pt;
 	//double jet2Pt;
 
@@ -282,8 +282,8 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			//if (CEMF > .99) continue;
 			if (CEMF > .90)  continue;
 			if(BJP > 0.4184){ btagcount++; }		
-			if(jetCount==0){jet1Phi=iJet->phi(); jet1Eta=iJet->eta();}// jet1Pt=iJet->pt();}
-			if(jetCount>0){jet2Phi=iJet->phi(); jet2Eta=iJet->eta();}// jet2Pt=iJet->pt();}
+			if(jetCount==0){double jet1Phi=iJet->phi(); double jet1Eta=iJet->eta();}// jet1Pt=iJet->pt();}
+			if(jetCount>0){double jet2Phi=iJet->phi(); double jet2Eta=iJet->eta();}// jet2Pt=iJet->pt();}
 			jetCount++;
 		}
 
