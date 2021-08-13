@@ -318,7 +318,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	//muon reco
 
-	  const pat::Muon* leadMuon;
+	  const pat::Muon* leadMuon = 0;
 
 		double leadMuonpT = -1000;
 		double newLeadMuonpT;
@@ -342,7 +342,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	//electron reco
 
-		const pat::Electron* leadElectron = 0;
+		const pat::Electron* leadElectron;
 
 		double leadElectronpT = -1000;
 		double newLeadElectronpT;
