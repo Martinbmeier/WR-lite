@@ -99,7 +99,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		double dPhi(double phi1, double phi2);
 		bool tWfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event&);
-		void csvTable(const reco::GenParticle*, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet* );
+		void csvTable(double genMuonPt, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet* );
 		//double transverseSphericity(math::XYZTLorentzVector p1, math::XYZTLorentzVector p2, math::XYZTLorentzVector p3);
 		//void saveElectronData(eventBits2 * iBit, double matched1Mass, double matched2Mass);
 		//void saveMuonData(eventBits2 * iBit, double matched1Mass, double matched2Mass);
@@ -135,7 +135,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		
 		edm::Service<TFileService> fs; 
 
-		std::ofstream myfile;
+		//std::ofstream myfile;
 		
 };
 
@@ -292,7 +292,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 //gen lepton info
 
-	const reco::GenParticle* leadGenMuon=0;
+	//const reco::GenParticle* leadGenMuon=0;
 
 	double leadGenMuonPt=-1000;
 	double newGenMuonPt;
@@ -307,7 +307,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 		//if(!tWfinder(iEvent, &(*iParticle))){ continue; }
 		genMuon = true;
 		newGenMuonPt=iParticle->pt();
-		if(newGenMuonPt>leadGenMuonPt){leadGenMuonPt=newGenMuonPt; leadGenMuon=&(*iParticle);}
+		if(newGenMuonPt>leadGenMuonPt){leadGenMuonPt=newGenMuonPt} //leadGenMuon=&(*iParticle);}
 	}
 	if(abs(iParticle->pdgId())==11){genElectron=true;}
 }
@@ -396,7 +396,7 @@ if(oneElectronMuon || !oneElectronMuon){
 					m_histoMaker.fill(leadGenMuonPt,4,eventWeight);
 					if(angularSeparation){
 						m_histoMaker.fill(leadGenMuonPt,5,eventWeight);
-						csvTable(leadGenMuon,leadMuon,leadElectron,Jet1,Jet2);
+						csvTable(leadGenMuonPt,leadMuon,leadElectron,Jet1,Jet2);
 						if(electronHighPt){
 							m_histoMaker.fill(leadGenMuonPt,6,eventWeight);
 							if(oneBTag){
@@ -498,7 +498,7 @@ bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
   return passTriggers;
 }
 
-void cut_flow2::csvTable(const reco::GenParticle* genMuon, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* jet1, const pat::Jet* jet2) {
+void cut_flow2::csvTable(double genMuonPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* jet1, const pat::Jet* jet2) {
 
 std::ofstream myfile;
 myfile.open("neuralNetData.csv",std::ios_base::app);
@@ -513,7 +513,7 @@ myfile << muon->phi() << ", "
        << jet2->pt() << ", "
        << jet2->phi() << ", "
        << jet2->eta() << ", "
-       << genMuon->pt() << "\n ";
+       << genMuonPt << "\n ";
 
 myfile.close();
 
