@@ -322,6 +322,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		double leadMuonpT = -1000;
 		double newLeadMuonpT=-1000;
+		bool foundMuon=false;
 		//int muCount=0;
 
    	for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
@@ -332,11 +333,11 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
    		
    		newLeadMuonpT=iMuon->pt();
 
-   		if(newLeadMuonpT>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*iMuon);}
+   		if(newLeadMuonpT>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*iMuon); foundMuon=true;}
 
 		}
 
-		if(oneMuonHighpT){
+		if(foundMuon){
 			if(leadMuon->passed(reco::Muon::TkIsoLoose)){muonIsolation1=true;}
 			if(leadMuon->passed(reco::Muon::TkIsoTight)){muonIsolation1=true; muonIsolation2=true; }
 		}
