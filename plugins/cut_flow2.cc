@@ -318,10 +318,10 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	//muon reco
 
-	  const pat::Muon* leadMuon;
+	  const pat::Muon* leadMuon = 0;
 
 		double leadMuonpT = -1000;
-		double newLeadMuonpT;
+		double newLeadMuonpT=-1000;
 		//int muCount=0;
 
    	for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
@@ -332,31 +332,32 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
    		
    		newLeadMuonpT=iMuon->pt();
 
-   		if(newLeadMuonpT>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*iMuon);}
+   		if(newLeadMuonpT>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*iMuon); foundMuon=true;}
 
 		}
 
-		if(leadMuon->passed(reco::Muon::TkIsoLoose)){muonIsolation1=true;}
-		if(leadMuon->passed(reco::Muon::TkIsoTight)){muonIsolation1=true; muonIsolation2=true; }
-		
+		if(oneMuonHighpT){
+			if(leadMuon->passed(reco::Muon::TkIsoLoose)){muonIsolation1=true;}
+			if(leadMuon->passed(reco::Muon::TkIsoTight)){muonIsolation1=true; muonIsolation2=true; }
+		}
 
 	//electron reco
 
 		const pat::Electron* leadElectron;
 
 		double leadElectronpT = -1000;
-		double newLeadElectronpT;
+		double newLeadElectronpT = -1000;
 
 			//for all reco electrons, loop through gen electrons to find spatial matches
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
 				//if(fabs(iElectron->eta()) > 2.4) {continue;}
 				//if(iElectron->pt() < 10 ) {continue;}
-				oneHeepElectron=true;
+				
 
 				newLeadElectronpT=iElectron->pt();
    			//newLeadElectronp4=iElectron->p4();
 
-   			if(newLeadElectronpT>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*iElectron);}
+   			if(newLeadElectronpT>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*iElectron); oneHeepElectron=true;}
 
 			}
 
