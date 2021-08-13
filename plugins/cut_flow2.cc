@@ -194,7 +194,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	bool oneMuonHighpT=false;    //cut3
 	bool twoJets=false;				   //cut4
 	bool angularSeparation=false;//cut5
-	bool dileptonMass=false;		 //cut6
+	bool electronHighPt=false;	 //cut6
 	bool oneBTag=false;				   //cut7
 	bool twoBTag=false;				   //cut8
 	bool muonIsolation1=false;	 //cut9
@@ -372,8 +372,8 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} //check for lepton separation
 			} 
-			if(oneHeepElectron && foundMuon){
-				if((leadElectron->p4()+leadMuon->p4()).mass()>150){dileptonMass=true;} //check for dilepton mass
+			if(oneHeepElectron){
+				if(leadElectron->pt()>75){electronHighPt=true;} //check for dilepton mass
 			}
 
 		
@@ -391,7 +391,7 @@ if(oneElectronMuon || !oneElectronMuon){
 					m_histoMaker.fill(leadGenMuonPt,4,eventWeight);
 					if(angularSeparation){
 						m_histoMaker.fill(leadGenMuonPt,5,eventWeight);
-						if(dileptonMass){
+						if(electronHighPt){
 							m_histoMaker.fill(leadGenMuonPt,6,eventWeight);
 							if(oneBTag){
 								m_histoMaker.fill(leadGenMuonPt,7,eventWeight);
