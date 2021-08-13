@@ -499,7 +499,9 @@ bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
 }
 
 void cut_flow2::csvTable(const reco::GenParticle* genMuon, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* jet1, const pat::Jet* jet2) {
-  
+
+std::ofstream myfile;
+myfile.open("neuralNetData.csv",std::ios_base::app);
 myfile << muon->phi() << ", "
        << muon->eta() << ", "
        << electron->pt() << ", "
@@ -513,6 +515,8 @@ myfile << muon->phi() << ", "
        << jet2->eta() << ", "
        << genMuon->pt() << "\n ";
 
+myfile.close();
+
 }
 
 
@@ -522,8 +526,9 @@ cut_flow2::beginJob() {
 
 	std::ofstream myfile;
 
-	myfile.open("neuralNetData.csv");
+	myfile.open("neuralNetData.csv",std::ios_base::app);
 	myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, gen muon pt\n";
+	myfile.close();
 
 	edm::Service<TFileService> fs; 
 
