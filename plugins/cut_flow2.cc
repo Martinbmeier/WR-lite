@@ -243,8 +243,8 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	int jetCount = 0;
 	int btagcount = 0;
 
-	const pat::Jet* Jet1;
-	const pat::Jet* Jet2;
+	const pat::Jet* Jet1=0;
+	const pat::Jet* Jet2=0;
 
 
 
@@ -318,7 +318,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	//muon reco
 
-	  const pat::Muon* leadMuon;
+	  const pat::Muon* leadMuon=0;
 
 		double leadMuonpT = -1000;
 		double newLeadMuonpT=-1000;
@@ -333,7 +333,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
    		
    		newLeadMuonpT=iMuon->pt();
 
-   		if(newLeadMuonpT>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*iMuon); foundMuon=true;}
+   		if(newLeadMuonpT>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*(iMuon)); foundMuon=true;}
 
 		}
 
@@ -344,7 +344,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	//electron reco
 
-		const pat::Electron* leadElectron;
+		const pat::Electron* leadElectron=0;
 
 		double leadElectronpT = -1000;
 		double newLeadElectronpT = -1000;
@@ -358,7 +358,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				newLeadElectronpT=iElectron->pt();
    			//newLeadElectronp4=iElectron->p4();
 
-   			if(newLeadElectronpT>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*iElectron); oneHeepElectron=true;}
+   			if(newLeadElectronpT>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*(iElectron)); oneHeepElectron=true;}
 
 			}
 
@@ -372,7 +372,9 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} //check for lepton separation
 			} 
-			if((leadElectron->p4()+leadMuon->p4()).mass()>150){dileptonMass=true;} //check for dilepton mass
+			if(oneHeepElectron && foundMuon){
+				if((leadElectron->p4()+leadMuon->p4()).mass()>150){dileptonMass=true;} //check for dilepton mass
+			}
 
 		
 	m_eventsWeight->Fill(0.5, eventCount);
