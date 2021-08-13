@@ -307,7 +307,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 		//if(!tWfinder(iEvent, &(*iParticle))){ continue; }
 		genMuon = true;
 		newGenMuonPt=iParticle->pt();
-		if(newGenMuonPt>leadGenMuonPt){leadGenMuonPt=newGenMuonPt} //leadGenMuon=&(*iParticle);}
+		if(newGenMuonPt>leadGenMuonPt){leadGenMuonPt=newGenMuonPt}; //leadGenMuon=&(*iParticle);}
 	}
 	if(abs(iParticle->pdgId())==11){genElectron=true;}
 }
