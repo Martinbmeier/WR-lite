@@ -292,7 +292,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 //gen lepton info
 
-	reco::GenParticle* leadGenMuon=0;
+	const reco::GenParticle* leadGenMuon=0;
 
 	double leadGenMuonPt=-1000;
 	double newGenMuonPt;
