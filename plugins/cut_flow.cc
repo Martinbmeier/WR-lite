@@ -237,13 +237,8 @@ cut_flow::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	iEvent.getByToken(m_AK4recoCHSJetsToken, recoJetsAK4);  
 
 
-	//const pat::Jet* leadJet = 0;
-	//const pat::Jet* subleadJet = 0;
 	int jetCount = 0;
-
 	int btagcount = 0;
-
-	//bool btagged;
 
 	const pat::Jet* Jet1;
 	const pat::Jet* Jet2;
