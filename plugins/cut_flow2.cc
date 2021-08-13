@@ -342,7 +342,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	//electron reco
 
-		const pat::Electron* leadElectron;
+		const pat::Electron* leadElectron = 0;
 
 		double leadElectronpT = -1000;
 		double newLeadElectronpT;
