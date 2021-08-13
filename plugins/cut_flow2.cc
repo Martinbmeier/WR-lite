@@ -332,7 +332,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
    		
    		newLeadMuonpT=iMuon->pt();
 
-   		if(newLeadMuonpT>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*iMuon); foundMuon=true;}
+   		if(newLeadMuonpT>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*iMuon);}
 
 		}
 
