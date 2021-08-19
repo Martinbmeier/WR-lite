@@ -221,7 +221,8 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
-	double eventWeight = eventInfo->weight();
+	//double eventWeight = eventInfo->weight();
+	double eventWeight = 1;
 	
 	
 	edm::Handle<std::vector<reco::Vertex>> vertices;
@@ -384,7 +385,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 		
 	m_eventsWeight->Fill(0.5, eventCount);
 
-if(oneElectronMuon || !oneElectronMuon){
+if(oneElectronMuon)// || !oneElectronMuon){
 	m_histoMaker.fill(leadGenMuonPt,0,eventWeight);
 	if(electronTrigger){
 		m_histoMaker.fill(leadGenMuonPt,1,eventWeight);
@@ -396,9 +397,9 @@ if(oneElectronMuon || !oneElectronMuon){
 					m_histoMaker.fill(leadGenMuonPt,4,eventWeight);
 					if(angularSeparation){
 						m_histoMaker.fill(leadGenMuonPt,5,eventWeight);
-						if(leadGenMuonPt!=-1000){
-							csvTable(leadGenMuonPt,leadMuon,leadElectron,Jet1,Jet2);
-						}
+						//if(leadGenMuonPt!=-1000){
+							//csvTable(leadGenMuonPt,leadMuon,leadElectron,Jet1,Jet2);
+						//}
 						if(electronHighPt){
 							m_histoMaker.fill(leadGenMuonPt,6,eventWeight);
 							if(oneBTag){
