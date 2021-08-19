@@ -121,8 +121,8 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 
 		edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
 		edm::EDGetToken m_genParticleToken;
-		edm::EDGetToken m_highMuonToken;
 		edm::EDGetToken m_recoMETToken;
+		edm::EDGetToken m_highMuonToken;
 		edm::EDGetToken m_highElectronToken;
 		edm::EDGetToken m_AK4recoCHSJetsToken;
 		edm::EDGetToken m_genEventInfoToken;
