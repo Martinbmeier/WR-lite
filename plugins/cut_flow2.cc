@@ -250,7 +250,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 //start reco
 
-	const pat::MET* Met = recoMET.front();
+	const pat::MET* Met = recoMET->begin();
 
 	edm::Handle<std::vector<pat::Jet>> recoJetsAK4;  
 	iEvent.getByToken(m_AK4recoCHSJetsToken, recoJetsAK4);  
