@@ -528,8 +528,8 @@ myfile << muon->phi() << ", "
        << jet2->pt() << ", "
        << jet2->phi() << ", "
        << jet2->eta() << ", "
-       << Met->pt() << ", "
-       << Met->phi() <<", "
+       << Met.pt() << ", "
+       << Met.phi() <<", "
        << genMuonPt << "\n ";
 
 myfile.close();
