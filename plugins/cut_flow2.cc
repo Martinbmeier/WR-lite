@@ -104,7 +104,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		double dPhi(double phi1, double phi2);
 		bool tWfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event&);
-		void csvTable(double genMuonPt, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet* , const pat::MET*);
+		void csvTable(double genMuonPt, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet* , const pat::MET);
 		//double transverseSphericity(math::XYZTLorentzVector p1, math::XYZTLorentzVector p2, math::XYZTLorentzVector p3);
 		//void saveElectronData(eventBits2 * iBit, double matched1Mass, double matched2Mass);
 		//void saveMuonData(eventBits2 * iBit, double matched1Mass, double matched2Mass);
@@ -250,7 +250,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 //start reco
 
-	pat::MET Met = recoMET->front();
+	const pat::MET Met = recoMET->front();
 
 	edm::Handle<std::vector<pat::Jet>> recoJetsAK4;  
 	iEvent.getByToken(m_AK4recoCHSJetsToken, recoJetsAK4);  
@@ -513,7 +513,7 @@ bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
   return passTriggers;
 }
 
-void cut_flow2::csvTable(double genMuonPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* jet1, const pat::Jet* jet2, const pat::MET* Met) {
+void cut_flow2::csvTable(double genMuonPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* jet1, const pat::Jet* jet2, const pat::MET Met) {
 
 std::ofstream myfile;
 myfile.open("neuralNetData.csv",std::ios_base::app);
