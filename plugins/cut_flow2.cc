@@ -46,6 +46,10 @@
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/JetReco/interface/GenJet.h"
+#include "DataFormats/METReco/interface/CaloMETCollection.h"
+#include "DataFormats/METReco/interface/CaloMET.h"
+#include "DataFormats/METReco/interface/GenMETCollection.h"
+#include "DataFormats/METReco/interface/GenMET.h"
 
 #include "DataFormats/PatCandidates/interface/VIDCutFlowResult.h"
 
@@ -154,6 +158,7 @@ cut_flow2::cut_flow2(const edm::ParameterSet& iConfig)
 	:
 	tracksToken_(consumes<TrackCollection>(iConfig.getUntrackedParameter<edm::InputTag>("tracks"))),
 	m_genParticleToken(consumes<std::vector<reco::GenParticle>> (iConfig.getParameter<edm::InputTag>("genParticles"))),
+	m_recoMETToken(consumes<std::vector<pat::MET>> (iConfig.getParameter<edm::InputTag>("recoMET"))),
 	m_highMuonToken (consumes<std::vector<pat::Muon>> (iConfig.getParameter<edm::InputTag>("highMuons"))),
 	m_highElectronToken (consumes<std::vector<pat::Electron>> (iConfig.getParameter<edm::InputTag>("highElectrons"))),
 	m_AK4recoCHSJetsToken (consumes<std::vector<pat::Jet>> (iConfig.getParameter<edm::InputTag>("AK4recoCHSJets"))),
@@ -218,6 +223,9 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	edm::Handle<std::vector<reco::GenParticle>> genParticles;
 	iEvent.getByToken(m_genParticleToken, genParticles);
+
+	edm::Handle<std::vector<pat::MET>> recoMET;
+	iEvent.getByToken(m_recoMETToken, recoMET);
 	
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
@@ -239,6 +247,8 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 //start reco
+
+	const pat::MET* Met = recoMET.front();
 
 	edm::Handle<std::vector<pat::Jet>> recoJetsAK4;  
 	iEvent.getByToken(m_AK4recoCHSJetsToken, recoJetsAK4);  
@@ -397,9 +407,9 @@ if(oneElectronMuon){// || !oneElectronMuon){
 					m_histoMaker.fill(leadGenMuonPt,4,eventWeight);
 					if(angularSeparation){
 						m_histoMaker.fill(leadGenMuonPt,5,eventWeight);
-						//if(leadGenMuonPt!=-1000){
-							//csvTable(leadGenMuonPt,leadMuon,leadElectron,Jet1,Jet2);
-						//}
+						if(leadGenMuonPt!=-1000){
+							csvTable(leadGenMuonPt,leadMuon,leadElectron,Jet1,Jet2,Met);
+						}
 						if(electronHighPt){
 							m_histoMaker.fill(leadGenMuonPt,6,eventWeight);
 							if(oneBTag){
@@ -501,7 +511,7 @@ bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
   return passTriggers;
 }
 
-void cut_flow2::csvTable(double genMuonPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* jet1, const pat::Jet* jet2) {
+void cut_flow2::csvTable(double genMuonPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* jet1, const pat::Jet* jet2, const pat::MET Met) {
 
 std::ofstream myfile;
 myfile.open("neuralNetData.csv",std::ios_base::app);
@@ -516,6 +526,8 @@ myfile << muon->phi() << ", "
        << jet2->pt() << ", "
        << jet2->phi() << ", "
        << jet2->eta() << ", "
+       << Met->pt() << ", "
+       << Met->phi() <<", "
        << genMuonPt << "\n ";
 
 myfile.close();

@@ -231,7 +231,9 @@ process.analysis = cms.EDAnalyzer('cut_flow2',
                         trainFile = cms.untracked.string(options.trainFile),
                         isSignal = cms.untracked.bool(options.isSignal),
                         genTrainData = cms.untracked.bool(options.genTrainData),
-                        electronPathsToPass = electronPaths
+                        electronPathsToPass = electronPaths,
+                        recoMET = cms.InputTag("slimmedMETs")
+
 )
 
 
