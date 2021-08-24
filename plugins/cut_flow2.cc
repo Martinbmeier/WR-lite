@@ -37,6 +37,7 @@
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/Math/interface/deltaR.h"
+#include "DataFormats/Math/interface/deltaPhi.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
@@ -112,7 +113,18 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		
 		cutFlowHistos m_histoMaker;
 		TH1D* m_eventsWeight;
-
+	  TH2D* m_cosJets;
+	  TH2D* m_cosJet1electron;
+	  TH2D* m_cosJet2electron; 
+	  TH2D* m_cosJet1muon; 
+	  TH2D* m_cosJet2muon; 
+	  TH2D* m_cosLeptons; 
+	  TH2D* m_dRjets;
+	  TH2D* m_dRLeptons;
+	  TH2D* m_dRJet1muon;
+	  TH2D* m_dRJet2muon;
+	  TH2D* m_dRJet1electron;
+	  TH2D* m_dRJet2electron;
 
 		//neuralNet networkResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/Resolved");
 		//neuralNet networkSuperResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/SuperResolved");
@@ -404,6 +416,8 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 		
 	m_eventsWeight->Fill(0.5, eventCount);
 
+	double em_ratio=leadGenMuonPt/leadGenElectronPt;
+
 if(oneElectronMuon){// || !oneElectronMuon){
 	m_histoMaker.fill(leadGenMuonPt,0,eventWeight);
 	if(electronTrigger){
@@ -417,7 +431,44 @@ if(oneElectronMuon){// || !oneElectronMuon){
 					if(angularSeparation){
 						m_histoMaker.fill(leadGenMuonPt,5,eventWeight);
 						if(leadGenMuonPt!=-1000){
-							csvTable(leadGenMuonPt,leadGenElectronPt,leadMuon,leadElectron,Jet1,Jet2,Met);
+							//csvTable(leadGenMuonPt,leadGenElectronPt,leadMuon,leadElectron,Jet1,Jet2,Met);
+
+								m_cosJets->Fill(ROOT::Math::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
+								m_cosLeptons->Fill(ROOT::Math::Cos(deltaPhi(leadMuon->phi(),leadElectron->phi())),em_ratio,1);
+
+
+							if(jet1->pt()>jet2->pt()){
+								m_cosJet1electron->Fill(ROOT::Math::Cos(deltaPhi(Jet1->phi(),leadElectron->phi())),em_ratio,1);
+								m_cosJet2electron->Fill(ROOT::Math::Cos(deltaPhi(Jet2->phi(),leadElectron->phi())),em_ratio,1);
+								m_cosJet1muon->Fill(ROOT::Math::Cos(deltaPhi(Jet1->phi(),leadMuon->phi())),em_ratio,1);
+								m_cosJet2muon->Fill(ROOT::Math::Cos(deltaPhi(Jet2->phi(),leadMuon->phi())),em_ratio,1);
+
+							}
+							else{
+								m_cosJet1electron->Fill(ROOT::Math::Cos(deltaPhi(Jet2->phi(),leadElectron->phi())),em_ratio,1);
+								m_cosJet2electron->Fill(ROOT::Math::Cos(deltaPhi(Jet1->phi(),leadElectron->phi())),em_ratio,1);
+								m_cosJet1muon->Fill(ROOT::Math::Cos(deltaPhi(Jet2->phi(),leadMuon->phi())),em_ratio,1);
+								m_cosJet2muon->Fill(ROOT::Math::Cos(deltaPhi(Jet1->phi(),leadMuon->phi())),em_ratio,1);
+							}
+
+							m_dRjets->Fill(deltaR(Jet1->eta(),Jet1->phi(),Jet2->eta(),Jet2->phi()));
+							m_dRLeptons->Fill(deltaR(leadMuon->eta(),leadMuon->phi(),leadElectron->eta(),leadElectron->phi()));
+
+							if(jet1->pt()>jet2->pt()){
+								m_dRJet1muon->Fill(deltaR(Jet1->eta(),Jet1->phi(),leadMuon->eta(),leadMuon->phi()));
+								m_dRJet2muon->Fill(deltaR(Jet2->eta(),Jet2->phi(),leadMuon->eta(),leadMuon->phi()));
+
+								m_dRJet1electron->Fill(deltaR(Jet1->eta(),Jet1->phi(),leadElectron->eta(),leadElectron->phi()));
+								m_dRJet2electron->Fill(deltaR(Jet2->eta(),Jet2->phi(),leadElectron->eta(),leadElectron->phi()));
+							}
+							else{
+								m_dRJet1muon->Fill(deltaR(Jet2->eta(),Jet2->phi(),leadMuon->eta(),leadMuon->phi()));
+								m_dRJet2muon->Fill(deltaR(Jet1->eta(),Jet1->phi(),leadMuon->eta(),leadMuon->phi()));
+
+								m_dRJet1electron->Fill(deltaR(Jet2->eta(),Jet2->phi(),leadElectron->eta(),leadElectron->phi()));
+								m_dRJet2electron->Fill(deltaR(Jet1->eta(),Jet1->phi(),leadElectron->eta(),leadElectron->phi()));
+							}
+
 						}
 						if(electronHighPt){
 							m_histoMaker.fill(leadGenMuonPt,6,eventWeight);
@@ -557,6 +608,8 @@ cut_flow2::beginJob() {
 	edm::Service<TFileService> fs; 
 
 	TFileDirectory countFolder = fs->mkdir("event_count");
+
+	TFileDirectory variableCorrelations = fs->mkdir("variable_correlations");
 	
 	m_histoMaker.book(fs->mkdir("cuts1"),0);
 
@@ -582,6 +635,23 @@ cut_flow2::beginJob() {
 
 
 	m_eventsWeight = {countFolder.make<TH1D>("eventsWeight","number of events weighted", 1, 0.0, 1)};
+
+	m_cosJets = {variableCorrelations.make<TH2D>("cosJets","muon electron pt ratio vs. cos(delta Phi) for two jets",50,-1,1,50,0,2.5)};
+	m_cosJet1electron = {variableCorrelations.make<TH2D>("cosJet1Electron","muon electron pt ratio vs. cos(delta Phi) for jet1 and electron",50,-1,1,50,0,2.5)};
+	m_cosJet2electron = {variableCorrelations.make<TH2D>("cosJet2Electron","muon electron pt ratio vs. cos(delta Phi) for jet2 and electron",50,-1,1,50,0,2.5)};
+	m_cosJet1muon = {variableCorrelations.make<TH2D>("cosJet1Muon","muon electron pt ratio vs. cos(delta Phi) for jet1 and muon",50,-1,1,50,0,2.5)};
+	m_cosJet2muon = {variableCorrelations.make<TH2D>("cosJet2Muon","muon electron pt ratio vs. cos(delta Phi) for jet2 and muon",50,-1,1,50,0,2.5)};
+	m_cosLeptons = {variableCorrelations.make<TH2D>("cosleptons","muon electron pt ratio vs. cos(delta Phi) for electron and muon",50,-1,1,50,0,2.5)};
+
+	m_dRjets = {variableCorrelations.make<TH2D>("dRjets","muon electron pt ratio vs. deltaR for jets",50,0,7.5,50,0,2.5)};
+	m_dRLeptons = {variableCorrelations.make<TH2D>("dRLeptons","muon electron pt ratio vs. deltaR for muon and electron",50,0,7.5,50,0,2.5)};
+	m_dRJet1muon = {variableCorrelations.make<TH2D>("dRJet1muon","muon electron pt ratio vs. deltaR for jet1 and muon",50,0,7.5,50,0,2.5)};
+	m_dRJet2muon = {variableCorrelations.make<TH2D>("dRJet2muon","muon electron pt ratio vs. deltaR for jet2 and muon",50,0,7.5,50,0,2.5)};
+	m_dRJet1electron = {variableCorrelations.make<TH2D>("dRJet1electron","muon electron pt ratio vs. deltaR for jet1 and electron",50,0,7.5,50,0,2.5)};
+	m_dRJet2electron = {variableCorrelations.make<TH2D>("dRJet2electron","muon electron pt ratio vs. deltaR for jet2 and electron",50,0,7.5,50,0,2.5)};
+
+
+
 
 
 
