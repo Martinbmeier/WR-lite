@@ -434,22 +434,22 @@ if(oneElectronMuon){// || !oneElectronMuon){
 						if(leadGenMuonPt!=-1000){
 							//csvTable(leadGenMuonPt,leadGenElectronPt,leadMuon,leadElectron,Jet1,Jet2,Met);
 
-								m_cosJets->Fill(Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
-								m_cosLeptons->Fill(Cos(deltaPhi(leadMuon->phi(),leadElectron->phi())),em_ratio,1);
+								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
+								m_cosLeptons->Fill(TMath::Cos(deltaPhi(leadMuon->phi(),leadElectron->phi())),em_ratio,1);
 
 
 							if(Jet1->pt()>Jet2->pt()){
-								m_cosJet1electron->Fill(Cos(deltaPhi(Jet1->phi(),leadElectron->phi())),em_ratio,1);
-								m_cosJet2electron->Fill(Cos(deltaPhi(Jet2->phi(),leadElectron->phi())),em_ratio,1);
-								m_cosJet1muon->Fill(Cos(deltaPhi(Jet1->phi(),leadMuon->phi())),em_ratio,1);
-								m_cosJet2muon->Fill(Cos(deltaPhi(Jet2->phi(),leadMuon->phi())),em_ratio,1);
+								m_cosJet1electron->Fill(TMath::Cos(deltaPhi(Jet1->phi(),leadElectron->phi())),em_ratio,1);
+								m_cosJet2electron->Fill(TMath::Cos(deltaPhi(Jet2->phi(),leadElectron->phi())),em_ratio,1);
+								m_cosJet1muon->Fill(TMath::Cos(deltaPhi(Jet1->phi(),leadMuon->phi())),em_ratio,1);
+								m_cosJet2muon->Fill(TMath::Cos(deltaPhi(Jet2->phi(),leadMuon->phi())),em_ratio,1);
 
 							}
 							else{
-								m_cosJet1electron->Fill(Cos(deltaPhi(Jet2->phi(),leadElectron->phi())),em_ratio,1);
-								m_cosJet2electron->Fill(Cos(deltaPhi(Jet1->phi(),leadElectron->phi())),em_ratio,1);
-								m_cosJet1muon->Fill(Cos(deltaPhi(Jet2->phi(),leadMuon->phi())),em_ratio,1);
-								m_cosJet2muon->Fill(Cos(deltaPhi(Jet1->phi(),leadMuon->phi())),em_ratio,1);
+								m_cosJet1electron->Fill(TMath::Cos(deltaPhi(Jet2->phi(),leadElectron->phi())),em_ratio,1);
+								m_cosJet2electron->Fill(TMath::Cos(deltaPhi(Jet1->phi(),leadElectron->phi())),em_ratio,1);
+								m_cosJet1muon->Fill(TMath::Cos(deltaPhi(Jet2->phi(),leadMuon->phi())),em_ratio,1);
+								m_cosJet2muon->Fill(TMath::Cos(deltaPhi(Jet1->phi(),leadMuon->phi())),em_ratio,1);
 							}
 
 							m_dRjets->Fill(deltaR(Jet1->eta(),Jet1->phi(),Jet2->eta(),Jet2->phi()),em_ratio,1);
