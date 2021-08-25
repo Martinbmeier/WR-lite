@@ -385,7 +385,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				//if(fabs(iElectron->eta()) > 2.4) {continue;}
 				//if(iElectron->pt() < 10 ) {continue;}
 				
-				recoElectronpT=iElectron->pt();
+				//recoElectronpT=iElectron->pt();
 				oneHeepElectron=true;
 				recoElectron=&(*(iElectron));
 
