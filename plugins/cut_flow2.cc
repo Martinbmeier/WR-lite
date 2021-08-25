@@ -352,7 +352,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	  const pat::Muon* recoMuon=0;
 
-		double recoMuonpT = -1000;
+		//double recoMuonpT = -1000;
 		//double newrecoMuonpT=-1000;
 		bool foundMuon=false;
 
@@ -361,7 +361,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
    		//if(fabs(iMuon->eta()) > 2.4 || iMuon->tunePMuonBestTrack()->pt() < 10 || !(iMuon->isHighPtMuon(*myEvent.PVertex)) || (iMuon->isolationR03().sumPt/iMuon->pt() > .1)){ continue;} //preliminary cut
    		
-   		if(iMuon->isHighPtMuon(*myEvent.PVertex) && !oneMuonHighpT){oneMuonHighpT=true; newrecoMuonpT=iMuon->pt(); recoMuon=&(*(iMuon))}
+   		if(iMuon->isHighPtMuon(*myEvent.PVertex) && !oneMuonHighpT){oneMuonHighpT=true; recoMuon=&(*(iMuon));}
 
    	
 
@@ -387,7 +387,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				
 				recoElectronpT=iElectron->pt();
 				oneHeepElectron=true;
-				recoElectron=&(*(iElectron))
+				recoElectron=&(*(iElectron));
 
 				if(recoElectron->pt()>75){electronHighPt=true;}
 
@@ -427,7 +427,7 @@ if(oneElectronMuon){// || !oneElectronMuon){
 							m_histoMaker.fill(genMuonpT,6,eventWeight);
 
 								//csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,Jet1,Jet2,Met);  //fill a csv table with variables for the NN 
-							
+
 								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
 								m_cosLeptons->Fill(TMath::Cos(deltaPhi(recoMuon->phi(),recoElectron->phi())),em_ratio,1);
 
