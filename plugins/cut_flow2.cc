@@ -423,7 +423,7 @@ if(oneElectronMuon){// || !oneElectronMuon){
 					m_histoMaker.fill(leadGenMuonPt,4,eventWeight);
 					if(angularSeparation){
 						m_histoMaker.fill(leadGenMuonPt,5,eventWeight);
-						if(leadGenMuonPt!=-1000){
+						
 							//csvTable(leadGenMuonPt,leadGenElectronPt,leadMuon,leadElectron,Jet1,Jet2,Met);  //fill a csv table with variables for the NN 
 
 								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
@@ -462,7 +462,7 @@ if(oneElectronMuon){// || !oneElectronMuon){
 								m_dRJet2electron->Fill(deltaR(Jet1->eta(),Jet1->phi(),leadElectron->eta(),leadElectron->phi()),em_ratio,1);
 							}
 
-						}
+						
 						if(electronHighPt){
 							m_histoMaker.fill(leadGenMuonPt,6,eventWeight);
 							if(oneBTag){
