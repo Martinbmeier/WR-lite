@@ -5,13 +5,13 @@
 // Class:      cut_flow2
 //
 /**\class cut_flow2 cut_flow2.cc ExoAnalysis/cut_flow2/plugins/cut_flow2.cc
- Description: [one line class summary]
+ Description: cut flow, event selection, and extraction of variables for NN
  Implementation:
      [Notes on implementation]
 */
 //
-// Original Author:  Andrew Evans
-//         Created:  Mon, 14 Oct 2019 19:43:16 GMT
+//  Author:  Andrew Evans, adapted by Martin Meier
+//         Created:  Aug 2021
 //
 //
 
@@ -181,7 +181,6 @@ cut_flow2::cut_flow2(const edm::ParameterSet& iConfig)
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
 	m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal"))
-	//m_genTrainData (iConfig.getUntrackedParameter<bool>("genTrainData"))
 
 {
    //now do what ever initialization is needed
