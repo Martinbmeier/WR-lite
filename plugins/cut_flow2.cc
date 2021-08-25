@@ -280,8 +280,6 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	//Get jets with maximum pt
 		for(std::vector<pat::Jet>::const_iterator iJet = recoJetsAK4->begin(); iJet != recoJetsAK4->end(); iJet++) {
-			//Make sure jets are not around leptons
-			//if ( fabs(iJet->eta()) > 2.4) continue;
 
 			double NHF  =           iJet->neutralHadronEnergyFraction();
 			double NEMF =           iJet->neutralEmEnergyFraction();
@@ -318,8 +316,6 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 //gen lepton info
 
-	//const reco::GenParticle* leadGenMuon=0;
-
 	double leadGenMuonPt=-1000;
 	double newGenMuonPt;
 
@@ -333,20 +329,19 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 	if( ! iParticle->isHardProcess() ){ continue; }
 	if(abs(iParticle->pdgId())==13){
-		//if(!tWfinder(iEvent, &(*iParticle))){ continue; }
+		//if(!tWfinder(iEvent, &(*iParticle))){ continue; } //could check if the gen particle comes from a top->W->lepton
 		genMuon = true;
 		newGenMuonPt=iParticle->pt();
-		if(newGenMuonPt>leadGenMuonPt){leadGenMuonPt=newGenMuonPt;} //leadGenMuon=&(*iParticle);}
+		if(newGenMuonPt>leadGenMuonPt){leadGenMuonPt=newGenMuonPt;} //get the highest pt muon if multiple
 	}
 	if(abs(iParticle->pdgId())==11){
 		genElectron=true;
 		newGenElectronPt = iParticle->pt();
-		if(newGenElectronPt>leadGenElectronPt){leadGenElectronPt=newGenElectronPt;}
+		if(newGenElectronPt>leadGenElectronPt){leadGenElectronPt=newGenElectronPt;} //get the highest pt electron if multiple
 	}
 }
 
 if(genElectron==true && genMuon==true){oneElectronMuon=true;}
-//cut flow things
 
 
 //check electron trigger
@@ -361,11 +356,12 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 		double leadMuonpT = -1000;
 		double newLeadMuonpT=-1000;
 		bool foundMuon=false;
-		//int muCount=0;
+
 
    	for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
 
    		//if(fabs(iMuon->eta()) > 2.4 || iMuon->tunePMuonBestTrack()->pt() < 10 || !(iMuon->isHighPtMuon(*myEvent.PVertex)) || (iMuon->isolationR03().sumPt/iMuon->pt() > .1)){ continue;} //preliminary cut
+   		
    		if(iMuon->isHighPtMuon(*myEvent.PVertex)){oneMuonHighpT=true;}
 
    		
@@ -392,9 +388,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				//if(fabs(iElectron->eta()) > 2.4) {continue;}
 				//if(iElectron->pt() < 10 ) {continue;}
 				
-
 				newLeadElectronpT=iElectron->pt();
-   			//newLeadElectronp4=iElectron->p4();
 
    			if(newLeadElectronpT>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*(iElectron)); oneHeepElectron=true;}
 
@@ -408,10 +402,10 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), leadElectron->eta(), Jet1->phi(), leadElectron->phi()));
 				double electronJet2Sep=sqrt(dR2(Jet2->eta(), leadElectron->eta(), Jet2->phi(), leadElectron->phi()));
 				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
-				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} //check for lepton separation
+				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} // jet/lepton separation cut
 			} 
 			if(oneHeepElectron){
-				if(leadElectron->pt()>75){electronHighPt=true;} //check for electron pt
+				if(leadElectron->pt()>75){electronHighPt=true;} //electron pt cut
 			}
 
 		
@@ -432,7 +426,7 @@ if(oneElectronMuon){// || !oneElectronMuon){
 					if(angularSeparation){
 						m_histoMaker.fill(leadGenMuonPt,5,eventWeight);
 						if(leadGenMuonPt!=-1000){
-							//csvTable(leadGenMuonPt,leadGenElectronPt,leadMuon,leadElectron,Jet1,Jet2,Met);
+							//csvTable(leadGenMuonPt,leadGenElectronPt,leadMuon,leadElectron,Jet1,Jet2,Met);  //fill a csv table with variables for the NN 
 
 								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
 								m_cosLeptons->Fill(TMath::Cos(deltaPhi(leadMuon->phi(),leadElectron->phi())),em_ratio,1);
