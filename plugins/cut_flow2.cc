@@ -332,12 +332,12 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 		//if(!tWfinder(iEvent, &(*iParticle))){ continue; } //could check if the gen particle comes from a top->W->lepton
 		genMuon = true;
 		newGenMuonPt=iParticle->pt();
-		if(newGenMuonPt>leadGenMuonPt){leadGenMuonPt=newGenMuonPt;} //get the highest pt muon if multiple
+		if(newGenMuonPt>leadGenMuonPt){leadGenMuonPt=newGenMuonPt;} //get the highest pt gen muon if multiple
 	}
 	if(abs(iParticle->pdgId())==11){
 		genElectron=true;
 		newGenElectronPt = iParticle->pt();
-		if(newGenElectronPt>leadGenElectronPt){leadGenElectronPt=newGenElectronPt;} //get the highest pt electron if multiple
+		if(newGenElectronPt>leadGenElectronPt){leadGenElectronPt=newGenElectronPt;} //get the highest pt gen electron if multiple
 	}
 }
 
@@ -367,7 +367,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
    		
    		newLeadMuonpT=iMuon->pt();
 
-   		if(newLeadMuonpT>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*(iMuon)); foundMuon=true;}
+   		if(newLeadMuonpT>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*(iMuon)); foundMuon=true;} //get the highest pt muon if multiple
 
 		}
 
@@ -383,14 +383,13 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 		double leadElectronpT = -1000;
 		double newLeadElectronpT = -1000;
 
-			//for all reco electrons, loop through gen electrons to find spatial matches
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
 				//if(fabs(iElectron->eta()) > 2.4) {continue;}
 				//if(iElectron->pt() < 10 ) {continue;}
 				
 				newLeadElectronpT=iElectron->pt();
 
-   			if(newLeadElectronpT>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*(iElectron)); oneHeepElectron=true;}
+   			if(newLeadElectronpT>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*(iElectron)); oneHeepElectron=true;} //get the highest pt electron if multiple
 
 			}
 
