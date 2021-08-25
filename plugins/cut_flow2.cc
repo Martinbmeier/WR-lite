@@ -302,7 +302,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			if (CEMF > .90)  continue;
 			if(BJP > 0.4184){ btagcount++; }		
 			if(jetCount==0){Jet1=&(*(iJet));}
-			if(jetCount>0){Jet2=&(*(iJet));}
+			if(jetCount==1){Jet2=&(*(iJet));}
 			jetCount++;
 		}
 
@@ -315,11 +315,11 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 //gen lepton info
 
-	double leadGenMuonPt=-1000;
-	double newGenMuonPt;
+	double genMuonpT=-1000;
+	//double newGenMuonPt;
 
-	double leadGenElectronPt=-1000;
-	double newGenElectronPt;
+	double genElectronpT=-1000;
+	//double newGenElectronPt;
 
 	bool genMuon = false;
 	bool genElectron = false;
@@ -327,20 +327,20 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 	if( ! iParticle->isHardProcess() ){ continue; }
-	if(abs(iParticle->pdgId())==13){
+	if(abs(iParticle->pdgId())==13 && !genMuon){
 		//if(!tWfinder(iEvent, &(*iParticle))){ continue; } //could check if the gen particle comes from a top->W->lepton
 		genMuon = true;
-		newGenMuonPt=iParticle->pt();
-		if(newGenMuonPt>leadGenMuonPt){leadGenMuonPt=newGenMuonPt;} //get the highest pt gen muon if multiple
+		genMuonpT=iParticle->pt();
+		//if(newGenMuonPt>genMuonpT){genMuonpT=newGenMuonPt;} //get the highest pt gen muon if multiple
 	}
-	if(abs(iParticle->pdgId())==11){
+	if(abs(iParticle->pdgId())==11 && !genElectron){
 		genElectron=true;
-		newGenElectronPt = iParticle->pt();
-		if(newGenElectronPt>leadGenElectronPt){leadGenElectronPt=newGenElectronPt;} //get the highest pt gen electron if multiple
+		genElectronpT = iParticle->pt();
+		//if(newGenElectronPt>genElectronpT){genElectronpT=newGenElectronPt;} //get the highest pt gen electron if multiple
 	}
 }
 
-if(genElectron==true && genMuon==true){oneElectronMuon=true;}
+if(genElectron && genMuon){oneElectronMuon=true;}
 
 
 //check electron trigger
@@ -350,10 +350,10 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	//muon reco
 
-	  const pat::Muon* leadMuon=0;
+	  const pat::Muon* recoMuon=0;
 
-		double leadMuonpT = -1000;
-		double newLeadMuonpT=-1000;
+		double recoMuonpT = -1000;
+		//double newrecoMuonpT=-1000;
 		bool foundMuon=false;
 
 
@@ -361,118 +361,118 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
    		//if(fabs(iMuon->eta()) > 2.4 || iMuon->tunePMuonBestTrack()->pt() < 10 || !(iMuon->isHighPtMuon(*myEvent.PVertex)) || (iMuon->isolationR03().sumPt/iMuon->pt() > .1)){ continue;} //preliminary cut
    		
-   		if(iMuon->isHighPtMuon(*myEvent.PVertex)){oneMuonHighpT=true;}
+   		if(iMuon->isHighPtMuon(*myEvent.PVertex) && !oneMuonHighpT){oneMuonHighpT=true; newrecoMuonpT=iMuon->pt(); recoMuon=&(*(iMuon))}
 
-   		
-   		newLeadMuonpT=iMuon->pt();
+   	
 
-   		if(newLeadMuonpT>leadMuonpT){leadMuonpT=newLeadMuonpT; leadMuon=&(*(iMuon)); foundMuon=true;} //get the highest pt muon if multiple
+   		//if(newrecoMuonpT>recoMuonpT){recoMuonpT=newrecoMuonpT; recoMuon=&(*(iMuon)); foundMuon=true;} //get the highest pt muon if multiple
 
 		}
 
-		if(foundMuon){
-			if(leadMuon->passed(reco::Muon::TkIsoLoose)){muonIsolation1=true;}
-			if(leadMuon->passed(reco::Muon::TkIsoTight)){muonIsolation1=true; muonIsolation2=true; }
+		if(oneMuonHighpT){
+			if(recoMuon->passed(reco::Muon::TkIsoLoose)){muonIsolation1=true;}
+			if(recoMuon->passed(reco::Muon::TkIsoTight)){muonIsolation1=true; muonIsolation2=true; }
 		}
 
 	//electron reco
 
-		const pat::Electron* leadElectron=0;
+		const pat::Electron* recoElectron=0;
 
-		double leadElectronpT = -1000;
-		double newLeadElectronpT = -1000;
+		double recoElectronpT = -1000;
+		//double newrecoElectronpT = -1000;
 
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
 				//if(fabs(iElectron->eta()) > 2.4) {continue;}
 				//if(iElectron->pt() < 10 ) {continue;}
 				
-				newLeadElectronpT=iElectron->pt();
+				recoElectronpT=iElectron->pt();
+				oneHeepElectron=true;
+				recoElectron=&(*(iElectron))
 
-   			if(newLeadElectronpT>leadElectronpT){leadElectronpT=newLeadElectronpT; leadElectron=&(*(iElectron)); oneHeepElectron=true;} //get the highest pt electron if multiple
+				if(recoElectron->pt()>75){electronHighPt=true;}
+
+   			//if(newrecoElectronpT>recoElectronpT){recoElectronpT=newrecoElectronpT; recoElectron=&(*(iElectron)); oneHeepElectron=true;} //get the highest pt electron if multiple
 
 			}
 
 
 			if(oneHeepElectron && foundMuon && twoJets){
-				double dileptonSeparation=sqrt(dR2(leadMuon->eta(), leadElectron->eta(), leadMuon->phi(), leadElectron->phi()));
-			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), leadMuon->eta(), Jet1->phi(), leadMuon->phi()));
-			   double muonJet2Sep=sqrt(dR2(Jet2->eta(), leadMuon->eta(), Jet2->phi(), leadMuon->phi()));
-			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), leadElectron->eta(), Jet1->phi(), leadElectron->phi()));
-				double electronJet2Sep=sqrt(dR2(Jet2->eta(), leadElectron->eta(), Jet2->phi(), leadElectron->phi()));
+				double dileptonSeparation=sqrt(dR2(recoMuon->eta(), recoElectron->eta(), recoMuon->phi(), recoElectron->phi()));
+			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), recoMuon->eta(), Jet1->phi(), recoMuon->phi()));
+			   double muonJet2Sep=sqrt(dR2(Jet2->eta(), recoMuon->eta(), Jet2->phi(), recoMuon->phi()));
+			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), recoElectron->eta(), Jet1->phi(), recoElectron->phi()));
+				double electronJet2Sep=sqrt(dR2(Jet2->eta(), recoElectron->eta(), Jet2->phi(), recoElectron->phi()));
 				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} // jet/lepton separation cut
 			} 
-			if(oneHeepElectron){
-				if(leadElectron->pt()>75){electronHighPt=true;} //electron pt cut
-			}
 
 		
 	m_eventsWeight->Fill(0.5, eventCount);
 
-	double em_ratio=leadGenMuonPt/leadGenElectronPt;
+	double em_ratio=genMuonpT/genElectronpT;
 
 if(oneElectronMuon){// || !oneElectronMuon){
-	m_histoMaker.fill(leadGenMuonPt,0,eventWeight);
+	m_histoMaker.fill(genMuonpT,0,eventWeight);
 	if(electronTrigger){
-		m_histoMaker.fill(leadGenMuonPt,1,eventWeight);
+		m_histoMaker.fill(genMuonpT,1,eventWeight);
 		if(oneHeepElectron){
-			m_histoMaker.fill(leadGenMuonPt,2,eventWeight);
+			m_histoMaker.fill(genMuonpT,2,eventWeight);
 			if(oneMuonHighpT){
-				m_histoMaker.fill(leadGenMuonPt,3,eventWeight);
+				m_histoMaker.fill(genMuonpT,3,eventWeight);
 				if(twoJets){
-					m_histoMaker.fill(leadGenMuonPt,4,eventWeight);
+					m_histoMaker.fill(genMuonpT,4,eventWeight);
 					if(angularSeparation){
-						m_histoMaker.fill(leadGenMuonPt,5,eventWeight);
-						
-							//csvTable(leadGenMuonPt,leadGenElectronPt,leadMuon,leadElectron,Jet1,Jet2,Met);  //fill a csv table with variables for the NN 
+						m_histoMaker.fill(genMuonpT,5,eventWeight);
+						if(electronHighPt){
+							m_histoMaker.fill(genMuonpT,6,eventWeight);
 
+								//csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,Jet1,Jet2,Met);  //fill a csv table with variables for the NN 
+							
 								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
-								m_cosLeptons->Fill(TMath::Cos(deltaPhi(leadMuon->phi(),leadElectron->phi())),em_ratio,1);
+								m_cosLeptons->Fill(TMath::Cos(deltaPhi(recoMuon->phi(),recoElectron->phi())),em_ratio,1);
 
 
 							if(Jet1->pt()>Jet2->pt()){
-								m_cosJet1electron->Fill(TMath::Cos(deltaPhi(Jet1->phi(),leadElectron->phi())),em_ratio,1);
-								m_cosJet2electron->Fill(TMath::Cos(deltaPhi(Jet2->phi(),leadElectron->phi())),em_ratio,1);
-								m_cosJet1muon->Fill(TMath::Cos(deltaPhi(Jet1->phi(),leadMuon->phi())),em_ratio,1);
-								m_cosJet2muon->Fill(TMath::Cos(deltaPhi(Jet2->phi(),leadMuon->phi())),em_ratio,1);
+								m_cosJet1electron->Fill(TMath::Cos(deltaPhi(Jet1->phi(),recoElectron->phi())),em_ratio,1);
+								m_cosJet2electron->Fill(TMath::Cos(deltaPhi(Jet2->phi(),recoElectron->phi())),em_ratio,1);
+								m_cosJet1muon->Fill(TMath::Cos(deltaPhi(Jet1->phi(),recoMuon->phi())),em_ratio,1);
+								m_cosJet2muon->Fill(TMath::Cos(deltaPhi(Jet2->phi(),recoMuon->phi())),em_ratio,1);
 
 							}
 							else{
-								m_cosJet1electron->Fill(TMath::Cos(deltaPhi(Jet2->phi(),leadElectron->phi())),em_ratio,1);
-								m_cosJet2electron->Fill(TMath::Cos(deltaPhi(Jet1->phi(),leadElectron->phi())),em_ratio,1);
-								m_cosJet1muon->Fill(TMath::Cos(deltaPhi(Jet2->phi(),leadMuon->phi())),em_ratio,1);
-								m_cosJet2muon->Fill(TMath::Cos(deltaPhi(Jet1->phi(),leadMuon->phi())),em_ratio,1);
+								m_cosJet1electron->Fill(TMath::Cos(deltaPhi(Jet2->phi(),recoElectron->phi())),em_ratio,1);
+								m_cosJet2electron->Fill(TMath::Cos(deltaPhi(Jet1->phi(),recoElectron->phi())),em_ratio,1);
+								m_cosJet1muon->Fill(TMath::Cos(deltaPhi(Jet2->phi(),recoMuon->phi())),em_ratio,1);
+								m_cosJet2muon->Fill(TMath::Cos(deltaPhi(Jet1->phi(),recoMuon->phi())),em_ratio,1);
 							}
 
 							m_dRjets->Fill(deltaR(Jet1->eta(),Jet1->phi(),Jet2->eta(),Jet2->phi()),em_ratio,1);
-							m_dRLeptons->Fill(deltaR(leadMuon->eta(),leadMuon->phi(),leadElectron->eta(),leadElectron->phi()),em_ratio,1);
+							m_dRLeptons->Fill(deltaR(recoMuon->eta(),recoMuon->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
 
 							if(Jet1->pt()>Jet2->pt()){
-								m_dRJet1muon->Fill(deltaR(Jet1->eta(),Jet1->phi(),leadMuon->eta(),leadMuon->phi()),em_ratio,1);
-								m_dRJet2muon->Fill(deltaR(Jet2->eta(),Jet2->phi(),leadMuon->eta(),leadMuon->phi()),em_ratio,1);
+								m_dRJet1muon->Fill(deltaR(Jet1->eta(),Jet1->phi(),recoMuon->eta(),recoMuon->phi()),em_ratio,1);
+								m_dRJet2muon->Fill(deltaR(Jet2->eta(),Jet2->phi(),recoMuon->eta(),recoMuon->phi()),em_ratio,1);
 
-								m_dRJet1electron->Fill(deltaR(Jet1->eta(),Jet1->phi(),leadElectron->eta(),leadElectron->phi()),em_ratio,1);
-								m_dRJet2electron->Fill(deltaR(Jet2->eta(),Jet2->phi(),leadElectron->eta(),leadElectron->phi()),em_ratio,1);
+								m_dRJet1electron->Fill(deltaR(Jet1->eta(),Jet1->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
+								m_dRJet2electron->Fill(deltaR(Jet2->eta(),Jet2->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
 							}
 							else{
-								m_dRJet1muon->Fill(deltaR(Jet2->eta(),Jet2->phi(),leadMuon->eta(),leadMuon->phi()),em_ratio,1);
-								m_dRJet2muon->Fill(deltaR(Jet1->eta(),Jet1->phi(),leadMuon->eta(),leadMuon->phi()),em_ratio,1);
+								m_dRJet1muon->Fill(deltaR(Jet2->eta(),Jet2->phi(),recoMuon->eta(),recoMuon->phi()),em_ratio,1);
+								m_dRJet2muon->Fill(deltaR(Jet1->eta(),Jet1->phi(),recoMuon->eta(),recoMuon->phi()),em_ratio,1);
 
-								m_dRJet1electron->Fill(deltaR(Jet2->eta(),Jet2->phi(),leadElectron->eta(),leadElectron->phi()),em_ratio,1);
-								m_dRJet2electron->Fill(deltaR(Jet1->eta(),Jet1->phi(),leadElectron->eta(),leadElectron->phi()),em_ratio,1);
+								m_dRJet1electron->Fill(deltaR(Jet2->eta(),Jet2->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
+								m_dRJet2electron->Fill(deltaR(Jet1->eta(),Jet1->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
 							}
 
 						
-						if(electronHighPt){
-							m_histoMaker.fill(leadGenMuonPt,6,eventWeight);
 							if(oneBTag){
-								m_histoMaker.fill(leadGenMuonPt,7,eventWeight);
+								m_histoMaker.fill(genMuonpT,7,eventWeight);
 								if(twoBTag){
-									m_histoMaker.fill(leadGenMuonPt,8,eventWeight);
+									m_histoMaker.fill(genMuonpT,8,eventWeight);
 									if(muonIsolation1){
-										m_histoMaker.fill(leadGenMuonPt,9,eventWeight);
+										m_histoMaker.fill(genMuonpT,9,eventWeight);
 										if(muonIsolation2)
-											m_histoMaker.fill(leadGenMuonPt,10,eventWeight);
+											m_histoMaker.fill(genMuonpT,10,eventWeight);
 									}
 								}
 							}
