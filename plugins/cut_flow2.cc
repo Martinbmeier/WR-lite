@@ -378,7 +378,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		const pat::Electron* recoElectron=0;
 
-		double recoElectronpT = -1000;
+		//double recoElectronpT = -1000;
 		//double newrecoElectronpT = -1000;
 
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
