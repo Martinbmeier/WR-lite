@@ -377,7 +377,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 	//electron reco
 
 		const pat::Electron* recoElectron=0;
-
+		bool foundRecoElectron=false;
 		//double recoElectronpT = -1000;
 		//double newrecoElectronpT = -1000;
 
@@ -386,11 +386,13 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				//if(iElectron->pt() < 10 ) {continue;}
 				
 				//recoElectronpT=iElectron->pt();
-				oneHeepElectron=true;
-				recoElectron=&(*(iElectron));
+				if(!foundRecoElectron){
+					oneHeepElectron=true;
+					recoElectron=&(*(iElectron));
+					foundRecoElectron=true;
 
-				if(recoElectron->pt()>75){electronHighPt=true;}
-
+					if(recoElectron->pt()>75){electronHighPt=true;}
+				}
    			//if(newrecoElectronpT>recoElectronpT){recoElectronpT=newrecoElectronpT; recoElectron=&(*(iElectron)); oneHeepElectron=true;} //get the highest pt electron if multiple
 
 			}
