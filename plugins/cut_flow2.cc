@@ -398,7 +398,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			}
 
 
-			if(oneHeepElectron && foundMuon && twoJets){
+			if(oneHeepElectron && oneMuonHighpT && twoJets){
 				double dileptonSeparation=sqrt(dR2(recoMuon->eta(), recoElectron->eta(), recoMuon->phi(), recoElectron->phi()));
 			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), recoMuon->eta(), Jet1->phi(), recoMuon->phi()));
 			   double muonJet2Sep=sqrt(dR2(Jet2->eta(), recoMuon->eta(), Jet2->phi(), recoMuon->phi()));
