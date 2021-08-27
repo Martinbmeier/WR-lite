@@ -113,7 +113,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		
 		
 		cutFlowHistos m_histoMaker;
-		
+
 		TH1D* m_eventsWeight;
 	  TH2D* m_cosJets;
 	  TH2D* m_cosJet1electron;
@@ -362,7 +362,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		//double recoMuonpT = -1000;
 		//double newrecoMuonpT=-1000;
-		bool foundMuon=false;
+		//bool foundMuon=false;
 
 
    	for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
@@ -441,7 +441,7 @@ if(oneElectronMuon){// || !oneElectronMuon){
 								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
 								m_deltaPhiLeptons->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
 								m_cosLeptons->Fill(TMath::Cos(deltaPhi(recoMuon->phi(),recoElectron->phi())),em_ratio,1);
-								m_deltaPhiJets->Fill(deltaPhi(Jet2->phi(),Jet1->phi()))
+								m_deltaPhiJets->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
 
 								m_cosJet1electron->Fill(TMath::Cos(deltaPhi(Jet1->phi(),recoElectron->phi())),em_ratio,1);
 								m_deltaPhiJet1Electron->Fill(deltaPhi(Jet1->phi(),recoElectron->phi()));
