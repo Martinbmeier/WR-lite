@@ -113,6 +113,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		
 		
 		cutFlowHistos m_histoMaker;
+		
 		TH1D* m_eventsWeight;
 	  TH2D* m_cosJets;
 	  TH2D* m_cosJet1electron;
@@ -126,6 +127,13 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 	  TH2D* m_dRJet2muon;
 	  TH2D* m_dRJet1electron;
 	  TH2D* m_dRJet2electron;
+
+	  TH1D* m_deltaPhiJet2Electron;
+	  TH1D* m_deltaPhiLeptons;
+	  TH1D* m_deltaPhiJet1Muon;
+	  TH1D* m_deltaPhiJets;
+	  TH1D* m_deltaPhiJet1Electron;
+	  TH1D* m_deltaPhiJet2Muon;
 
 		//neuralNet networkResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/Resolved");
 		//neuralNet networkSuperResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/SuperResolved");
@@ -632,10 +640,6 @@ cut_flow2::beginJob() {
 	m_deltaPhiJet1Electron = {variableCorrelations.make<TH1D>("deltaPhiJet1Electron","muon electron pt ratio vs. delta Phi for jet1 and electron",50,-3.3,3.3)};
 	m_deltaPhiJet2Muon = {variableCorrelations.make<TH1D>("deltaPhiJet2Muon","muon electron pt ratio vs. delta Phi for jet2 and muon",50,-3.3,3.3)};
 	m_deltaPhiJet2Electron = {variableCorrelations.make<TH1D>("deltaPhiJet2Electron","muon electron pt ratio vs. delta Phi for jet2 and electron",50,-3.3,3.3)};
-
-
-
-
 
 	m_dRjets = {variableCorrelations.make<TH2D>("dRjets","muon electron pt ratio vs. deltaR for jets",50,0,7.5,50,0,2.5)};
 	m_dRLeptons = {variableCorrelations.make<TH2D>("dRLeptons","muon electron pt ratio vs. deltaR for muon and electron",50,0,7.5,50,0,2.5)};
