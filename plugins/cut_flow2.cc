@@ -369,7 +369,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
    		//if(fabs(iMuon->eta()) > 2.4 || iMuon->tunePMuonBestTrack()->pt() < 10 || !(iMuon->isHighPtMuon(*myEvent.PVertex)) || (iMuon->isolationR03().sumPt/iMuon->pt() > .1)){ continue;} //preliminary cut
    		
-   		if(iMuon->isHighPtMuon(*myEvent.PVertex) && !oneMuonHighpT){oneMuonHighpT=true; recoMuon=&(*(iMuon));}
+   		if(iMuon->isHighPtMuon(*myEvent.PVertex) && !oneMuonHighpT){oneMuonHighpT=true; recoMuon=&(*(iMuon)); }
 
    	
 
@@ -441,7 +441,15 @@ if(oneElectronMuon){// || !oneElectronMuon){
 								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
 								m_deltaPhiLeptons->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
 								m_cosLeptons->Fill(TMath::Cos(deltaPhi(recoMuon->phi(),recoElectron->phi())),em_ratio,1);
+								m_cosMetJet1->Fill(TMath::Cos(deltaPhi(Met->phi(),Jet1->phi())),em_ratio,1);
+								m_cosMetJet2->Fill(TMath::Cos(deltaPhi(Met->phi(),Jet2->phi())),em_ratio,1);
+								m_cosMetElectron->Fill(TMath::Cos(deltaPhi(Met->phi(),recoElectron->phi())),em_ratio,1);
+								m_cosMetMuon->Fill(TMath::Cos(deltaPhi(Met->phi(),recoMuon->phi())),em_ratio,1);
 								m_deltaPhiJets->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
+								m_deltaPhiMetElectron->Fill(deltaPhi(Met->phi(),recoElectron->phi()));
+								m_deltaPhiMetMuon->Fill(deltaPhi(Met->phi(),recoMuon->phi()));
+								m_deltaPhiMetJet1->Fill(deltaPhi(Met->phi(),Jet1->phi()));
+								m_deltaPhiMetJet2->Fill(deltaPhi(Met->phi(),Jet2->phi()));
 
 								m_cosJet1electron->Fill(TMath::Cos(deltaPhi(Jet1->phi(),recoElectron->phi())),em_ratio,1);
 								m_deltaPhiJet1Electron->Fill(deltaPhi(Jet1->phi(),recoElectron->phi()));
@@ -579,6 +587,7 @@ myfile << muon->phi() << ", "
        << jet2->eta() << ", "
        << Met.pt() << ", "
        << Met.phi() <<", "
+       << genElectronPt<<", "
        << genMuonPt/genElectronPt << "\n ";
 
 myfile.close();
@@ -593,7 +602,7 @@ cut_flow2::beginJob() {
 	std::ofstream myfile;
 
 	myfile.open("neuralNetData.csv",std::ios_base::app);
-	myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, MET pt, MET phi, gen muon/electron pt ratio\n";
+	myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, MET pt, MET phi, gen electron pt, gen muon/electron pt ratio\n";
 	myfile.close();
 
 	edm::Service<TFileService> fs; 
@@ -633,6 +642,10 @@ cut_flow2::beginJob() {
 	m_cosJet1muon = {variableCorrelations.make<TH2D>("cosJet1Muon","muon electron pt ratio vs. cos(delta Phi) for jet1 and muon",50,-1,1,50,0,2.5)};
 	m_cosJet2muon = {variableCorrelations.make<TH2D>("cosJet2Muon","muon electron pt ratio vs. cos(delta Phi) for jet2 and muon",50,-1,1,50,0,2.5)};
 	m_cosLeptons = {variableCorrelations.make<TH2D>("cosleptons","muon electron pt ratio vs. cos(delta Phi) for electron and muon",50,-1,1,50,0,2.5)};
+	m_cosMetJet1 = {variableCorrelations.make<TH2D>("cosMetJet1","muon electron pt ratio vs. cos(delta Phi) for MET and jet1",50,-1,1,50,0,2.5)};
+	m_cosMetJet2 = {variableCorrelations.make<TH2D>("cosMetJet2","muon electron pt ratio vs. cos(delta Phi) for MET and jet2",50,-1,1,50,0,2.5)};
+	m_cosMetElectron = {variableCorrelations.make<TH2D>("cosMetElectron","muon electron pt ratio vs. cos(delta Phi) for MET and Electron",50,-1,1,50,0,2.5)};
+	m_cosMetMuon = {variableCorrelations.make<TH2D>("cosMetMuon","muon electron pt ratio vs. cos(delta Phi) for MET and Muon",50,-1,1,50,0,2.5)};
 
 	m_deltaPhiLeptons = {variableCorrelations.make<TH1D>("deltaPhileptons","muon electron pt ratio vs. delta Phi for electron and muon",50,-3.3,3.3)};
 	m_deltaPhiJet1Muon = {variableCorrelations.make<TH1D>("deltaPhiJet1Muon","muon electron pt ratio vs. delta Phi for jet1 and muon",50,-3.3,3.3)};
@@ -640,6 +653,10 @@ cut_flow2::beginJob() {
 	m_deltaPhiJet1Electron = {variableCorrelations.make<TH1D>("deltaPhiJet1Electron","muon electron pt ratio vs. delta Phi for jet1 and electron",50,-3.3,3.3)};
 	m_deltaPhiJet2Muon = {variableCorrelations.make<TH1D>("deltaPhiJet2Muon","muon electron pt ratio vs. delta Phi for jet2 and muon",50,-3.3,3.3)};
 	m_deltaPhiJet2Electron = {variableCorrelations.make<TH1D>("deltaPhiJet2Electron","muon electron pt ratio vs. delta Phi for jet2 and electron",50,-3.3,3.3)};
+	m_deltaPhiMetElectron = {variableCorrelations.make<TH1D>("deltaPhiMetElectron","muon electron pt ratio vs. delta Phi for Met and electron",50,-3.3,3.3)};
+	m_deltaPhiMetMuon = {variableCorrelations.make<TH1D>("deltaPhiMetMuon","muon electron pt ratio vs. delta Phi for Met and muon",50,-3.3,3.3)};
+	m_deltaPhiMetJet1 = {variableCorrelations.make<TH1D>("deltaPhiMetJet1","muon electron pt ratio vs. delta Phi for Met and jet1",50,-3.3,3.3)};
+	m_deltaPhiMetJet2 = {variableCorrelations.make<TH1D>("deltaPhiMetJet2","muon electron pt ratio vs. delta Phi for Met and jet2",50,-3.3,3.3)};
 
 	m_dRjets = {variableCorrelations.make<TH2D>("dRjets","muon electron pt ratio vs. deltaR for jets",50,0,7.5,50,0,2.5)};
 	m_dRLeptons = {variableCorrelations.make<TH2D>("dRLeptons","muon electron pt ratio vs. deltaR for muon and electron",50,0,7.5,50,0,2.5)};
