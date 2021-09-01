@@ -115,6 +115,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		cutFlowHistos m_histoMaker;
 
 		TH1D* m_eventsWeight;
+
 	  TH2D* m_cosJets;
 	  TH2D* m_cosJet1electron;
 	  TH2D* m_cosJet2electron; 
@@ -139,10 +140,11 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 	  TH2D* m_cosMetJet2;
 	  TH2D* m_cosMetElectron;
 	  TH2D* m_cosMetMuon;
-	  TH2D* m_deltaPhiMetJet1;
-	  TH2D* m_deltaPhiMetJet2;
-	  TH2D* m_deltaPhiMetMuon;
-	  TH2D* m_deltaPhiMetElectron; 
+	  
+	  TH1D* m_deltaPhiMetJet1;
+	  TH1D* m_deltaPhiMetJet2;
+	  TH1D* m_deltaPhiMetMuon;
+	  TH1D* m_deltaPhiMetElectron; 
 
 		//neuralNet networkResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/Resolved");
 		//neuralNet networkSuperResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/SuperResolved");
