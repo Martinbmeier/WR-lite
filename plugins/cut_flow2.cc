@@ -135,6 +135,15 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 	  TH1D* m_deltaPhiJet1Electron;
 	  TH1D* m_deltaPhiJet2Muon;
 
+	  TH2D* m_cosMetJet1;
+	  TH2D* m_cosMetJet2;
+	  TH2D* m_cosMetElectron;
+	  TH2D* m_cosMetMuon;
+	  TH2D* m_deltaPhiMetJet1;
+	  TH2D* m_deltaPhiMetJet2;
+	  TH2D* m_deltaPhiMetMuon;
+	  TH2D* m_deltaPhiMetElectron; 
+
 		//neuralNet networkResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/Resolved");
 		//neuralNet networkSuperResolved = neuralNet("/home/kronh006/Version3/CMSSW_10_4_0_patch1/src/ExoAnalysis/WR_lite/data/SuperResolved");
 
