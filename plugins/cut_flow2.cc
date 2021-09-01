@@ -450,15 +450,15 @@ if(oneElectronMuon){// || !oneElectronMuon){
 								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
 								m_deltaPhiLeptons->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
 								m_cosLeptons->Fill(TMath::Cos(deltaPhi(recoMuon->phi(),recoElectron->phi())),em_ratio,1);
-								m_cosMetJet1->Fill(TMath::Cos(deltaPhi(Met->phi(),Jet1->phi())),em_ratio,1);
-								m_cosMetJet2->Fill(TMath::Cos(deltaPhi(Met->phi(),Jet2->phi())),em_ratio,1);
-								m_cosMetElectron->Fill(TMath::Cos(deltaPhi(Met->phi(),recoElectron->phi())),em_ratio,1);
-								m_cosMetMuon->Fill(TMath::Cos(deltaPhi(Met->phi(),recoMuon->phi())),em_ratio,1);
+								m_cosMetJet1->Fill(TMath::Cos(deltaPhi(Met.phi(),Jet1->phi())),em_ratio,1);
+								m_cosMetJet2->Fill(TMath::Cos(deltaPhi(Met.phi(),Jet2->phi())),em_ratio,1);
+								m_cosMetElectron->Fill(TMath::Cos(deltaPhi(Met.phi(),recoElectron->phi())),em_ratio,1);
+								m_cosMetMuon->Fill(TMath::Cos(deltaPhi(Met.phi(),recoMuon->phi())),em_ratio,1);
 								m_deltaPhiJets->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
-								m_deltaPhiMetElectron->Fill(deltaPhi(Met->phi(),recoElectron->phi()));
-								m_deltaPhiMetMuon->Fill(deltaPhi(Met->phi(),recoMuon->phi()));
-								m_deltaPhiMetJet1->Fill(deltaPhi(Met->phi(),Jet1->phi()));
-								m_deltaPhiMetJet2->Fill(deltaPhi(Met->phi(),Jet2->phi()));
+								m_deltaPhiMetElectron->Fill(deltaPhi(Met.phi(),recoElectron->phi()));
+								m_deltaPhiMetMuon->Fill(deltaPhi(Met.phi(),recoMuon->phi()));
+								m_deltaPhiMetJet1->Fill(deltaPhi(Met.phi(),Jet1->phi()));
+								m_deltaPhiMetJet2->Fill(deltaPhi(Met.phi(),Jet2->phi()));
 
 								m_cosJet1electron->Fill(TMath::Cos(deltaPhi(Jet1->phi(),recoElectron->phi())),em_ratio,1);
 								m_deltaPhiJet1Electron->Fill(deltaPhi(Jet1->phi(),recoElectron->phi()));
