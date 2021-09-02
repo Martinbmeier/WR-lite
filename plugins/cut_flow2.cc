@@ -140,7 +140,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 	  TH2D* m_cosMetJet2;
 	  TH2D* m_cosMetElectron;
 	  TH2D* m_cosMetMuon;
-	  
+
 	  TH1D* m_deltaPhiMetJet1;
 	  TH1D* m_deltaPhiMetJet2;
 	  TH1D* m_deltaPhiMetMuon;
@@ -612,9 +612,9 @@ cut_flow2::beginJob() {
 
 	std::ofstream myfile;
 
-	myfile.open("neuralNetData.csv",std::ios_base::app);
-	myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, MET pt, MET phi, gen electron pt, gen muon/electron pt ratio\n";
-	myfile.close();
+	//myfile.open("neuralNetData.csv",std::ios_base::app);
+	//myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, MET pt, MET phi, gen electron pt, gen muon/electron pt ratio\n";
+	//myfile.close();
 
 	edm::Service<TFileService> fs; 
 
