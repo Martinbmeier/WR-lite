@@ -599,6 +599,7 @@ myfile << muon->phi() << ", "
        << Met.pt() << ", "
        << Met.phi() <<", "
        << genElectronPt<<", "
+       << genMuonPt<<", "
        << genMuonPt/genElectronPt << "\n ";
 
 myfile.close();
@@ -612,9 +613,9 @@ cut_flow2::beginJob() {
 
 	std::ofstream myfile;
 
-	//myfile.open("neuralNetData.csv",std::ios_base::app);
-	//myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, MET pt, MET phi, gen electron pt, gen muon/electron pt ratio\n";
-	//myfile.close();
+	myfile.open("neuralNetData.csv",std::ios_base::app);
+	myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio\n";
+	myfile.close();
 
 	edm::Service<TFileService> fs; 
 
