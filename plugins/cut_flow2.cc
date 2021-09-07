@@ -283,7 +283,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	const pat::MET Met = recoMET->front();
 
-	math::XYZTLorentzVector combinedJetsP4 = (0., 0., 0., 0.);
+	math::XYZTLorentzVector combinedJetsP4 = {0., 0., 0., 0.};
 
 	edm::Handle<std::vector<pat::Jet>> recoJetsAK4;  
 	iEvent.getByToken(m_AK4recoCHSJetsToken, recoJetsAK4);  
@@ -340,10 +340,10 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		if(btagcount>1){twoBTag=true;}
 			
 
-			double combinedJetPhi = combinedJetsP4.phi();
-			double combinedJetsEta = combinedJetsP4.eta();
-			double combinedJetspT = combinedJetsP4.pt();
-			double combinedJetsMass = combinedJetsP4.mass();
+			// double combinedJetPhi = combinedJetsP4.phi();
+			// double combinedJetsEta = combinedJetsP4.eta();
+			// double combinedJetspT = combinedJetsP4.pt();
+			// double combinedJetsMass = combinedJetsP4.mass();
 
 //gen lepton info
 
