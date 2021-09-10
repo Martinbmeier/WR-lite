@@ -340,18 +340,15 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 //gen lepton info
 
+	int n;
+
 	double genMuonpT=-1000;
-
-
 	double genElectronpT=-1000;
-
 
 	bool genMuon = false;
 	bool genElectron = false;
 
-
 	const reco::Candidate* ileptonCandidate = 0;
-
 
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 	ileptonCandidate = 0;
