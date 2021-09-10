@@ -296,8 +296,6 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	const pat::Jet* Jet2=0;
 
 
-
-
 	//Get jets with maximum pt
 		for(std::vector<pat::Jet>::const_iterator iJet = recoJetsAK4->begin(); iJet != recoJetsAK4->end(); iJet++) {
 
@@ -340,37 +338,46 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		if(btagcount>1){twoBTag=true;}
 			
 
-			// double combinedJetPhi = combinedJetsP4.phi();
-			// double combinedJetsEta = combinedJetsP4.eta();
-			// double combinedJetspT = combinedJetsP4.pt();
-			// double combinedJetsMass = combinedJetsP4.mass();
-
 //gen lepton info
 
 	double genMuonpT=-1000;
-	//double newGenMuonPt;
+
 
 	double genElectronpT=-1000;
-	//double newGenElectronPt;
+
 
 	bool genMuon = false;
 	bool genElectron = false;
 
 
+	const reco::Candidate* ileptonCandidate = 0;
+
+
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
+	ileptonCandidate = 0;
 	if( ! iParticle->isHardProcess() ){ continue; }
 	if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
-	if(abs(iParticle->pdgId())==13 && !genMuon){
-		genMuon = true;
-		genMuonpT=iParticle->pt();
-		//if(newGenMuonPt>genMuonpT){genMuonpT=newGenMuonPt;} //get the highest pt gen muon if multiple
+
+	   if((abs(iParticle->pdgId())==11 || abs(iParticle->pdgId())==13 ) && iParticle->status()!=1){ //find daughter leptons if not the final state lepton
+    		n = iParticle->numberOfDaughters();
+       	for(int j = 0; j < n; ++ j) {
+      		int dauId = abs(iParticle->daughter(j)->pdgId());
+    			if(dauId==abs(iParticle->pdgId())){ 
+    				ileptonCandidate = iParticle->daughter(j); 
+    			}
+		}
 	}
-	if(abs(iParticle->pdgId())==11 && !genElectron){
-		genElectron=true;
-		genElectronpT = iParticle->pt();
-		//if(newGenElectronPt>genElectronpT){genElectronpT=newGenElectronPt;} //get the highest pt gen electron if multiple
+
+	if(ileptonCandidate==0){
+		if(abs(iParticle->pdgId())==13 && !genMuon){genMuonpT=iParticle->pt();genMuon=true;}
+		if(abs(iParticle->pdgId())==11 && !genElectron){genElectronpT=iParticle->pt();genElectron=true;}
+	}
+	else if(ileptonCandidate!=0){
+		if(abs(iParticle->pdgId())==13 && !genMuon){genMuonpT=ileptonCandidate->pt();genMuon=true;}
+		if(abs(iParticle->pdgId())==11 && !genElectron){genElectronpT=ileptonCandidate->pt();genElectron=true;}
 	}
 }
+
 
 if(genElectron && genMuon){oneElectronMuon=true;}
 
