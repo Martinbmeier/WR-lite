@@ -323,15 +323,15 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			if (CHM == 0) continue;
 			//if (CEMF > .99) continue;
 			if (CEMF > .90)  continue;
-			if(BJP > 0.4184){ btagcount++; }		
+			if(BJP > 0.4184){ btagcount++; }
+			else if(BJP < 0.4184){ continue }		
+
 			if(jetCount==0){
-				if(BJP > 0.4184){Jet1=&(*(iJet)); jetCount++;}
-				else{Jet2=&(*(iJet)); jetCount++;}
+				Jet1=&(*(iJet)); jetCount++;
 			}
 			if(jetCount==1){
-				if(BJP > 0.4184 && Jet1==0){Jet1=&(*(iJet)); jetCount++;}
+				Jet2=&(*(iJet)); jetCount++;
 			}
-			else if(Jet2==0){Jet2=&(*(iJet)); jetCount++;}
 				
 		}
 
@@ -359,8 +359,8 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 	if( ! iParticle->isHardProcess() ){ continue; }
+	if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
 	if(abs(iParticle->pdgId())==13 && !genMuon){
-		//if(!tWfinder(iEvent, &(*iParticle))){ continue; } //could check if the gen particle comes from a top->W->lepton
 		genMuon = true;
 		genMuonpT=iParticle->pt();
 		//if(newGenMuonPt>genMuonpT){genMuonpT=newGenMuonPt;} //get the highest pt gen muon if multiple
@@ -597,7 +597,7 @@ bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
 void cut_flow2::csvTable(double genMuonPt, double genElectronPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met) {
 
 std::ofstream myfile;
-myfile.open("neuralNetData.csv",std::ios_base::app);
+myfile.open("neuralNetData2.csv",std::ios_base::app);
 myfile << muon->phi() << ", "
        << muon->eta() << ", "
        << electron->pt() << ", "
@@ -630,9 +630,9 @@ cut_flow2::beginJob() {
 
 	std::ofstream myfile;
 
-	// myfile.open("neuralNetData.csv",std::ios_base::app);
-	// myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio\n";
-	// myfile.close();
+	xmyfile.open("neuralNetData2.csv",std::ios_base::app);
+	myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio\n";
+	myfile.close();
 
 	edm::Service<TFileService> fs; 
 
