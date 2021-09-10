@@ -325,12 +325,12 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			else if(BJP < 0.4184){ continue; }		
 
 			if(jetCount==0){
-				Jet1=&(*(iJet)); jetCount++;
+				Jet1=&(*(iJet));
 			}
 			if(jetCount==1){
-				Jet2=&(*(iJet)); jetCount++;
+				Jet2=&(*(iJet));
 			}
-				
+			jetcount++;
 		}
 
 		if(jetCount>1){twoJets=true;}
