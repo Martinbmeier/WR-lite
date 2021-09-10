@@ -466,6 +466,14 @@ if(oneElectronMuon){// || !oneElectronMuon){
 							if(oneBTag){
 								m_histoMaker.fill(genMuonpT,7,eventWeight);
 
+								if(twoBTag){
+									m_histoMaker.fill(genMuonpT,8,eventWeight);
+									if(muonIsolation1){
+										m_histoMaker.fill(genMuonpT,9,eventWeight);
+										if(muonIsolation2){
+											m_histoMaker.fill(genMuonpT,10,eventWeight);
+
+											
 								csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,Jet1,Jet2,combinedJetsP4,Met);  //fill a csv table with variables for the NN 
 
 								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
@@ -500,12 +508,6 @@ if(oneElectronMuon){// || !oneElectronMuon){
 								m_dRJet1electron->Fill(deltaR(Jet1->eta(),Jet1->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
 								m_dRJet2electron->Fill(deltaR(Jet2->eta(),Jet2->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
 							
-								if(twoBTag){
-									m_histoMaker.fill(genMuonpT,8,eventWeight);
-									if(muonIsolation1){
-										m_histoMaker.fill(genMuonpT,9,eventWeight);
-										if(muonIsolation2){
-											m_histoMaker.fill(genMuonpT,10,eventWeight);
 										}
 									}
 								}
