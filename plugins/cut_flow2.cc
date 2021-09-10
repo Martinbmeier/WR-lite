@@ -330,7 +330,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			if(jetCount==1){
 				Jet2=&(*(iJet));
 			}
-			jetcount++;
+			jetCount++;
 		}
 
 		if(jetCount>1){twoJets=true;}
