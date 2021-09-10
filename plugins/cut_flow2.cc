@@ -322,7 +322,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			//if (CEMF > .99) continue;
 			if (CEMF > .90)  continue;
 			if(BJP > 0.4184){ btagcount++; }
-			else if(BJP < 0.4184){ continue }		
+			else if(BJP < 0.4184){ continue; }		
 
 			if(jetCount==0){
 				Jet1=&(*(iJet)); jetCount++;
@@ -637,7 +637,7 @@ cut_flow2::beginJob() {
 
 	std::ofstream myfile;
 
-	xmyfile.open("neuralNetData2.csv",std::ios_base::app);
+	myfile.open("neuralNetData2.csv",std::ios_base::app);
 	myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio\n";
 	myfile.close();
 
