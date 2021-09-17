@@ -106,7 +106,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		double dPhi(double phi1, double phi2);
 		bool tWfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event&);
-		void csvTable(double genMuonPt, double genElectronPt, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet* , math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
+		void csvTable(double genMuonPt, double genElectronPt, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet* ,const pat::Jet*, const pat::Jet*,  math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
 		//double transverseSphericity(math::XYZTLorentzVector p1, math::XYZTLorentzVector p2, math::XYZTLorentzVector p3);
 		//void saveElectronData(eventBits2 * iBit, double matched1Mass, double matched2Mass);
 		//void saveMuonData(eventBits2 * iBit, double matched1Mass, double matched2Mass);
@@ -292,8 +292,13 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	int jetCount = 0;
 	int btagcount = 0;
 
+	const pat::Jet* bJet1=0;
+	const pat::Jet* bJet2=0;
+
 	const pat::Jet* Jet1=0;
 	const pat::Jet* Jet2=0;
+
+
 
 
 	//Get jets with maximum pt
@@ -321,8 +326,6 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			if (CHM == 0) continue;
 			//if (CEMF > .99) continue;
 			if (CEMF > .90)  continue;
-			if(BJP > 0.4184){ btagcount++; }
-			else if(BJP < 0.4184){ continue; }		
 
 			if(jetCount==0){
 				Jet1=&(*(iJet));
@@ -331,6 +334,18 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 				Jet2=&(*(iJet));
 			}
 			jetCount++;
+
+			if(BJP > 0.4184){ 
+	
+
+				if(btagcount==0){
+					bJet1=&(*(iJet));
+				}
+				if(btagcount==1){
+					bJet2=&(*(iJet));
+				}
+				btagcount++; 
+			}
 		}
 
 		if(jetCount>1){twoJets=true;}
@@ -348,31 +363,31 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	bool genMuon = false;
 	bool genElectron = false;
 
-	const reco::Candidate* ileptonCandidate = 0;
+	//const reco::Candidate* ileptonCandidate = 0;
 
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
-	ileptonCandidate = 0;
+	//ileptonCandidate = 0;
 	if( ! iParticle->isHardProcess() ){ continue; }
 	if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
 
-	   if((abs(iParticle->pdgId())==11 || abs(iParticle->pdgId())==13 ) && iParticle->status()!=1){ //find daughter leptons if not the final state lepton
-    		n = iParticle->numberOfDaughters();
-       	for(int j = 0; j < n; ++ j) {
-      		int dauId = abs(iParticle->daughter(j)->pdgId());
-    			if(dauId==abs(iParticle->pdgId())){ 
-    				ileptonCandidate = iParticle->daughter(j); 
-    			}
-		}
-	}
+	//    if((abs(iParticle->pdgId())==11 || abs(iParticle->pdgId())==13 ) && iParticle->status()!=1){ //find daughter leptons if not the final state lepton
+ //    		n = iParticle->numberOfDaughters();
+ //       	for(int j = 0; j < n; ++ j) {
+ //      		int dauId = abs(iParticle->daughter(j)->pdgId());
+ //    			if(dauId==abs(iParticle->pdgId())){ 
+ //    				ileptonCandidate = iParticle->daughter(j); 
+ //    			}
+	// 	}
+	// }
 
-	if(ileptonCandidate==0){
+	// if(ileptonCandidate==0){
 		if(abs(iParticle->pdgId())==13 && !genMuon){genMuonpT=iParticle->pt();genMuon=true;}
 		if(abs(iParticle->pdgId())==11 && !genElectron){genElectronpT=iParticle->pt();genElectron=true;}
-	}
-	else if(ileptonCandidate!=0){
-		if(abs(iParticle->pdgId())==13 && !genMuon){genMuonpT=ileptonCandidate->pt();genMuon=true;}
-		if(abs(iParticle->pdgId())==11 && !genElectron){genElectronpT=ileptonCandidate->pt();genElectron=true;}
-	}
+	// }
+	// else if(ileptonCandidate!=0){
+	// 	if(abs(iParticle->pdgId())==13 && !genMuon){genMuonpT=ileptonCandidate->pt();genMuon=true;}
+	// 	if(abs(iParticle->pdgId())==11 && !genElectron){genElectronpT=ileptonCandidate->pt();genElectron=true;}
+	// }
 }
 
 
@@ -436,11 +451,11 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 			if(oneHeepElectron && oneMuonHighpT && twoJets){
 				double dileptonSeparation=sqrt(dR2(recoMuon->eta(), recoElectron->eta(), recoMuon->phi(), recoElectron->phi()));
-			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), recoMuon->eta(), Jet1->phi(), recoMuon->phi()));
-			   double muonJet2Sep=sqrt(dR2(Jet2->eta(), recoMuon->eta(), Jet2->phi(), recoMuon->phi()));
-			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), recoElectron->eta(), Jet1->phi(), recoElectron->phi()));
-				double electronJet2Sep=sqrt(dR2(Jet2->eta(), recoElectron->eta(), Jet2->phi(), recoElectron->phi()));
-				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
+			   double muonJet1Sep=sqrt(dR2(bJet1->eta(), recoMuon->eta(), bJet1->phi(), recoMuon->phi()));
+			   double muonJet2Sep=sqrt(dR2(bJet2->eta(), recoMuon->eta(), bJet2->phi(), recoMuon->phi()));
+			   double electronJet1Sep=sqrt(dR2(bJet1->eta(), recoElectron->eta(), bJet1->phi(), recoElectron->phi()));
+				double electronJet2Sep=sqrt(dR2(bJet2->eta(), recoElectron->eta(), bJet2->phi(), recoElectron->phi()));
+				double jetSeparation=sqrt(dR2(bJet2->eta(), bJet1->eta(), bJet2->phi(), bJet1->phi()));
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} // jet/lepton separation cut
 			} 
 
@@ -474,7 +489,7 @@ if(oneElectronMuon){// || !oneElectronMuon){
 											m_histoMaker.fill(genMuonpT,10,eventWeight);
 
 
-								csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,Jet1,Jet2,combinedJetsP4,Met, eventWeight);  //fill a csv table with variables for the NN 
+								csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,bJet1,bJet2,Jet1,Jet2,combinedJetsP4,Met, eventWeight);  //fill a csv table with variables for the NN 
 
 								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
 								m_deltaPhiLeptons->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
@@ -600,7 +615,7 @@ bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
   return passTriggers;
 }
 
-void cut_flow2::csvTable(double genMuonPt, double genElectronPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
+void cut_flow2::csvTable(double genMuonPt, double genElectronPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* bjet2, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
 std::ofstream myfile;
 myfile.open("neuralNetData2.csv",std::ios_base::app);
@@ -609,6 +624,12 @@ myfile << muon->phi() << ", "
        << electron->pt() << ", "
        << electron->phi() << ", "
        << electron->eta() << ", "
+       << bjet1->pt() << ", "
+       << bjet1->phi() << ", "
+       << bjet1->eta() << ", "
+       << bjet2->pt() << ", "
+       << bjet2->phi() << ", "
+       << bjet2->eta() << ", "
        << jet1->pt() << ", "
        << jet1->phi() << ", "
        << jet1->eta() << ", "
@@ -637,9 +658,9 @@ cut_flow2::beginJob() {
 
 	std::ofstream myfile;
 
-	//myfile.open("neuralNetData2.csv",std::ios_base::app);
-	//myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio, event weight\n";
-	//myfile.close();
+	myfile.open("neuralNetData2.csv",std::ios_base::app);
+	myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, bjet 1 pt, bjet 1 phi, bjet 1 eta, bjet 2 pt, bjet 2 phi, bjet 2 eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio, event weight\n";
+	myfile.close();
 
 	edm::Service<TFileService> fs; 
 
