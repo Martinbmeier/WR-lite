@@ -449,7 +449,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			}
 
 
-			if(oneHeepElectron && oneMuonHighpT && twoJets){
+			if(oneHeepElectron && oneMuonHighpT && btagcount>1){
 				double dileptonSeparation=sqrt(dR2(recoMuon->eta(), recoElectron->eta(), recoMuon->phi(), recoElectron->phi()));
 			   double muonJet1Sep=sqrt(dR2(bJet1->eta(), recoMuon->eta(), bJet1->phi(), recoMuon->phi()));
 			   double muonJet2Sep=sqrt(dR2(bJet2->eta(), recoMuon->eta(), bJet2->phi(), recoMuon->phi()));
@@ -489,7 +489,7 @@ if(oneElectronMuon){// || !oneElectronMuon){
 											m_histoMaker.fill(genMuonpT,10,eventWeight);
 
 
-								csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,bJet1,bJet2,Jet1,Jet2,combinedJetsP4,Met, eventWeight);  //fill a csv table with variables for the NN 
+								csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,bJet1,bJet2,Jet1,Jet2,combinedJetsP4,Met,eventWeight);  //fill a csv table with variables for the NN 
 
 								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
 								m_deltaPhiLeptons->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
