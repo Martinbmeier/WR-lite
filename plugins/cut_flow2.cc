@@ -355,7 +355,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 //gen lepton info
 
-	int n;
+	//int n;
 
 	double genMuonpT=-1000;
 	double genElectronpT=-1000;
