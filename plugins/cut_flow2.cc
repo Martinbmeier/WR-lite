@@ -722,11 +722,6 @@ cut_flow2::beginJob() {
 	m_dRJet1electron = {variableCorrelations.make<TH2D>("dRJet1electron","muon electron pt ratio vs. deltaR for jet1 and electron",50,0,7.5,50,0,2.5)};
 	m_dRJet2electron = {variableCorrelations.make<TH2D>("dRJet2electron","muon electron pt ratio vs. deltaR for jet2 and electron",50,0,7.5,50,0,2.5)};
 
-
-
-
-
-
 	
 }
 
