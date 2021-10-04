@@ -616,7 +616,7 @@ bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
 void cut_flow2::csvTable(double genMuonPt, double genElectronPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* bjet2, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
 std::ofstream myfile;
-myfile.open("neuralNetData1.csv",std::ios_base::app);
+myfile.open("neuralNetData2.csv",std::ios_base::app);
 myfile << muon->phi() << ", "
        << muon->eta() << ", "
        << electron->pt() << ", "
@@ -656,9 +656,9 @@ cut_flow2::beginJob() {
 
 	std::ofstream myfile;
 
-	myfile.open("neuralNetData1.csv",std::ios_base::app);
-	myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, bjet 1 pt, bjet 1 phi, bjet 1 eta, bjet 2 pt, bjet 2 phi, bjet 2 eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio, event weight\n";
-	myfile.close();
+	// myfile.open("neuralNetData1.csv",std::ios_base::app);
+	// myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, bjet 1 pt, bjet 1 phi, bjet 1 eta, bjet 2 pt, bjet 2 phi, bjet 2 eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio, event weight\n";
+	// myfile.close();
 
 	edm::Service<TFileService> fs; 
 
