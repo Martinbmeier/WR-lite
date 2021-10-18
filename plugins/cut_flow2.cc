@@ -106,7 +106,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		double dPhi(double phi1, double phi2);
 		bool tWfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event&);
-		void csvTable(double genMuonPt, double genElectronPt, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet* ,const pat::Jet*, const pat::Jet*,  math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
+		void csvTable(double genMuonPt, double genElectronPt, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*,  math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
 		//double transverseSphericity(math::XYZTLorentzVector p1, math::XYZTLorentzVector p2, math::XYZTLorentzVector p3);
 		//void saveElectronData(eventBits2 * iBit, double matched1Mass, double matched2Mass);
 		//void saveMuonData(eventBits2 * iBit, double matched1Mass, double matched2Mass);
@@ -476,18 +476,8 @@ if(oneElectronMuon){// || !oneElectronMuon){
 					if(angularSeparation){
 						m_histoMaker.fill(genMuonpT,5,eventWeight);
 						if(electronHighPt){
-							m_histoMaker.fill(genMuonpT,6,eventWeight);
-							if(oneBTag){
-								m_histoMaker.fill(genMuonpT,7,eventWeight);
-								if(twoBTag){
-									m_histoMaker.fill(genMuonpT,8,eventWeight);
-									if(muonIsolation1){
-										m_histoMaker.fill(genMuonpT,9,eventWeight);
-										if(muonIsolation2){
-											m_histoMaker.fill(genMuonpT,10,eventWeight);
 
-
-								csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,bJet1,bJet2,Jet1,Jet2,combinedJetsP4,Met,eventWeight);  //fill a csv table with variables for the NN 
+							csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,Jet1,Jet2,combinedJetsP4,Met,eventWeight);  //fill a csv table with variables for the NN 
 
 								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
 								m_deltaPhiLeptons->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
@@ -520,6 +510,19 @@ if(oneElectronMuon){// || !oneElectronMuon){
 
 								m_dRJet1electron->Fill(deltaR(Jet1->eta(),Jet1->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
 								m_dRJet2electron->Fill(deltaR(Jet2->eta(),Jet2->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
+
+							m_histoMaker.fill(genMuonpT,6,eventWeight);
+							if(oneBTag){
+								m_histoMaker.fill(genMuonpT,7,eventWeight);
+								if(twoBTag){
+									m_histoMaker.fill(genMuonpT,8,eventWeight);
+									if(muonIsolation1){
+										m_histoMaker.fill(genMuonpT,9,eventWeight);
+										if(muonIsolation2){
+											m_histoMaker.fill(genMuonpT,10,eventWeight);
+
+
+								
 							
 										}
 									}
@@ -613,21 +616,21 @@ bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
   return passTriggers;
 }
 
-void cut_flow2::csvTable(double genMuonPt, double genElectronPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* bjet2, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
+void cut_flow2::csvTable(double genMuonPt, double genElectronPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
 std::ofstream myfile;
-myfile.open("neuralNetData10.csv",std::ios_base::app);
+myfile.open("neuralNetDataNob.csv",std::ios_base::app);
 myfile << muon->phi() << ", "
        << muon->eta() << ", "
        << electron->pt() << ", "
        << electron->phi() << ", "
        << electron->eta() << ", "
-       << bjet1->pt() << ", "
-       << bjet1->phi() << ", "
-       << bjet1->eta() << ", "
-       << bjet2->pt() << ", "
-       << bjet2->phi() << ", "
-       << bjet2->eta() << ", "
+       // << bjet1->pt() << ", "
+       // << bjet1->phi() << ", "
+       // << bjet1->eta() << ", "
+       // << bjet2->pt() << ", "
+       // << bjet2->phi() << ", "
+       // << bjet2->eta() << ", "
        << jet1->pt() << ", "
        << jet1->phi() << ", "
        << jet1->eta() << ", "
@@ -656,9 +659,9 @@ cut_flow2::beginJob() {
 
 	std::ofstream myfile;
 
-	// myfile.open("neuralNetData1.csv",std::ios_base::app);
-	// myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, bjet 1 pt, bjet 1 phi, bjet 1 eta, bjet 2 pt, bjet 2 phi, bjet 2 eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio, event weight\n";
-	// myfile.close();
+	myfile.open("neuralNetDataNob.csv",std::ios_base::app);
+	myfile<<"muon phi, muon eta, electron pt, electron phi, electron eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio, event weight\n";
+	myfile.close();
 
 	edm::Service<TFileService> fs; 
 
