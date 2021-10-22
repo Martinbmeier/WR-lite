@@ -106,7 +106,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		double dPhi(double phi1, double phi2);
 		bool tWfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event&);
-		void csvTable(double genMuonPt, double genElectronPt, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*, const pat::Jet*, const pat::Jet*,  math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
+		void csvTable(double genMuonPt, double genElectronPt, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
 		//double transverseSphericity(math::XYZTLorentzVector p1, math::XYZTLorentzVector p2, math::XYZTLorentzVector p3);
 		//void saveElectronData(eventBits2 * iBit, double matched1Mass, double matched2Mass);
 		//void saveMuonData(eventBits2 * iBit, double matched1Mass, double matched2Mass);
@@ -487,7 +487,7 @@ if(oneElectronMuon){// || !oneElectronMuon){
 											m_histoMaker.fill(genMuonpT,10,eventWeight);
 
 
-																csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,Jet1,Jet2,combinedJetsP4,Met,eventWeight);  //fill a csv table with variables for the NN 
+																csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,bJet1,bJet2,Jet1,Jet2,combinedJetsP4,Met,eventWeight);  //fill a csv table with variables for the NN 
 
 								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
 								m_deltaPhiLeptons->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
