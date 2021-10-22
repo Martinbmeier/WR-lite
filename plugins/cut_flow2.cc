@@ -233,13 +233,13 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	bool electronTrigger=false;  //cut1
 	bool oneHeepElectron=false;  //cut2
 	bool oneMuonHighpT=false;    //cut3
-	bool twoJets=false;				   //cut4
+	bool twoJets=false;			  //cut4
 	bool angularSeparation=false;//cut5
-	bool electronHighPt=false;	 //cut6
-	bool oneBTag=false;				   //cut7
-	bool twoBTag=false;				   //cut8
-	bool muonIsolation1=false;	 //cut9
-	bool muonIsolation2=false;	 //cut10
+	bool electronHighPt=false;	  //cut6
+	bool oneBTag=false;			  //cut7
+	bool twoBTag=false;			  //cut8
+	bool muonIsolation1=false;	  //cut9
+	bool muonIsolation2=false;	  //cut10
 
 	eventBits2 iBit; 
    
@@ -298,8 +298,6 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	const pat::Jet* Jet2=0;
 
 
-
-
 	//Get jets with maximum pt
 		for(std::vector<pat::Jet>::const_iterator iJet = recoJetsAK4->begin(); iJet != recoJetsAK4->end(); iJet++) {
 
@@ -354,7 +352,6 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 //gen lepton info
 
-	//int n;
 
 	double genMuonpT=-1000;
 	double genElectronpT=-1000;
@@ -362,31 +359,15 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	bool genMuon = false;
 	bool genElectron = false;
 
-	//const reco::Candidate* ileptonCandidate = 0;
 
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
-	//ileptonCandidate = 0;
+
 	if( ! iParticle->isHardProcess() ){ continue; }
 	if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
 
-	//    if((abs(iParticle->pdgId())==11 || abs(iParticle->pdgId())==13 ) && iParticle->status()!=1){ //find daughter leptons if not the final state lepton
- //    		n = iParticle->numberOfDaughters();
- //       	for(int j = 0; j < n; ++ j) {
- //      		int dauId = abs(iParticle->daughter(j)->pdgId());
- //    			if(dauId==abs(iParticle->pdgId())){ 
- //    				ileptonCandidate = iParticle->daughter(j); 
- //    			}
-	// 	}
-	// }
-
-	// if(ileptonCandidate==0){
 		if(abs(iParticle->pdgId())==13 && !genMuon){genMuonpT=iParticle->pt();genMuon=true;}
 		if(abs(iParticle->pdgId())==11 && !genElectron){genElectronpT=iParticle->pt();genElectron=true;}
-	// }
-	// else if(ileptonCandidate!=0){
-	// 	if(abs(iParticle->pdgId())==13 && !genMuon){genMuonpT=ileptonCandidate->pt();genMuon=true;}
-	// 	if(abs(iParticle->pdgId())==11 && !genElectron){genElectronpT=ileptonCandidate->pt();genElectron=true;}
-	// }
+
 }
 
 
@@ -402,20 +383,11 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	  const pat::Muon* recoMuon=0;
 
-		//double recoMuonpT = -1000;
-		//double newrecoMuonpT=-1000;
-		//bool foundMuon=false;
-
-
    	for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
 
    		//if(fabs(iMuon->eta()) > 2.4 || iMuon->tunePMuonBestTrack()->pt() < 10 || !(iMuon->isHighPtMuon(*myEvent.PVertex)) || (iMuon->isolationR03().sumPt/iMuon->pt() > .1)){ continue;} //preliminary cut
    		
    		if(iMuon->isHighPtMuon(*myEvent.PVertex) && !oneMuonHighpT){oneMuonHighpT=true; recoMuon=&(*(iMuon)); }
-
-   	
-
-   		//if(newrecoMuonpT>recoMuonpT){recoMuonpT=newrecoMuonpT; recoMuon=&(*(iMuon)); foundMuon=true;} //get the highest pt muon if multiple
 
 		}
 
@@ -486,40 +458,39 @@ if(oneElectronMuon){// || !oneElectronMuon){
 										if(muonIsolation2){
 											m_histoMaker.fill(genMuonpT,10,eventCount);
 
+											csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,bJet1,bJet2,Jet1,Jet2,combinedJetsP4,Met,eventWeight);  //fill a csv table with variables for the NN 
 
-																csvTable(genMuonpT,genElectronpT,recoMuon,recoElectron,bJet1,bJet2,Jet1,Jet2,combinedJetsP4,Met,eventWeight);  //fill a csv table with variables for the NN 
+											m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
+											m_deltaPhiLeptons->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
+											m_cosLeptons->Fill(TMath::Cos(deltaPhi(recoMuon->phi(),recoElectron->phi())),em_ratio,1);
+											m_cosMetJet1->Fill(TMath::Cos(deltaPhi(Met.phi(),Jet1->phi())),em_ratio,1);
+											m_cosMetJet2->Fill(TMath::Cos(deltaPhi(Met.phi(),Jet2->phi())),em_ratio,1);
+											m_cosMetElectron->Fill(TMath::Cos(deltaPhi(Met.phi(),recoElectron->phi())),em_ratio,1);
+											m_cosMetMuon->Fill(TMath::Cos(deltaPhi(Met.phi(),recoMuon->phi())),em_ratio,1);
+											m_deltaPhiJets->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
+											m_deltaPhiMetElectron->Fill(deltaPhi(Met.phi(),recoElectron->phi()));
+											m_deltaPhiMetMuon->Fill(deltaPhi(Met.phi(),recoMuon->phi()));
+											m_deltaPhiMetJet1->Fill(deltaPhi(Met.phi(),Jet1->phi()));
+											m_deltaPhiMetJet2->Fill(deltaPhi(Met.phi(),Jet2->phi()));
 
-								m_cosJets->Fill(TMath::Cos(deltaPhi(Jet2->phi(),Jet1->phi())),em_ratio,1);
-								m_deltaPhiLeptons->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
-								m_cosLeptons->Fill(TMath::Cos(deltaPhi(recoMuon->phi(),recoElectron->phi())),em_ratio,1);
-								m_cosMetJet1->Fill(TMath::Cos(deltaPhi(Met.phi(),Jet1->phi())),em_ratio,1);
-								m_cosMetJet2->Fill(TMath::Cos(deltaPhi(Met.phi(),Jet2->phi())),em_ratio,1);
-								m_cosMetElectron->Fill(TMath::Cos(deltaPhi(Met.phi(),recoElectron->phi())),em_ratio,1);
-								m_cosMetMuon->Fill(TMath::Cos(deltaPhi(Met.phi(),recoMuon->phi())),em_ratio,1);
-								m_deltaPhiJets->Fill(deltaPhi(Jet2->phi(),Jet1->phi()));
-								m_deltaPhiMetElectron->Fill(deltaPhi(Met.phi(),recoElectron->phi()));
-								m_deltaPhiMetMuon->Fill(deltaPhi(Met.phi(),recoMuon->phi()));
-								m_deltaPhiMetJet1->Fill(deltaPhi(Met.phi(),Jet1->phi()));
-								m_deltaPhiMetJet2->Fill(deltaPhi(Met.phi(),Jet2->phi()));
+											m_cosJet1electron->Fill(TMath::Cos(deltaPhi(Jet1->phi(),recoElectron->phi())),em_ratio,1);
+											m_deltaPhiJet1Electron->Fill(deltaPhi(Jet1->phi(),recoElectron->phi()));
+											m_cosJet2electron->Fill(TMath::Cos(deltaPhi(Jet2->phi(),recoElectron->phi())),em_ratio,1);
+											m_deltaPhiJet2Electron->Fill(deltaPhi(Jet2->phi(),recoElectron->phi()));
+											m_cosJet1muon->Fill(TMath::Cos(deltaPhi(Jet1->phi(),recoMuon->phi())),em_ratio,1);
+											m_deltaPhiJet1Muon->Fill(deltaPhi(Jet1->phi(),recoMuon->phi()));
+											m_cosJet2muon->Fill(TMath::Cos(deltaPhi(Jet2->phi(),recoMuon->phi())),em_ratio,1);
+											m_deltaPhiJet2Muon->Fill(deltaPhi(Jet2->phi(),recoMuon->phi()));
 
-								m_cosJet1electron->Fill(TMath::Cos(deltaPhi(Jet1->phi(),recoElectron->phi())),em_ratio,1);
-								m_deltaPhiJet1Electron->Fill(deltaPhi(Jet1->phi(),recoElectron->phi()));
-								m_cosJet2electron->Fill(TMath::Cos(deltaPhi(Jet2->phi(),recoElectron->phi())),em_ratio,1);
-								m_deltaPhiJet2Electron->Fill(deltaPhi(Jet2->phi(),recoElectron->phi()));
-								m_cosJet1muon->Fill(TMath::Cos(deltaPhi(Jet1->phi(),recoMuon->phi())),em_ratio,1);
-								m_deltaPhiJet1Muon->Fill(deltaPhi(Jet1->phi(),recoMuon->phi()));
-								m_cosJet2muon->Fill(TMath::Cos(deltaPhi(Jet2->phi(),recoMuon->phi())),em_ratio,1);
-								m_deltaPhiJet2Muon->Fill(deltaPhi(Jet2->phi(),recoMuon->phi()));
+								
+										  	m_dRjets->Fill(deltaR(Jet1->eta(),Jet1->phi(),Jet2->eta(),Jet2->phi()),em_ratio,1);
+										  	m_dRLeptons->Fill(deltaR(recoMuon->eta(),recoMuon->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
 
-						
-							  m_dRjets->Fill(deltaR(Jet1->eta(),Jet1->phi(),Jet2->eta(),Jet2->phi()),em_ratio,1);
-							  m_dRLeptons->Fill(deltaR(recoMuon->eta(),recoMuon->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
+											m_dRJet1muon->Fill(deltaR(Jet1->eta(),Jet1->phi(),recoMuon->eta(),recoMuon->phi()),em_ratio,1);
+											m_dRJet2muon->Fill(deltaR(Jet2->eta(),Jet2->phi(),recoMuon->eta(),recoMuon->phi()),em_ratio,1);
 
-								m_dRJet1muon->Fill(deltaR(Jet1->eta(),Jet1->phi(),recoMuon->eta(),recoMuon->phi()),em_ratio,1);
-								m_dRJet2muon->Fill(deltaR(Jet2->eta(),Jet2->phi(),recoMuon->eta(),recoMuon->phi()),em_ratio,1);
-
-								m_dRJet1electron->Fill(deltaR(Jet1->eta(),Jet1->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
-								m_dRJet2electron->Fill(deltaR(Jet2->eta(),Jet2->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
+											m_dRJet1electron->Fill(deltaR(Jet1->eta(),Jet1->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
+											m_dRJet2electron->Fill(deltaR(Jet2->eta(),Jet2->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
 								
 							
 										}
