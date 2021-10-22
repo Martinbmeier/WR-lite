@@ -289,7 +289,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 	int jetCount = 0;
-	int btagcount = 0;
+	// int btagcount = 0;
 
 	// const pat::Jet* bJet1=0;
 	// const pat::Jet* bJet2=0;
@@ -448,7 +448,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			}
 
 
-			if(oneHeepElectron && oneMuonHighpT){
+			if(oneHeepElectron && oneMuonHighpT && twoJets){
 				double dileptonSeparation=sqrt(dR2(recoMuon->eta(), recoElectron->eta(), recoMuon->phi(), recoElectron->phi()));
 			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), recoMuon->eta(), Jet1->phi(), recoMuon->phi()));
 			   double muonJet2Sep=sqrt(dR2(Jet2->eta(), recoMuon->eta(), Jet2->phi(), recoMuon->phi()));
