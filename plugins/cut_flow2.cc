@@ -291,8 +291,8 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	int jetCount = 0;
 	int btagcount = 0;
 
-	const pat::Jet* bJet1=0;
-	const pat::Jet* bJet2=0;
+	// const pat::Jet* bJet1=0;
+	// const pat::Jet* bJet2=0;
 
 	const pat::Jet* Jet1=0;
 	const pat::Jet* Jet2=0;
@@ -334,22 +334,22 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			}
 			jetCount++;
 
-			if(BJP > 0.4184){ 
+			// if(BJP > 0.4184){ 
 	
 
-				if(btagcount==0){
-					bJet1=&(*(iJet));
-				}
-				if(btagcount==1){
-					bJet2=&(*(iJet));
-				}
-				btagcount++; 
-			}
+			// 	if(btagcount==0){
+			// 		bJet1=&(*(iJet));
+			// 	}
+			// 	if(btagcount==1){
+			// 		bJet2=&(*(iJet));
+			// 	}
+			// 	btagcount++; 
+			// }
 		}
 
 		if(jetCount>1){twoJets=true;}
-		if(btagcount>0){oneBTag=true;}
-		if(btagcount>1){twoBTag=true;}
+		// if(btagcount>0){oneBTag=true;}
+		// if(btagcount>1){twoBTag=true;}
 			
 
 //gen lepton info
@@ -512,9 +512,9 @@ if(oneElectronMuon){// || !oneElectronMuon){
 								m_dRJet2electron->Fill(deltaR(Jet2->eta(),Jet2->phi(),recoElectron->eta(),recoElectron->phi()),em_ratio,1);
 
 							m_histoMaker.fill(genMuonpT,6,eventWeight);
-							if(oneBTag){
+							// if(oneBTag){
 								m_histoMaker.fill(genMuonpT,7,eventWeight);
-								if(twoBTag){
+								// if(twoBTag){
 									m_histoMaker.fill(genMuonpT,8,eventWeight);
 									if(muonIsolation1){
 										m_histoMaker.fill(genMuonpT,9,eventWeight);
@@ -526,8 +526,8 @@ if(oneElectronMuon){// || !oneElectronMuon){
 							
 										}
 									}
-								}
-							}
+								// }
+							// }
 						}
 					}
 				}
