@@ -448,13 +448,13 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			}
 
 
-			if(oneHeepElectron && oneMuonHighpT && btagcount>1){
+			if(oneHeepElectron && oneMuonHighpT){
 				double dileptonSeparation=sqrt(dR2(recoMuon->eta(), recoElectron->eta(), recoMuon->phi(), recoElectron->phi()));
-			   double muonJet1Sep=sqrt(dR2(bJet1->eta(), recoMuon->eta(), bJet1->phi(), recoMuon->phi()));
-			   double muonJet2Sep=sqrt(dR2(bJet2->eta(), recoMuon->eta(), bJet2->phi(), recoMuon->phi()));
-			   double electronJet1Sep=sqrt(dR2(bJet1->eta(), recoElectron->eta(), bJet1->phi(), recoElectron->phi()));
-				double electronJet2Sep=sqrt(dR2(bJet2->eta(), recoElectron->eta(), bJet2->phi(), recoElectron->phi()));
-				double jetSeparation=sqrt(dR2(bJet2->eta(), bJet1->eta(), bJet2->phi(), bJet1->phi()));
+			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), recoMuon->eta(), Jet1->phi(), recoMuon->phi()));
+			   double muonJet2Sep=sqrt(dR2(Jet2->eta(), recoMuon->eta(), Jet2->phi(), recoMuon->phi()));
+			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), recoElectron->eta(), Jet1->phi(), recoElectron->phi()));
+				double electronJet2Sep=sqrt(dR2(Jet2->eta(), recoElectron->eta(), Jet2->phi(), recoElectron->phi()));
+				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} // jet/lepton separation cut
 			} 
 
