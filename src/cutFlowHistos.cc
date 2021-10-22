@@ -25,7 +25,7 @@ void cutFlowHistos::book(TFileDirectory histoFolder, int nCut) {
 
 	//Muon Histos
 
-	m_recoMuonPt[nCut] =  {m_histoFolder.make<TH1D>("recoMuonPt","Pt for reco muons",70,0,700)};
+	m_recoMuonPt[nCut] =  {m_histoFolder.make<TH1D>("recoMuonPt","Pt for reco muons",100,0,1000)};
 	m_recoMuonPt[nCut]->GetXaxis()-> SetTitle("Pt (GeV)");
 
 }
