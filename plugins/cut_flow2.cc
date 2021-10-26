@@ -588,7 +588,7 @@ bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
 void cut_flow2::csvTable(double genMuonPt, double genElectronPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* bjet2, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
 std::ofstream myfile;
-myfile.open("neuralNetData6.csv",std::ios_base::app);
+myfile.open("neuralNetData7.csv",std::ios_base::app);
 myfile << muon->pt() << ", "
 		 << muon->phi() << ", "
        << muon->eta() << ", "
