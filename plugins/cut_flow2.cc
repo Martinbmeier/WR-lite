@@ -453,8 +453,8 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 //	double em_ratio=genMuonpT/genElectronpT;
 
-//if(oneElectronMuon){
 	m_histoMaker.fill(recoMuonpT,0,eventCount);
+
 	if(electronTrigger){
 		m_histoMaker.fill(recoMuonpT,1,eventCount);
 		if(oneHeepElectron){
@@ -467,6 +467,21 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 						m_histoMaker.fill(recoMuonpT,5,eventCount);
 						if(electronHighPt){
 							m_histoMaker.fill(recoMuonpT,6,eventCount);
+							
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+	if(electronTrigger){
+		if(oneHeepElectron){
+			if(oneMuonHighpT){
+				if(twoJets){
+					if(electronHighPt){
+
 							if(oneBTag && angularSeparation1B){
 								m_histoMaker.fill(recoMuonpT,7,eventCount);
 								if(twoBTag && angularSeparation2B){
@@ -518,8 +533,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				}
 			}
 		}
-	}
-//}
+
 
 
 }
@@ -604,7 +618,7 @@ bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
 void cut_flow2::csvTable(double genMuonPt, double genElectronPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* bjet2, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
 std::ofstream myfile;
-myfile.open("neuralNetDataWZ1.csv",std::ios_base::app);
+myfile.open("neuralNetDataWZ2.csv",std::ios_base::app);
 myfile << muon->pt() << ", "
 		 << muon->phi() << ", "
        << muon->eta() << ", "
@@ -642,7 +656,7 @@ myfile.close();
 void cut_flow2::csvTable(const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* bjet2, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
 std::ofstream myfile;
-myfile.open("neuralNetDataWZ1.csv",std::ios_base::app);
+myfile.open("neuralNetDataWZ2.csv",std::ios_base::app);
 myfile << muon->pt() << ", "
 		 << muon->phi() << ", "
        << muon->eta() << ", "
@@ -680,9 +694,9 @@ cut_flow2::beginJob() {
 
 	std::ofstream myfile;
 
-	myfile.open("neuralNetDataWZ1.csv",std::ios_base::app);
-	myfile<<"muon pt, muon phi, muon eta, electron pt, electron phi, electron eta, bjet 1 pt, bjet 1 phi, bjet 1 eta, bjet 2 pt, bjet 2 phi, bjet 2 eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio, event weight\n";
-	myfile.close();
+	// myfile.open("neuralNetDataWZ1.csv",std::ios_base::app);
+	// myfile<<"muon pt, muon phi, muon eta, electron pt, electron phi, electron eta, bjet 1 pt, bjet 1 phi, bjet 1 eta, bjet 2 pt, bjet 2 phi, bjet 2 eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio, event weight\n";
+	// myfile.close();
 
 	edm::Service<TFileService> fs; 
 
