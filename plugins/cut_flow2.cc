@@ -421,7 +421,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			}
 
 
-			double invMass = -1000
+			double invMass = -1000;
 
 			if(oneHeepElectron && oneMuonHighpT && twoBTag){
 				double dileptonSeparation=sqrt(dR2(recoMuon->eta(), recoElectron->eta(), recoMuon->phi(), recoElectron->phi()));
