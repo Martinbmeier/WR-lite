@@ -430,7 +430,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			   double electronJet1Sep=sqrt(dR2(bJet1->eta(), recoElectron->eta(), bJet1->phi(), recoElectron->phi()));
 				double electronJet2Sep=sqrt(dR2(bJet2->eta(), recoElectron->eta(), bJet2->phi(), recoElectron->phi()));
 				double jetSeparation=sqrt(dR2(bJet2->eta(), bJet1->eta(), bJet2->phi(), bJet1->phi()));
-				invMass = (recoMuon->p4() + recoElectron->p4() + bJet1->p4() + bJet2->p4()).mass()
+				invMass = (recoMuon->p4() + recoElectron->p4() + bJet1->p4() + bJet2->p4()).mass();
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation2B=true;} // jet/lepton separation cut
 			} 
 
@@ -441,7 +441,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), recoElectron->eta(), Jet1->phi(), recoElectron->phi()));
 				double electronJet2Sep=sqrt(dR2(Jet2->eta(), recoElectron->eta(), Jet2->phi(), recoElectron->phi()));
 				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
-				invMass = (recoMuon->p4() + recoElectron->p4() + Jet1->p4() + Jet2->p4()).mass()
+				invMass = (recoMuon->p4() + recoElectron->p4() + Jet1->p4() + Jet2->p4()).mass();
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} // jet/lepton separation cut
 			} 
 
@@ -449,7 +449,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				double dileptonSeparation=sqrt(dR2(recoMuon->eta(), recoElectron->eta(), recoMuon->phi(), recoElectron->phi()));
 			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), recoMuon->eta(), Jet1->phi(), recoMuon->phi()));
 			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), recoElectron->eta(), Jet1->phi(), recoElectron->phi()));
-			   invMass = (recoMuon->p4() + recoElectron->p4() + Jet1->p4()).mass()
+			   invMass = (recoMuon->p4() + recoElectron->p4() + Jet1->p4()).mass();
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && electronJet1Sep > 0.4){angularSeparation1B=true;} // jet/lepton separation cut
 			} 
 
