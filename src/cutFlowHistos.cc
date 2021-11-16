@@ -28,13 +28,17 @@ void cutFlowHistos::book(TFileDirectory histoFolder, int nCut) {
 	m_recoMuonPt[nCut] =  {m_histoFolder.make<TH1D>("recoMuonPt","Pt for reco muons",100,0,1000)};
 	m_recoMuonPt[nCut]->GetXaxis()-> SetTitle("Pt (GeV)");
 
+	m_invMass[nCut] =  {m_histoFolder.make<TH1D>("4objectMass","invariant mass",100,0,1000)};
+	m_invMass[nCut]->GetXaxis()-> SetTitle("mass (GeV/c)");
+
 }
 
 //General histogram filling
-void cutFlowHistos::fill(double pT, int cutNumber, double weight) {
+void cutFlowHistos::fill(double pT, double mass, int cutNumber, double weight) {
 	
 
 		m_recoMuonPt[cutNumber]->Fill(pT,weight);
+		m_invMass[cutNumber]->Fill(mass,weight);
 
 
 

@@ -421,6 +421,8 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			}
 
 
+			double invMass = -1000
+
 			if(oneHeepElectron && oneMuonHighpT && twoBTag){
 				double dileptonSeparation=sqrt(dR2(recoMuon->eta(), recoElectron->eta(), recoMuon->phi(), recoElectron->phi()));
 			   double muonJet1Sep=sqrt(dR2(bJet1->eta(), recoMuon->eta(), bJet1->phi(), recoMuon->phi()));
@@ -428,6 +430,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			   double electronJet1Sep=sqrt(dR2(bJet1->eta(), recoElectron->eta(), bJet1->phi(), recoElectron->phi()));
 				double electronJet2Sep=sqrt(dR2(bJet2->eta(), recoElectron->eta(), bJet2->phi(), recoElectron->phi()));
 				double jetSeparation=sqrt(dR2(bJet2->eta(), bJet1->eta(), bJet2->phi(), bJet1->phi()));
+				invMass = (recoMuon->p4() + recoElectron->p4() + bJet1->p4() + bJet2->p4()).mass()
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation2B=true;} // jet/lepton separation cut
 			} 
 
@@ -438,6 +441,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), recoElectron->eta(), Jet1->phi(), recoElectron->phi()));
 				double electronJet2Sep=sqrt(dR2(Jet2->eta(), recoElectron->eta(), Jet2->phi(), recoElectron->phi()));
 				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
+				invMass = = (recoMuon->p4() + recoElectron->p4() + Jet1->p4() + Jet2->p4()).mass()
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} // jet/lepton separation cut
 			} 
 
@@ -445,6 +449,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				double dileptonSeparation=sqrt(dR2(recoMuon->eta(), recoElectron->eta(), recoMuon->phi(), recoElectron->phi()));
 			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), recoMuon->eta(), Jet1->phi(), recoMuon->phi()));
 			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), recoElectron->eta(), Jet1->phi(), recoElectron->phi()));
+			   invMass = = (recoMuon->p4() + recoElectron->p4() + Jet1->p4()).mass()
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && electronJet1Sep > 0.4){angularSeparation1B=true;} // jet/lepton separation cut
 			} 
 
@@ -453,20 +458,20 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 //	double em_ratio=genMuonpT/genElectronpT;
 
-	m_histoMaker.fill(recoMuonpT,0,eventCount);
+	m_histoMaker.fill(recoMuonpT,invMass,0,eventCount);
 
 	if(electronTrigger){
-		m_histoMaker.fill(recoMuonpT,1,eventCount);
+		m_histoMaker.fill(recoMuonpT,invMass,1,eventCount);
 		if(oneHeepElectron){
-			m_histoMaker.fill(recoMuonpT,2,eventCount);
+			m_histoMaker.fill(recoMuonpT,invMass,2,eventCount);
 			if(oneMuonHighpT){
-				m_histoMaker.fill(recoMuonpT,3,eventCount);
+				m_histoMaker.fill(recoMuonpT,invMass,3,eventCount);
 				if(twoJets){
-					m_histoMaker.fill(recoMuonpT,4,eventCount);
+					m_histoMaker.fill(recoMuonpT,invMass,4,eventCount);
 					if(angularSeparation){
-						m_histoMaker.fill(recoMuonpT,5,eventCount);
+						m_histoMaker.fill(recoMuonpT,invMass,5,eventCount);
 						if(electronHighPt){
-							m_histoMaker.fill(recoMuonpT,6,eventCount);
+							m_histoMaker.fill(recoMuonpT,invMass,6,eventCount);
 							
 						}
 					}
@@ -483,14 +488,14 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 					if(electronHighPt){
 
 							if(oneBTag && angularSeparation1B){
-								m_histoMaker.fill(recoMuonpT,7,eventCount);
+								m_histoMaker.fill(recoMuonpT,invMass,7,eventCount);
 								if(twoBTag && angularSeparation2B){
-									m_histoMaker.fill(recoMuonpT,8,eventCount);
+									m_histoMaker.fill(recoMuonpT,invMass,8,eventCount);
 									if(muonIsolation1){
-										m_histoMaker.fill(recoMuonpT,9,eventCount);
+										m_histoMaker.fill(recoMuonpT,invMass,9,eventCount);
 										if(muonIsolation2){
 
-											m_histoMaker.fill(recoMuonpT,10,eventCount);
+											m_histoMaker.fill(recoMuonpT,invMass,10,eventCount);
 
 											csvTable(recoMuon,recoElectron,bJet1,bJet2,Jet1,Jet2,combinedJetsP4,Met,eventWeight);  //fill a csv table with variables for the NN (genMuonpT,genElectronpT,)
 
@@ -534,8 +539,6 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			}
 		}
 
-
-
 }
 
 
@@ -563,13 +566,10 @@ bool cut_flow2::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
 
     		const reco::Candidate* iParticle = lepton->mother();
 
-    		//while(iParticle->pdgId()!=2212){
-
     		while(iStatus!=4){  //status=4 is the initial proton
     			iStatus = iParticle->status();
     			
     			if(abs(iParticle->pdgId())==24){ //found W
-    				//while(iParticle->pdgId()!=2212){
     				while(iStatus!=4){
     				iParticle = iParticle->mother();
     				iStatus = iParticle->status();
@@ -584,10 +584,8 @@ bool cut_flow2::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
     			iParticle = iParticle->mother();
     		}
 
-		if(ttbar==true){//std::cout <<"found T->W lepton!"<<std::endl; 
-		return true;}
-		else{//std::cout <<"no T->W lepton :("<<std::endl; 
-		return false;}
+		if(ttbar==true){return true;}
+		else{return false;}
 }
 
 bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
