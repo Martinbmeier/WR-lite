@@ -31,13 +31,21 @@ void cutFlowHistos::book(TFileDirectory histoFolder, int nCut) {
 	m_invMass[nCut] =  {m_histoFolder.make<TH1D>("4objectMass","invariant mass",100,0,4000)};
 	m_invMass[nCut]->GetXaxis()-> SetTitle("mass (GeV/c)");
 
+	m_invMassSS[nCut] =  {m_histoFolder.make<TH1D>("4objectMassSS","invariant mass (same sign)",100,0,4000)};
+	m_invMassSS[nCut]->GetXaxis()-> SetTitle("mass (GeV/c)");
+
+	m_invMassSS[nCut] =  {m_histoFolder.make<TH1D>("4objectMassOS","invariant mass (opposite sign)",100,0,4000)};
+	m_invMassSS[nCut]->GetXaxis()-> SetTitle("mass (GeV/c)");
+
 }
 
 //General histogram filling
-void cutFlowHistos::fill(double pT, double mass, int cutNumber, double weight) {
+void cutFlowHistos::fill(double pT, double mass, double SSmass, double OSmass, int cutNumber, double weight) {
 	
 		m_recoMuonPt[cutNumber]->Fill(pT,weight);
 		m_invMass[cutNumber]->Fill(mass,weight);
+		m_invMassSS[cutNumber]->Fill(SSmass,weight);
+		m_invMassOS[cutNumber]->Fill(OSmass,weight);
 
 }
 

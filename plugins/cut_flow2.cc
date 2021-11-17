@@ -422,6 +422,8 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 
 			double invMass = -1000;
+			double invMassSS = -1000;
+			double invMassOS = -1000;
 
 			if(oneHeepElectron && oneMuonHighpT && twoBTag){
 				double dileptonSeparation=sqrt(dR2(recoMuon->eta(), recoElectron->eta(), recoMuon->phi(), recoElectron->phi()));
@@ -453,25 +455,34 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && electronJet1Sep > 0.4){angularSeparation1B=true;} // jet/lepton separation cut
 			} 
 
+			if(oneHeepElectron && oneMuonHighpT){
+				if((recoMuon->pdgId()*recoElectron->pdgId()) > 0){
+					invMassSS = invMass;
+				}
+				else if(recoMuon->pdgId()*recoElectron->pdgId() < 0){
+					invMassOS = invMass;
+				}
+			}
+
 		
 	m_eventsWeight->Fill(0.5, eventCount);
 
 //	double em_ratio=genMuonpT/genElectronpT;
 
-	m_histoMaker.fill(recoMuonpT,invMass,0,eventCount);
+	m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,0,eventCount);
 
 	if(electronTrigger){
-		m_histoMaker.fill(recoMuonpT,invMass,1,eventCount);
+		m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,1,eventCount);
 		if(oneHeepElectron){
-			m_histoMaker.fill(recoMuonpT,invMass,2,eventCount);
+			m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,2,eventCount);
 			if(oneMuonHighpT){
-				m_histoMaker.fill(recoMuonpT,invMass,3,eventCount);
+				m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,3,eventCount);
 				if(twoJets){
-					m_histoMaker.fill(recoMuonpT,invMass,4,eventCount);
+					m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,4,eventCount);
 					if(angularSeparation){
-						m_histoMaker.fill(recoMuonpT,invMass,5,eventCount);
+						m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,5,eventCount);
 						if(electronHighPt){
-							m_histoMaker.fill(recoMuonpT,invMass,6,eventCount);
+							m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,6,eventCount);
 							
 						}
 					}
@@ -488,14 +499,14 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 					if(electronHighPt){
 
 							if(oneBTag && angularSeparation1B){
-								m_histoMaker.fill(recoMuonpT,invMass,7,eventCount);
+								m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,7,eventCount);
 								if(twoBTag && angularSeparation2B){
-									m_histoMaker.fill(recoMuonpT,invMass,8,eventCount);
+									m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,8,eventCount);
 									if(muonIsolation1){
-										m_histoMaker.fill(recoMuonpT,invMass,9,eventCount);
+										m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,9,eventCount);
 										if(muonIsolation2){
 
-											m_histoMaker.fill(recoMuonpT,invMass,10,eventCount);
+											m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,10,eventCount);
 
 											//csvTable(recoMuon,recoElectron,bJet1,bJet2,Jet1,Jet2,combinedJetsP4,Met,eventWeight);  //fill a csv table with variables for the NN (genMuonpT,genElectronpT,)
 
