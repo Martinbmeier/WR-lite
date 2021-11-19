@@ -449,7 +449,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 				if(oneHeepElectron && oneMuonHighpT && oneBTag){
 				double dileptonSeparation=sqrt(dR2(recoMuon->eta(), recoElectron->eta(), recoMuon->phi(), recoElectron->phi()));
-			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), recoMuon->eta(), Jet1->phi(), recoMuon->phi()));
+			   double muonJet1Sep=sqrt(dR2(bJet1->eta(), recoMuon->eta(), bJet1->phi(), recoMuon->phi()));
 			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), recoElectron->eta(), Jet1->phi(), recoElectron->phi()));
 			   invMass = (recoMuon->p4() + recoElectron->p4() + bJet1->p4()).mass();
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && electronJet1Sep > 0.4){angularSeparation1B=true;} // jet/lepton separation cut

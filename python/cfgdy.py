@@ -105,9 +105,9 @@ process.source = cms.Source ("PoolSource",
 
         #WR1600_N800
 'file:/home/meier307/MINIAOD_1.root',
-'file:/home/meier307/MINIAOD_2.root'
+'file:/home/meier307/MINIAOD_2.root',
 'file:/home/meier307/MINIAOD_3.root',
-'file:/home/meier307/MINIAOD_4.root'
+'file:/home/meier307/MINIAOD_4.root',
 'file:/home/meier307/MINIAOD_5.root',
         #ttbar
 # 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/079C3FC4-8835-394B-8E54-1C67DFAE7E8D.root',
