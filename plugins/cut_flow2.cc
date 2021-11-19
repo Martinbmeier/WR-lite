@@ -473,7 +473,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 //	double em_ratio=genMuonpT/genElectronpT;
 
 	m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,0,eventCount);
-	electronTrigger = true;
+	//electronTrigger = true;
 
 	if(electronTrigger){
 		m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,1,eventCount);
