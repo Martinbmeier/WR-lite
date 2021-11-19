@@ -32,10 +32,10 @@ void cutFlowHistos::book(TFileDirectory histoFolder, int nCut) {
 	m_invMass[nCut]->GetXaxis()-> SetTitle("mass (GeV/c)");
 
 	m_invMassSS[nCut] =  {m_histoFolder.make<TH1D>("4objectMassSS","invariant mass (same sign)",100,0,4000)};
-	m_invMassSS[nCut]->GetXaxis()-> SetTitle("mass (GeV/c)");
+	m_invMassSS[nCut]->GetXaxis()-> SetTitle("mass (GeV)");
 
-	m_invMassSS[nCut] =  {m_histoFolder.make<TH1D>("4objectMassOS","invariant mass (opposite sign)",100,0,4000)};
-	m_invMassSS[nCut]->GetXaxis()-> SetTitle("mass (GeV/c)");
+	m_invMassOS[nCut] =  {m_histoFolder.make<TH1D>("4objectMassOS","invariant mass (opposite sign)",100,0,4000)};
+	m_invMassOS[nCut]->GetXaxis()-> SetTitle("mass (GeV)");
 
 }
 
