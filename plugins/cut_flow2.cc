@@ -407,6 +407,9 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
 				//if(fabs(iElectron->eta()) > 2.4) {continue;}
 				//if(iElectron->pt() < 10 ) {continue;}
+				const vid::CutFlowResult* vidResult =  iElectron->userData<vid::CutFlowResult>("heepElectronID_HEEPV70");
+				const bool heepIDVID = vidResult->cutFlowPassed();
+				if (heepIDVID == false) continue;
 				
 				//recoElectronpT=iElectron->pt();
 				if(!foundRecoElectron){
@@ -470,6 +473,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 //	double em_ratio=genMuonpT/genElectronpT;
 
 	m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,0,eventCount);
+	electronTrigger = true;
 
 	if(electronTrigger){
 		m_histoMaker.fill(recoMuonpT,invMass,invMassSS,invMassOS,1,eventCount);
