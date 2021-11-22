@@ -420,7 +420,6 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			}
 
 
-			double invMass = -1000;
 			double invMassSS_mu_mu = -1000;
 			double invMassOS_mu_mu = -1000;
 			double invMassSS_mu_e = -1000;
@@ -446,7 +445,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			   double electronJet1Sep=sqrt(dR2(bJet1->eta(), recoElectron1->eta(), bJet1->phi(), recoElectron1->phi()));
 				double electronJet2Sep=sqrt(dR2(bJet2->eta(), recoElectron1->eta(), bJet2->phi(), recoElectron1->phi()));
 				double jetSeparation=sqrt(dR2(bJet2->eta(), bJet1->eta(), bJet2->phi(), bJet1->phi()));
-				invMass_mu_e = (recoMuon->p4() + recoElectron1->p4() + bJet1->p4() + bJet2->p4()).mass();
+				invMass_mu_e = (recoMuon1->p4() + recoElectron1->p4() + bJet1->p4() + bJet2->p4()).mass();
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation2B=true;} // jet/lepton separation cut
 			} 
 
