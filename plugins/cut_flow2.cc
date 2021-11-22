@@ -366,7 +366,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
 //check electron trigger
 
-if (passElectronTrig(iEvent)){ electronTrigger=true; }
+//if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 //muon/electron reconstruction
 
