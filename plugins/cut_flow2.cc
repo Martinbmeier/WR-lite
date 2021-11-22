@@ -551,15 +551,17 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
 	if(twoJets == true && angularSeparation == true){
 		m_histoMaker.fill(recoMuonpT,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,0,eventCount);
+		std::cout <<"2 jets" << std::endl;
 	}
 	if(oneBTag == true && angularSeparation1B == true){
 		m_histoMaker.fill(recoMuonpT,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,1,eventCount);
+				std::cout <<"1 b jet" << std::endl;
 	}
 	if(twoBTag == true && angularSeparation2B == true){
 		m_histoMaker.fill(recoMuonpT,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,2,eventCount);
+				std::cout <<"2 b jets" << std::endl;
 	}
 	
-	std::cout <<"lepton count = "<< leptonCount << std::endl;
 }
 
 
