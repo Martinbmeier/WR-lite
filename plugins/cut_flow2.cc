@@ -335,7 +335,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		if(jetCount>1){twoJets=true;}
 		if(btagcount>0){oneBTag=true;}
 		if(btagcount>1){twoBTag=true;}
-			std::cout <<"jet count = " << jetCount << std::endl;
+
 /*
 
 //gen lepton info
@@ -376,12 +376,11 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
    		if(!(iMuon->isHighPtMuon(*myEvent.PVertex)) || !iMuon->passed(reco::Muon::TkIsoTight)) continue; //preliminary cut
    		
-   		if(muonCount==0){ recoMuon1=&(*(iMuon)); }
-   		else if(muonCount==1){ recoMuon2=&(*(iMuon)); }
+   		if(muonCount==0){ recoMuon1=&(*(iMuon)); muonCount += 1;}
+   		else if(muonCount==1){ recoMuon2=&(*(iMuon)); muonCount += 1; }
 
    		leptonCount += 1;
-   		muonCount +=1;
-
+   		
 		}
 
 	//electron reco
@@ -400,11 +399,11 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 				if (heepIDVID == false) continue;
 				
 				//recoElectronpT=iElectron->pt();
-				if(electronCount==0){ recoElectron1=&(*(iElectron)); }
-				else if(electronCount==1){ recoElectron2=&(*(iElectron)); }
+				if(electronCount==0){ recoElectron1=&(*(iElectron)); electronCount+=1; }
+				else if(electronCount==1){ recoElectron2=&(*(iElectron)); electronCount+=1;}
 
 				leptonCount+=1;
-				electronCount+=1;
+				
 			}
 
 
