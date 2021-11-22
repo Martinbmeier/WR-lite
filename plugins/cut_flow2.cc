@@ -425,6 +425,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
 			//muon-electron
 			if(muonCount==1 && electronCount==1 && twoBTag){
+				std::cout <<"checking separation - 1e1u 2bjet" << std::endl;
 				double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoElectron1->eta(), recoMuon1->phi(), recoElectron1->phi()));
 			   double muonJet1Sep=sqrt(dR2(bJet1->eta(), recoMuon1->eta(), bJet1->phi(), recoMuon1->phi()));
 			   double muonJet2Sep=sqrt(dR2(bJet2->eta(), recoMuon1->eta(), bJet2->phi(), recoMuon1->phi()));
@@ -436,6 +437,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 			} 
 
 			if(muonCount==1 && electronCount==1 && twoJets){
+				std::cout <<"checking separation - 1e1u 2jet" << std::endl;
 				double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoElectron1->eta(), recoMuon1->phi(), recoElectron1->phi()));
 			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), recoMuon1->eta(), Jet1->phi(), recoMuon1->phi()));
 			   double muonJet2Sep=sqrt(dR2(Jet2->eta(), recoMuon1->eta(), Jet2->phi(), recoMuon1->phi()));
@@ -447,6 +449,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 			} 
 
 				if(muonCount==1 && electronCount==1 && oneBTag){
+					std::cout <<"checking separation - 1e1u 1bjet" << std::endl;
 				double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoElectron1->eta(), recoMuon1->phi(), recoElectron1->phi()));
 			   double muonJet1Sep=sqrt(dR2(bJet1->eta(), recoMuon1->eta(), bJet1->phi(), recoMuon1->phi()));
 			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), recoElectron1->eta(), Jet1->phi(), recoElectron1->phi()));
@@ -465,6 +468,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
 			//muon-muon
 			if(muonCount==2 && twoBTag){
+				std::cout <<"checking separation - 2u 2bjet" << std::endl;
 				double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoMuon2->eta(), recoMuon1->phi(), recoMuon2->phi()));
 			   double muon1Jet1Sep=sqrt(dR2(bJet1->eta(), recoMuon1->eta(), bJet1->phi(), recoMuon1->phi()));
 			   double muon1Jet2Sep=sqrt(dR2(bJet2->eta(), recoMuon1->eta(), bJet2->phi(), recoMuon1->phi()));
@@ -476,6 +480,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 			} 
 
 			if(muonCount==2 && twoJets){
+				std::cout <<"checking separation - 2u 2jet" << std::endl;
 				double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoMuon2->eta(), recoMuon1->phi(), recoMuon2->phi()));
 			   double muon1Jet1Sep=sqrt(dR2(Jet1->eta(), recoMuon1->eta(), Jet1->phi(), recoMuon1->phi()));
 			   double muon1Jet2Sep=sqrt(dR2(Jet2->eta(), recoMuon1->eta(), Jet2->phi(), recoMuon1->phi()));
@@ -487,6 +492,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 			} 
 
 				if(muonCount==2 && oneBTag){
+					std::cout <<"checking separation - 2u 1bjet" << std::endl;
 				double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoMuon2->eta(), recoMuon1->phi(), recoMuon2->phi()));
 			   double muon1Jet1Sep=sqrt(dR2(bJet1->eta(), recoMuon1->eta(), bJet1->phi(), recoMuon1->phi()));
 			   double muon2Jet1Sep=sqrt(dR2(bJet1->eta(), recoMuon2->eta(), bJet1->phi(), recoMuon2->phi()));
@@ -505,6 +511,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
 			//electron-electron
 			if(electronCount==2 && twoBTag){
+				std::cout <<"checking separation - 2e 2bjet" << std::endl;
 				double dileptonSeparation=sqrt(dR2(recoElectron1->eta(), recoElectron2->eta(), recoElectron1->phi(), recoElectron2->phi()));
 			   double electron1Jet1Sep=sqrt(dR2(bJet1->eta(), recoElectron1->eta(), bJet1->phi(), recoElectron1->phi()));
 			   double electron1Jet2Sep=sqrt(dR2(bJet2->eta(), recoElectron1->eta(), bJet2->phi(), recoElectron1->phi()));
@@ -516,6 +523,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 			} 
 
 			if(electronCount==2 && twoJets){
+				std::cout <<"checking separation - 2e 2jet" << std::endl;
 				double dileptonSeparation=sqrt(dR2(recoElectron1->eta(), recoElectron2->eta(), recoElectron1->phi(), recoElectron2->phi()));
 			   double electron1Jet1Sep=sqrt(dR2(Jet1->eta(), recoElectron1->eta(), Jet1->phi(), recoElectron1->phi()));
 			   double electron1Jet2Sep=sqrt(dR2(Jet2->eta(), recoElectron1->eta(), Jet2->phi(), recoElectron1->phi()));
@@ -527,6 +535,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 			} 
 
 				if(electronCount==2 && oneBTag){
+					std::cout <<"checking separation - 2e 1bjet" << std::endl;
 				double dileptonSeparation=sqrt(dR2(recoElectron1->eta(), recoElectron2->eta(), recoElectron1->phi(), recoElectron2->phi()));
 			   double electron1Jet1Sep=sqrt(dR2(bJet1->eta(), recoElectron1->eta(), bJet1->phi(), recoElectron1->phi()));
 			   double electron2Jet1Sep=sqrt(dR2(bJet1->eta(), recoElectron2->eta(), bJet1->phi(), recoElectron2->phi()));
