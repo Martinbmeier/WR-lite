@@ -28,24 +28,36 @@ void cutFlowHistos::book(TFileDirectory histoFolder, int nCut) {
 	m_recoMuonPt[nCut] =  {m_histoFolder.make<TH1D>("recoMuonPt","Pt for reco muons",100,0,1000)};
 	m_recoMuonPt[nCut]->GetXaxis()-> SetTitle("Pt (GeV)");
 
-	m_invMass[nCut] =  {m_histoFolder.make<TH1D>("4objectMass","invariant mass",100,0,4000)};
-	m_invMass[nCut]->GetXaxis()-> SetTitle("mass (GeV/c)");
+	m_invMassSS_mu_mu[nCut] =  {m_histoFolder.make<TH1D>("4objectMassSS_mu_mu","invariant mass (same sign, 2 muons)",100,0,4000)};
+	m_invMassSS_mu_mu[nCut]->GetXaxis()-> SetTitle("mass (GeV)");
 
-	m_invMassSS[nCut] =  {m_histoFolder.make<TH1D>("4objectMassSS","invariant mass (same sign)",100,0,4000)};
-	m_invMassSS[nCut]->GetXaxis()-> SetTitle("mass (GeV)");
+	m_invMassOS_mu_mu[nCut] =  {m_histoFolder.make<TH1D>("4objectMassOS_mu_mu","invariant mass (opposite sign, 2 muons)",100,0,4000)};
+	m_invMassOS_mu_mu[nCut]->GetXaxis()-> SetTitle("mass (GeV)");
 
-	m_invMassOS[nCut] =  {m_histoFolder.make<TH1D>("4objectMassOS","invariant mass (opposite sign)",100,0,4000)};
-	m_invMassOS[nCut]->GetXaxis()-> SetTitle("mass (GeV)");
+	m_invMassSS_e_e[nCut] =  {m_histoFolder.make<TH1D>("4objectMassSS_e_e","invariant mass (same sign, 2 electrons)",100,0,4000)};
+	m_invMassSS_e_e[nCut]->GetXaxis()-> SetTitle("mass (GeV)");
+
+	m_invMassOS_e_e[nCut] =  {m_histoFolder.make<TH1D>("4objectMassOS_e_e","invariant mass (opposite sign, 2 electrons)",100,0,4000)};
+	m_invMassOS_e_e[nCut]->GetXaxis()-> SetTitle("mass (GeV)");
+
+	m_invMassSS_mu_e[nCut] =  {m_histoFolder.make<TH1D>("4objectMassSS_mu_e","invariant mass (same sign, muon/electron)",100,0,4000)};
+	m_invMassSS_mu_e[nCut]->GetXaxis()-> SetTitle("mass (GeV)");
+
+	m_invMassOS_mu_e[nCut] =  {m_histoFolder.make<TH1D>("4objectMassOS_mu_e","invariant mass (opposite sign, muon/electron)",100,0,4000)};
+	m_invMassOS_mu_e[nCut]->GetXaxis()-> SetTitle("mass (GeV)");
 
 }
 
 //General histogram filling
-void cutFlowHistos::fill(double pT, double mass, double SSmass, double OSmass, int cutNumber, double weight) {
+void cutFlowHistos::fill(double pT, double SSmass_mu_mu, double OSmass_mu_mu, double SSmass_e_e, double OSmass_e_e, double SSmass_mu_e, double OSmass_mu_e,  int cutNumber, double weight) {
 	
 		m_recoMuonPt[cutNumber]->Fill(pT,weight);
-		m_invMass[cutNumber]->Fill(mass,weight);
-		m_invMassSS[cutNumber]->Fill(SSmass,weight);
-		m_invMassOS[cutNumber]->Fill(OSmass,weight);
+		m_invMassSS_mu_mu[cutNumber]->Fill(SSmass_mu_mu,weight);
+		m_invMassOS_mu_mu[cutNumber]->Fill(OSmass_mu_mu,weight);
+		m_invMassSS_e_e[cutNumber]->Fill(SSmass_e_e,weight);
+		m_invMassOS_e_e[cutNumber]->Fill(OSmass_e_e,weight);
+		m_invMassSS_mu_e[cutNumber]->Fill(SSmass_mu_e,weight);
+		m_invMassOS_mu_e[cutNumber]->Fill(OSmass_mu_e,weight);
 
 }
 
