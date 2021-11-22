@@ -432,7 +432,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 				double electronJet2Sep=sqrt(dR2(bJet2->eta(), recoElectron1->eta(), bJet2->phi(), recoElectron1->phi()));
 				double jetSeparation=sqrt(dR2(bJet2->eta(), bJet1->eta(), bJet2->phi(), bJet1->phi()));
 				invMass_mu_e = (recoMuon1->p4() + recoElectron1->p4() + bJet1->p4() + bJet2->p4()).mass();
-				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation2B=true;} // jet/lepton separation cut
+				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation2B=true;std::cout <<"good separation" << std::endl;} // jet/lepton separation cut
 			} 
 
 			if(muonCount==1 && electronCount==1 && twoJets){
@@ -443,7 +443,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 				double electronJet2Sep=sqrt(dR2(Jet2->eta(), recoElectron1->eta(), Jet2->phi(), recoElectron1->phi()));
 				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
 				invMass_mu_e = (recoMuon1->p4() + recoElectron1->p4() + Jet1->p4() + Jet2->p4()).mass();
-				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} // jet/lepton separation cut
+				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;std::cout <<"good separation" << std::endl;} // jet/lepton separation cut
 			} 
 
 				if(muonCount==1 && electronCount==1 && oneBTag){
@@ -451,7 +451,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 			   double muonJet1Sep=sqrt(dR2(bJet1->eta(), recoMuon1->eta(), bJet1->phi(), recoMuon1->phi()));
 			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), recoElectron1->eta(), Jet1->phi(), recoElectron1->phi()));
 			   invMass_mu_e = (recoMuon1->p4() + recoElectron1->p4() + bJet1->p4()).mass();
-				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && electronJet1Sep > 0.4){angularSeparation1B=true;} // jet/lepton separation cut
+				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && electronJet1Sep > 0.4){angularSeparation1B=true;std::cout <<"good separation" << std::endl;} // jet/lepton separation cut
 			} 
 
 			if(muonCount==1 && electronCount==1){
@@ -472,7 +472,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 				double muon2Jet2Sep=sqrt(dR2(bJet2->eta(), recoMuon2->eta(), bJet2->phi(), recoMuon2->phi()));
 				double jetSeparation=sqrt(dR2(bJet2->eta(), bJet1->eta(), bJet2->phi(), bJet1->phi()));
 				invMass_mu_mu = (recoMuon1->p4() + recoMuon2->p4() + bJet1->p4() + bJet2->p4()).mass();
-				if(dileptonSeparation>0.4 && muon1Jet1Sep>0.4 && muon1Jet2Sep>0.4 && muon2Jet1Sep > 0.4 && muon2Jet2Sep>0.4 && jetSeparation>0.4){angularSeparation2B=true;} // jet/lepton separation cut
+				if(dileptonSeparation>0.4 && muon1Jet1Sep>0.4 && muon1Jet2Sep>0.4 && muon2Jet1Sep > 0.4 && muon2Jet2Sep>0.4 && jetSeparation>0.4){angularSeparation2B=true;std::cout <<"good separation" << std::endl;} // jet/lepton separation cut
 			} 
 
 			if(muonCount==2 && twoJets){
@@ -483,7 +483,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 				double muon2Jet2Sep=sqrt(dR2(Jet2->eta(), recoMuon2->eta(), Jet2->phi(), recoMuon2->phi()));
 				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
 				invMass_mu_mu = (recoMuon1->p4() + recoMuon2->p4() + Jet1->p4() + Jet2->p4()).mass();
-				if(dileptonSeparation>0.4 && muon1Jet1Sep>0.4 && muon1Jet2Sep>0.4 && muon2Jet1Sep > 0.4 && muon2Jet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} // jet/lepton separation cut
+				if(dileptonSeparation>0.4 && muon1Jet1Sep>0.4 && muon1Jet2Sep>0.4 && muon2Jet1Sep > 0.4 && muon2Jet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;std::cout <<"good separation" << std::endl;} // jet/lepton separation cut
 			} 
 
 				if(muonCount==2 && oneBTag){
@@ -491,7 +491,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 			   double muon1Jet1Sep=sqrt(dR2(bJet1->eta(), recoMuon1->eta(), bJet1->phi(), recoMuon1->phi()));
 			   double muon2Jet1Sep=sqrt(dR2(bJet1->eta(), recoMuon2->eta(), bJet1->phi(), recoMuon2->phi()));
 			   invMass_mu_mu = (recoMuon1->p4() + recoMuon2->p4() + bJet1->p4()).mass();
-				if(dileptonSeparation>0.4 && muon1Jet1Sep>0.4 && muon2Jet1Sep > 0.4){angularSeparation1B=true;} // jet/lepton separation cut
+				if(dileptonSeparation>0.4 && muon1Jet1Sep>0.4 && muon2Jet1Sep > 0.4){angularSeparation1B=true;std::cout <<"good separation" << std::endl;} // jet/lepton separation cut
 			} 
 
 			if(muonCount==2){
@@ -512,7 +512,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 				double electron2Jet2Sep=sqrt(dR2(bJet2->eta(), recoElectron2->eta(), bJet2->phi(), recoElectron2->phi()));
 				double jetSeparation=sqrt(dR2(bJet2->eta(), bJet1->eta(), bJet2->phi(), bJet1->phi()));
 				invMass_e_e = (recoElectron1->p4() + recoElectron2->p4() + bJet1->p4() + bJet2->p4()).mass();
-				if(dileptonSeparation>0.4 && electron1Jet1Sep>0.4 && electron1Jet2Sep>0.4 && electron2Jet1Sep > 0.4 && electron2Jet2Sep>0.4 && jetSeparation>0.4){angularSeparation2B=true;} // jet/lepton separation cut
+				if(dileptonSeparation>0.4 && electron1Jet1Sep>0.4 && electron1Jet2Sep>0.4 && electron2Jet1Sep > 0.4 && electron2Jet2Sep>0.4 && jetSeparation>0.4){angularSeparation2B=true;std::cout <<"good separation" << std::endl;} // jet/lepton separation cut
 			} 
 
 			if(electronCount==2 && twoJets){
@@ -523,7 +523,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 				double electron2Jet2Sep=sqrt(dR2(Jet2->eta(), recoElectron2->eta(), Jet2->phi(), recoElectron2->phi()));
 				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
 				invMass_e_e = (recoElectron1->p4() + recoElectron2->p4() + Jet1->p4() + Jet2->p4()).mass();
-				if(dileptonSeparation>0.4 && electron1Jet1Sep>0.4 && electron1Jet2Sep>0.4 && electron2Jet1Sep > 0.4 && electron2Jet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;} // jet/lepton separation cut
+				if(dileptonSeparation>0.4 && electron1Jet1Sep>0.4 && electron1Jet2Sep>0.4 && electron2Jet1Sep > 0.4 && electron2Jet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true;std::cout <<"good separation" << std::endl;} // jet/lepton separation cut
 			} 
 
 				if(electronCount==2 && oneBTag){
@@ -531,7 +531,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 			   double electron1Jet1Sep=sqrt(dR2(bJet1->eta(), recoElectron1->eta(), bJet1->phi(), recoElectron1->phi()));
 			   double electron2Jet1Sep=sqrt(dR2(bJet1->eta(), recoElectron2->eta(), bJet1->phi(), recoElectron2->phi()));
 			   invMass_e_e = (recoMuon1->p4() + recoMuon2->p4() + bJet1->p4()).mass();
-				if(dileptonSeparation>0.4 && electron1Jet1Sep>0.4 && electron2Jet1Sep > 0.4){angularSeparation1B=true;} // jet/lepton separation cut
+				if(dileptonSeparation>0.4 && electron1Jet1Sep>0.4 && electron2Jet1Sep > 0.4){angularSeparation1B=true;std::cout <<"good separation" << std::endl;} // jet/lepton separation cut
 			} 
 
 			if(electronCount==2){
