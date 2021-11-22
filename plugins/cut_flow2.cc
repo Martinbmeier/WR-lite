@@ -338,9 +338,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			
 /*
 
-
 //gen lepton info
-
 
 	double genMuonpT=-1000;
 	double genElectronpT=-1000;
@@ -348,24 +346,18 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	bool genMuon = false;
 	bool genElectron = false;
 
-
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
-
 	if( ! iParticle->isHardProcess() ){ continue; }
 	if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
-
-		if(abs(iParticle->pdgId())==13 && !genMuon){genMuonpT=iParticle->pt();genMuon=true;}
-		if(abs(iParticle->pdgId())==11 && !genElectron){genElectronpT=iParticle->pt();genElectron=true;}
+	if(abs(iParticle->pdgId())==13 && !genMuon){genMuonpT=iParticle->pt();genMuon=true;}
+	if(abs(iParticle->pdgId())==11 && !genElectron){genElectronpT=iParticle->pt();genElectron=true;}
 
 }
-
-
 if(genElectron && genMuon){oneElectronMuon=true;}
 
 */
 
 //check electron trigger
-
 //if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 //muon/electron reconstruction
@@ -388,14 +380,8 @@ if(genElectron && genMuon){oneElectronMuon=true;}
    		else if(muonCount==1){ recoMuon2=&(*(iMuon)); }
 
    		leptonCount += 1;
-   		//if(!oneMuon){recoMuonpT=iMuon->pt();}
 
 		}
-
-		// if(oneMuonHighpT){
-		// 	if(recoMuon->passed(reco::Muon::TkIsoLoose)){muonIsolation1=true;}
-		// 	if(recoMuon->passed(reco::Muon::TkIsoTight)){muonIsolation1=true; muonIsolation2=true; }
-		// }
 
 	//electron reco
 
@@ -435,7 +421,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
 			m_eventsWeight->Fill(0.5, eventCount);
 
-			if(leptonCount < 3 ){
+			if(leptonCount == 2 ){
 
 			//muon-electron
 			if(muonCount==1 && electronCount==1 && twoBTag){
@@ -573,6 +559,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 		m_histoMaker.fill(recoMuonpT,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,2,eventCount);
 	}
 	
+	std::cout <<"lepton count = "<< leptonCount << std::endl;
 }
 
 

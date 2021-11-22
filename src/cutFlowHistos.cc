@@ -20,11 +20,6 @@ void cutFlowHistos::book(TFileDirectory histoFolder, int nCut) {
 	gStyle->SetOptStat("omen");
 	m_histoFolder=histoFolder;
 
-	//Unmatchded lepton histos
-
-
-	//Muon Histos
-
 	m_recoMuonPt[nCut] =  {m_histoFolder.make<TH1D>("recoMuonPt","Pt for reco muons",100,0,1000)};
 	m_recoMuonPt[nCut]->GetXaxis()-> SetTitle("Pt (GeV)");
 
