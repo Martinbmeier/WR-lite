@@ -422,11 +422,11 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
 			m_eventsWeight->Fill(0.5, eventCount);
 
-			std::cout <<"jet count: " <<jetCount << std::endl;
-			std::cout <<"muon count: " <<muonCount << std::endl;
-			std::cout <<"electron count: " <<electronCount << std::endl;
-			std::cout <<"lepton count: " <<leptonCount << std::endl;
-			std::cout <<"--------------" << std::endl;
+			// std::cout <<"jet count: " <<jetCount << std::endl;
+			// std::cout <<"muon count: " <<muonCount << std::endl;
+			// std::cout <<"electron count: " <<electronCount << std::endl;
+			// std::cout <<"lepton count: " <<leptonCount << std::endl;
+			// std::cout <<"--------------" << std::endl;
 
 
 			if(leptonCount == 2 ){
@@ -547,7 +547,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 				double dileptonSeparation=sqrt(dR2(recoElectron1->eta(), recoElectron2->eta(), recoElectron1->phi(), recoElectron2->phi()));
 			   double electron1Jet1Sep=sqrt(dR2(bJet1->eta(), recoElectron1->eta(), bJet1->phi(), recoElectron1->phi()));
 			   double electron2Jet1Sep=sqrt(dR2(bJet1->eta(), recoElectron2->eta(), bJet1->phi(), recoElectron2->phi()));
-			   invMass_e_e = (recoMuon1->p4() + recoMuon2->p4() + bJet1->p4()).mass();
+			   invMass_e_e = (recoElectron1->p4() + recoElectron2->p4() + bJet1->p4()).mass();
 				if(dileptonSeparation>0.4 && electron1Jet1Sep>0.4 && electron2Jet1Sep > 0.4){angularSeparation1B=true;} // jet/lepton separation cut
 			} 
 
