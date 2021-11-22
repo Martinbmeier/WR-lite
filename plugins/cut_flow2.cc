@@ -222,16 +222,16 @@ void
 cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
-	bool background = true;
-	background = !m_isSignal;
+	//bool background = true;
+	//background = !m_isSignal;
 
-	bool electronTrigger=false;  //cut1
-	bool twoJets=false;			  //cut4
-	bool angularSeparation=false;//cut5
+	// bool electronTrigger=false;  
+	bool twoJets=false;			  
+	bool angularSeparation=false;
 	bool angularSeparation2B=false;
 	bool angularSeparation1B=false;
-	bool oneBTag=false;			  //cut7
-	bool twoBTag=false;			  //cut8
+	bool oneBTag=false;			  
+	bool twoBTag=false;			  
 
 	eventBits2 iBit; 
    eventInfo myEvent; 
