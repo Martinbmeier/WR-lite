@@ -222,7 +222,7 @@ void
 cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
-	background = true;
+	bool background = true;
 	background = !m_isSignal;
 
 	bool electronTrigger=false;  //cut1
