@@ -422,6 +422,13 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
 			m_eventsWeight->Fill(0.5, eventCount);
 
+			std::cout <<"jet count: " <<jetCount << std::endl;
+			std::cout <<"muon count: " <<muonCount << std::endl;
+			std::cout <<"electron count: " <<electronCount << std::endl;
+			std::cout <<"lepton count: " <<leptonCount << std::endl;
+			std::cout <<"--------------" << std::endl;
+
+
 			if(leptonCount == 2 ){
 
 			//muon-electron
