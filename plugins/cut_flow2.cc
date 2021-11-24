@@ -393,7 +393,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 		//double newrecoElectronpT = -1000;
 
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
-				if(iElectron->pt() < 75 ) continue;
+				if(iElectron->pt() < 53 ) continue;
 				const vid::CutFlowResult* vidResult =  iElectron->userData<vid::CutFlowResult>("heepElectronID_HEEPV70");
 				const bool heepIDVID = vidResult->cutFlowPassed();
 				if (heepIDVID == false) continue;
