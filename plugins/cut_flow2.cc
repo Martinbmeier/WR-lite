@@ -376,8 +376,12 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
    		if(!(iMuon->isHighPtMuon(*myEvent.PVertex)) || !iMuon->passed(reco::Muon::TkIsoTight)) continue; //preliminary cut
    		
-   		if(muonCount==0){ recoMuon1=&(*(iMuon)); muonCount += 1;}
-   		else if(muonCount==1){ recoMuon2=&(*(iMuon)); muonCount += 1; }
+   		if(muonCount==0){ 
+   				recoMuon1=&(*(iMuon)); muonCount += 1;
+   		}
+   		else if(muonCount==1){ 
+   				recoMuon2=&(*(iMuon)); muonCount += 1; 
+   		}
 
    		leptonCount += 1;
    		
@@ -393,18 +397,47 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 		//double newrecoElectronpT = -1000;
 
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
-				if(iElectron->pt() < 53 ) continue;
+
 				const vid::CutFlowResult* vidResult =  iElectron->userData<vid::CutFlowResult>("heepElectronID_HEEPV70");
 				const bool heepIDVID = vidResult->cutFlowPassed();
 				if (heepIDVID == false) continue;
 				
 				//recoElectronpT=iElectron->pt();
-				if(electronCount==0){ recoElectron1=&(*(iElectron)); electronCount+=1; }
-				else if(electronCount==1){ recoElectron2=&(*(iElectron)); electronCount+=1;}
+				if(electronCount==0){ 
+						recoElectron1=&(*(iElectron)); electronCount+=1; 
+				}
+				else if(electronCount==1){ 
+					recoElectron2=&(*(iElectron)); electronCount+=1;
+				}
 
 				leptonCount+=1;
 				
 			}
+
+
+			//This code checks that the leading lepton has pt of >60 GeV and the subleading lepton has pt >53 GeV
+			if(muonCount==2){
+				if(recoMuon1->pt()<60){ muonCount==0 }
+				else if(recoMuon2->pt()<53){ muonCount==0 }
+			}
+
+			if(electronCount==2){
+				if(recoElectron1->pt()<60){ electronCount==0 }
+				else if(recoElectron2->pt()<53){ electronCount==0 }
+			}
+
+			if(muonCount==1 && electronCount==1){
+				if(recoMuon1->pt()>recoElectron1->pt()){
+					if(recoMuon1->pt()<60){ muonCount==0 }
+					else if(recoElectron1->pt()<53){ electronCount==0 }
+				}
+				else{
+					if(recoElectron1->pt()<60){ electronCount==0 }
+					else if(recoMuon1->pt()<53){ muonCount==0 }
+				}
+			}
+
+
 
 
 			double invMassSS_mu_mu = -1000;
