@@ -417,23 +417,23 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
 			//This code checks that the leading lepton has pt of >60 GeV and the subleading lepton has pt >53 GeV
 			if(muonCount==2){
-				if(recoMuon1->pt()<60){ muonCount==0 }
-				else if(recoMuon2->pt()<53){ muonCount==0 }
+				if(recoMuon1->pt()<60){ muonCount=0 }
+				else if(recoMuon2->pt()<53){ muonCount=0 }
 			}
 
 			if(electronCount==2){
-				if(recoElectron1->pt()<60){ electronCount==0 }
-				else if(recoElectron2->pt()<53){ electronCount==0 }
+				if(recoElectron1->pt()<60){ electronCount=0 }
+				else if(recoElectron2->pt()<53){ electronCount=0 }
 			}
 
-			if(muonCount==1 && electronCount==1){
+			if(muonCount==1 && electronCount=1){
 				if(recoMuon1->pt()>recoElectron1->pt()){
-					if(recoMuon1->pt()<60){ muonCount==0 }
-					else if(recoElectron1->pt()<53){ electronCount==0 }
+					if(recoMuon1->pt()<60){ muonCount=0 }
+					else if(recoElectron1->pt()<53){ electronCount=0 }
 				}
 				else{
-					if(recoElectron1->pt()<60){ electronCount==0 }
-					else if(recoMuon1->pt()<53){ muonCount==0 }
+					if(recoElectron1->pt()<60){ electronCount=0 }
+					else if(recoMuon1->pt()<53){ muonCount=0 }
 				}
 			}
 
