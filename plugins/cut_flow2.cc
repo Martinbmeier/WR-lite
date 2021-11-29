@@ -426,7 +426,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 				else if(recoElectron2->pt()<53){ electronCount=0; }
 			}
 
-			if(muonCount==1 && electronCount=1){
+			if(muonCount==1 && electronCount==1){
 				if(recoMuon1->pt()>recoElectron1->pt()){
 					if(recoMuon1->pt()<60){ muonCount=0; }
 					else if(recoElectron1->pt()<53){ electronCount=0; }
