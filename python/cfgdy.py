@@ -104,12 +104,12 @@ process.source = cms.Source ("PoolSource",
       fileNames = cms.untracked.vstring (
 
         #WR1600_N800
-# 'file:/home/meier307/MINIAOD_5.root',
-# 'file:/home/meier307/MINIAOD_4.root',
-# 'file:/home/meier307/MINIAOD_3.root',
-# 'file:/home/meier307/MINIAOD_2.root',
-# 'file:/home/meier307/MINIAOD_1.root',
-# 'file:/home/meier307/MINIAOD_28.root',
+'file:/home/meier307/MINIAOD_5.root',
+'file:/home/meier307/MINIAOD_4.root',
+'file:/home/meier307/MINIAOD_3.root',
+'file:/home/meier307/MINIAOD_2.root',
+'file:/home/meier307/MINIAOD_1.root',
+'file:/home/meier307/MINIAOD_28.root',
 
         #ttbar
 # 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/079C3FC4-8835-394B-8E54-1C67DFAE7E8D.root',
@@ -218,11 +218,13 @@ process.source = cms.Source ("PoolSource",
 # 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/058CEA88-B851-0649-BF16-8BF1507483D1.root',
 # 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/0598BD4D-38D6-9C40-959D-DBAE5A2D9F1F.root', 
 
-'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/059F5E24-67C6-D342-AD95-02FF6C229A8C.root', 
-'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/05F916D0-9E04-4E44-A5BD-1795E4B424CC.root', 
-'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/0605DAA9-2E5E-AE42-8E88-F613F41365D8.root', 
-'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/070BF954-EDD6-EE44-AC2F-4C6C3802BA1C.root', 
-'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/077CCDC7-88F2-E44A-ACD0-AC58C30AF51A.root',
+# 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/059F5E24-67C6-D342-AD95-02FF6C229A8C.root', 
+# 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/05F916D0-9E04-4E44-A5BD-1795E4B424CC.root', 
+# 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/0605DAA9-2E5E-AE42-8E88-F613F41365D8.root', 
+# 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/070BF954-EDD6-EE44-AC2F-4C6C3802BA1C.root', 
+# 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/077CCDC7-88F2-E44A-ACD0-AC58C30AF51A.root',
+
+#start here
 # 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/079AFAB9-B48F-6547-87F2-9D39E782D972.root', 
 # 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/08183DBF-4A4A-0341-B4F1-871A9E874914.root', 
 # 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/0880A1C7-C5F9-F847-BA6E-35B531CDD7CD.root', 
