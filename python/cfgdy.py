@@ -104,13 +104,13 @@ process.source = cms.Source ("PoolSource",
       fileNames = cms.untracked.vstring (
 
         #WR1600_N800
-'file:/home/meier307/MINIAOD_14.root',
-'file:/home/meier307/MINIAOD_15.root',
-'file:/home/meier307/MINIAOD_16.root',
-'file:/home/meier307/MINIAOD_17.root',
-'file:/home/meier307/MINIAOD_18.root',
-'file:/home/meier307/MINIAOD_19.root',
-'file:/home/meier307/MINIAOD_20.root',
+'file:/home/meier307/MINIAOD_21.root',
+'file:/home/meier307/MINIAOD_22.root',
+'file:/home/meier307/MINIAOD_23.root',
+'file:/home/meier307/MINIAOD_24.root',
+'file:/home/meier307/MINIAOD_25.root',
+'file:/home/meier307/MINIAOD_26.root',
+'file:/home/meier307/MINIAOD_27.root',
 
         #ttbar
 # 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/110000/079C3FC4-8835-394B-8E54-1C67DFAE7E8D.root',
