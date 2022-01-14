@@ -107,9 +107,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		bool passElectronTrig(const edm::Event&);
 		void csvTable(double genMuonPt, double genElectronPt, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
 		void csvTable(const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
-		//double transverseSphericity(math::XYZTLorentzVector p1, math::XYZTLorentzVector p2, math::XYZTLorentzVector p3);
-		//void saveElectronData(eventBits2 * iBit, double matched1Mass, double matched2Mass);
-		//void saveMuonData(eventBits2 * iBit, double matched1Mass, double matched2Mass);
+		double cut_flow2::misIDrate(const pat::Muon*);
 		
 		
 		cutFlowHistos m_histoMaker;
@@ -166,6 +164,9 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 
 		std::string  cSV_bTag1      = "pfDeepCSVJetTags:probb";
 		std::string  cSV_bTag2      = "pfDeepCSVJetTags:probbb";
+
+		double binEdges[17] = {0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 120.0, 140.0, 160.0, 180.0, 200.0, 220.0, 250.0, 300.0, 350.0, 400.0, 1000.0};
+		double rates[16] = {0.001, 0.002, 0.003, 0.005, 0.01, 0.012, 0.015, 0.018, 0.02, 0.021, 0.024, 0.026, 0.029, 0.04, 0.06, 0.07};
 
 		
 		edm::Service<TFileService> fs; 
@@ -453,7 +454,6 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 			double invMass_e_e = -1000;
 
 
-
 			m_eventsWeight->Fill(0.5, eventCount);
 
 			// std::cout <<"jet count: " <<jetCount << std::endl;
@@ -467,6 +467,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
 			//muon-electron
 			if(muonCount==1 && electronCount==1){
+
 			 	if(twoBTag){
 				//std::cout <<"checking separation - 1e1u 2bjet" << std::endl;
 				double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoElectron1->eta(), recoMuon1->phi(), recoElectron1->phi()));
@@ -508,10 +509,15 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 				else if(recoMuon1->pdgId()*recoElectron1->pdgId() < 0){
 					invMassOS_mu_e = invMass_mu_e;
 				}
+
 			}
 
 			//muon-muon
 			if(muonCount==2){ 
+
+				//
+				eventCount = (1-(misIDrate(recoMuon1)+misIDrate(recoMuon2)-misIDrate(recoMuon1)*misIDrate(recoMuon2)))*eventCount;
+
 				if(twoBTag){
 				//std::cout <<"checking separation - 2u 2bjet" << std::endl;
 				double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoMuon2->eta(), recoMuon1->phi(), recoMuon2->phi()));
@@ -558,6 +564,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 
 			//electron-electron
 			if(electronCount==2){
+
 			 	if(twoBTag){
 				//std::cout <<"checking separation - 2e 2bjet" << std::endl;
 				double dileptonSeparation=sqrt(dR2(recoElectron1->eta(), recoElectron2->eta(), recoElectron1->phi(), recoElectron2->phi()));
@@ -599,6 +606,7 @@ if(genElectron && genMuon){oneElectronMuon=true;}
 				else if(recoElectron1->pdgId()*recoElectron2->pdgId() < 0){
 					invMassOS_e_e = invMass_e_e;
 				}
+
 			}
 
 		}
@@ -692,6 +700,18 @@ bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
   return passTriggers;
 }
 
+double cut_flow2::misIDrate(const pat::Muon* muon){
+
+	double muonPT = muon->pt();
+
+	for(i=0; i<16; i++){
+		if(binEdges[i] < muonPT < binEdges[i+1]){
+			return rates[i];
+		}
+	}
+
+}
+
 void cut_flow2::csvTable(double genMuonPt, double genElectronPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* bjet2, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
 std::ofstream myfile;
@@ -733,7 +753,7 @@ myfile.close();
 void cut_flow2::csvTable(const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* bjet2, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
 std::ofstream myfile;
-myfile.open("neuralNetDataZZ1.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT1.csv",std::ios_base::app);
 myfile << muon->pt() << ", "
 		 << muon->phi() << ", "
        << muon->eta() << ", "
