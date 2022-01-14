@@ -705,7 +705,7 @@ double cut_flow2::misIDrate(const pat::Muon* muon){
 	double muonPT = muon->pt();
 
 	for(int i=0; i<16; i++){
-		if(binEdges[i] < muonPT < binEdges[i+1]){
+		if(muonPT >= binEdges[i] && muonPT < binEdges[i+1]){
 			return rates[i];
 		}
 	}
