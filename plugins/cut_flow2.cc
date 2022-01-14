@@ -709,7 +709,8 @@ double cut_flow2::misIDrate(const pat::Muon* muon){
 			return rates[i];
 		}
 	}
-
+	if(muonPT > binEdges[16]){return 0.1;}
+	return 0.0;
 }
 
 void cut_flow2::csvTable(double genMuonPt, double genElectronPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* bjet2, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
