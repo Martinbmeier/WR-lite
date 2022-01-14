@@ -107,7 +107,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		bool passElectronTrig(const edm::Event&);
 		void csvTable(double genMuonPt, double genElectronPt, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
 		void csvTable(const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
-		double cut_flow2::misIDrate(const pat::Muon*);
+		double misIDrate(const pat::Muon*);
 		
 		
 		cutFlowHistos m_histoMaker;
@@ -704,7 +704,7 @@ double cut_flow2::misIDrate(const pat::Muon* muon){
 
 	double muonPT = muon->pt();
 
-	for(i=0; i<16; i++){
+	for(int i=0; i<16; i++){
 		if(binEdges[i] < muonPT < binEdges[i+1]){
 			return rates[i];
 		}
