@@ -23,6 +23,9 @@ void cutFlowHistos::book(TFileDirectory histoFolder, int nCut) {
 	m_recoMuonPt[nCut] =  {m_histoFolder.make<TH1D>("recoMuonPt","Pt for reco muons",100,0,1000)};
 	m_recoMuonPt[nCut]->GetXaxis()-> SetTitle("Pt (GeV)");
 
+	m_invMassAS_mu_mu[nCut] =  {m_histoFolder.make<TH1D>("4objectMassAS_mu_mu","invariant mass (misID'ed)",80,0,8000)};
+	m_invMassAS_mu_mu[nCut]->GetXaxis()-> SetTitle("mass (GeV)");
+
 	m_invMassSS_mu_mu[nCut] =  {m_histoFolder.make<TH1D>("4objectMassSS_mu_mu","invariant mass (same sign, 2 muons)",80,0,8000)};
 	m_invMassSS_mu_mu[nCut]->GetXaxis()-> SetTitle("mass (GeV)");
 
@@ -44,9 +47,10 @@ void cutFlowHistos::book(TFileDirectory histoFolder, int nCut) {
 }
 
 //General histogram filling
-void cutFlowHistos::fill(double pT, double SSmass_mu_mu, double OSmass_mu_mu, double SSmass_e_e, double OSmass_e_e, double SSmass_mu_e, double OSmass_mu_e,  int cutNumber, double weight) {
+void cutFlowHistos::fill(double pT, double ASmass_mu_mu, double SSmass_mu_mu, double OSmass_mu_mu, double SSmass_e_e, double OSmass_e_e, double SSmass_mu_e, double OSmass_mu_e,  int cutNumber, double weight) {
 	
 		m_recoMuonPt[cutNumber]->Fill(pT,weight);
+		m_invMassSS_mu_mu[cutNumber]->Fill(ASmass_mu_mu,weight);
 		m_invMassSS_mu_mu[cutNumber]->Fill(SSmass_mu_mu,weight);
 		m_invMassOS_mu_mu[cutNumber]->Fill(OSmass_mu_mu,weight);
 		m_invMassSS_e_e[cutNumber]->Fill(SSmass_e_e,weight);
