@@ -50,7 +50,7 @@ void cutFlowHistos::book(TFileDirectory histoFolder, int nCut) {
 void cutFlowHistos::fill(double pT, double ASmass_mu_mu, double SSmass_mu_mu, double OSmass_mu_mu, double SSmass_e_e, double OSmass_e_e, double SSmass_mu_e, double OSmass_mu_e,  int cutNumber, double weight) {
 	
 		m_recoMuonPt[cutNumber]->Fill(pT,weight);
-		m_invMassSS_mu_mu[cutNumber]->Fill(ASmass_mu_mu,weight);
+		m_invMassAS_mu_mu[cutNumber]->Fill(ASmass_mu_mu,weight);
 		m_invMassSS_mu_mu[cutNumber]->Fill(SSmass_mu_mu,weight);
 		m_invMassOS_mu_mu[cutNumber]->Fill(OSmass_mu_mu,weight);
 		m_invMassSS_e_e[cutNumber]->Fill(SSmass_e_e,weight);
