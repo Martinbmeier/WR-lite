@@ -519,7 +519,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			if(muonCount==2){ 
 
 				//
-				eventCountmiss = (misIDrate(recoMuon1)+misIDrate(recoMuon2)-misIDrate(recoMuon1)*misIDrate(recoMuon2))*eventCount;
+				double eventCountmiss = (misIDrate(recoMuon1)+misIDrate(recoMuon2)-misIDrate(recoMuon1)*misIDrate(recoMuon2))*eventCount;
 
 				// if(twoBTag){
 				// //std::cout <<"checking separation - 2u 2bjet" << std::endl;
