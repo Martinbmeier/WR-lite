@@ -69,9 +69,9 @@ void cutFlowHistos::fill(double pT1, double pT2, double ASmass_mu_mu, double SSm
 		m_invMassSS_mu_e[cutNumber]->Fill(SSmass_mu_e,weight);
 		m_invMassOS_mu_e[cutNumber]->Fill(OSmass_mu_e,weight);
 
-		m_leadmuon_pt->Fill(pT1,weight);
-		m_subleadmuon_pt->Fill(pT2,weight);
-		m_leadsubleadmuon_pt->Fill(pT1,pT2,weight);
+		m_leadmuon_pt[cutNumber]->Fill(pT1,weight);
+		m_subleadmuon_pt[cutNumber]->Fill(pT2,weight);
+		m_leadsubleadmuon_pt[cutNumber]->Fill(pT1,pT2,weight);
 
 }
 
