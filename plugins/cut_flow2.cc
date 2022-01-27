@@ -378,7 +378,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
    	for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
 
-   		if(!(iMuon->isHighPtMuon(*myEvent.PVertex)) || !iMuon->passed(reco::Muon::TkIsoTight)) continue; //preliminary cut
+   		//if(!(iMuon->isHighPtMuon(*myEvent.PVertex)) || !iMuon->passed(reco::Muon::TkIsoTight)) continue; //preliminary cut
    		
    		if(muonCount==0){ 
    				recoMuon1=&(*(iMuon)); muonCount += 1;
