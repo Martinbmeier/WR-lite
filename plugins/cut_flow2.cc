@@ -456,6 +456,9 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			double invMass_mu_e = -1000;
 			double invMass_e_e = -1000;
 
+			double leadpT = -1000;
+			double subleadpT = -1000;
+			bool sameSign = false;
 
 			m_eventsWeight->Fill(0.5, eventCount);
 
@@ -513,6 +516,16 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 					invMassOS_mu_e = invMass_mu_e;
 				}
 
+				if(recoMuon1->pt() > recoElectron1->pt()){
+					leadpT = recoMuon1->pt();
+					subleadpT = recoElectron1->pt();
+				}
+				else{
+					subleadpT = recoMuon1->pt();
+					leadpT = recoElectron1->pt();
+				}
+
+				//if(recoMuon1->pdgId() * recoElectron1->pdgId() > 0){sameSign = true;}
 			}
 
 			//muon-muon
@@ -563,6 +576,18 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 				else if(recoMuon1->pdgId()*recoMuon2->pdgId() < 0){
 					invMassOS_mu_mu = invMass_mu_mu;
 				}
+
+				if(recoMuon1->pt() > recoMuon2->pt()){
+					leadpT = recoMuon1->pt();
+					subleadpT = recoMuon2->pt();
+				}
+				else{
+					subleadpT = recoMuon1->pt();
+					leadpT = recoMuon2->pt();
+				}
+
+				if(recoMuon1->pdgId() * recoMuon2->pdgId() > 0){sameSign = true;}
+
 			}
 
 			//electron-electron
@@ -609,18 +634,29 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 					invMassOS_e_e = invMass_e_e;
 				}
 
+				if(recoElectron1->pt() > recoElectron2->pt()){
+					leadpT = recoElectron1->pt();
+					subleadpT = recoElectron2->pt();
+				}
+				else{
+					subleadpT = recoElectron1->pt();
+					leadpT = recoElectron2->pt();
+				}
+
+				//if(recoElectron1->pdgId() * recoElectron2->pdgId() > 0){sameSign = true;}
+
 			}
 
 		}
 
 
-	if(dileptonMass==true){
+	//if(dileptonMass==true){
 
-	if(twoJets == true && angularSeparation == true){
-		m_histoMaker.fill(recoMuonpT,invMass_mu_mu,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,0,eventCount);
-		m_histoMaker.fill(recoMuonpT,invMass_mu_mu,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,1,eventCountmiss);
+	if(twoJets == true && sameSign == true){ //&& angularSeparation == true){
+		m_histoMaker.fill(leadpT,subleadpT,invMass_mu_mu,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,0,eventCount);
+		//m_histoMaker.fill(leadpT,subleadpT,invMass_mu_mu,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,1,eventCountmiss);
 	}
-	
+
 	// if(oneBTag == true && angularSeparation1B == true){
 	// 	m_histoMaker.fill(recoMuonpT,invMassAS_mu_mu,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,1,eventCount);
 	// }
@@ -628,7 +664,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	// 	m_histoMaker.fill(recoMuonpT,invMassAS_mu_mu,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,2,eventCount);
 	// }
 
-	}
+	//}
 	
 }
 
