@@ -256,7 +256,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
 	double eventWeight = eventInfo->weight();
-	double eventCountmiss = 0;
+	//double eventCountmiss = 0;
 	
 	edm::Handle<std::vector<reco::Vertex>> vertices;
 	iEvent.getByToken(m_offlineVerticesToken, vertices);
@@ -532,7 +532,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			if(muonCount==2){ 
 
 				//
-				eventCountmiss = (misIDrate(recoMuon1)+misIDrate(recoMuon2)-misIDrate(recoMuon1)*misIDrate(recoMuon2))*eventCount;
+				//eventCountmiss = (misIDrate(recoMuon1)+misIDrate(recoMuon2)-misIDrate(recoMuon1)*misIDrate(recoMuon2))*eventCount;
 
 				// if(twoBTag){
 				// //std::cout <<"checking separation - 2u 2bjet" << std::endl;
