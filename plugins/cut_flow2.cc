@@ -650,7 +650,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		}
 
 
-	//if(dileptonMass==true){
+	if((dileptonMass==true || dileptonMass==false) && (angularSeparation==true || angularSeparation==false)){
 
 	if(twoJets == true && sameSign == true){ //&& angularSeparation == true){
 		m_histoMaker.fill(leadpT,subleadpT,invMass_mu_mu,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,0,eventCount);
@@ -664,7 +664,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	// 	m_histoMaker.fill(recoMuonpT,invMassAS_mu_mu,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,2,eventCount);
 	// }
 
-	//}
+	}
 	
 }
 
