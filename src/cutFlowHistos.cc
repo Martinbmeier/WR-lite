@@ -50,7 +50,7 @@ void cutFlowHistos::book(TFileDirectory histoFolder, int nCut) {
 	m_subleadmuon_pt[nCut] =  {m_histoFolder.make<TH1D>("subleadmuon_pt","subleading muon pT",50,0,800)};
 	m_subleadmuon_pt[nCut]->GetXaxis()-> SetTitle("pT (GeV)");
 
-	m_leadsubleadmuon_pt[nCut] =  {m_histoFolder.make<TH2D>("leadsubleadmuon_pt","leading muon pT vs. subleading muon pT",50,0,800)};
+	m_leadsubleadmuon_pt[nCut] =  {m_histoFolder.make<TH2D>("leadsubleadmuon_pt","leading muon pT vs. subleading muon pT",50,0,800,50,0,800)};
 	m_leadsubleadmuon_pt[nCut]->GetXaxis()-> SetTitle("leading pT (GeV)");
 	m_leadsubleadmuon_pt[nCut]->GetYaxis()-> SetTitle("subleading pT (GeV)");
 
