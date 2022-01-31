@@ -515,8 +515,7 @@ process.analysis = cms.EDAnalyzer('cut_flow2',
                         tracks = cms.untracked.InputTag('ctfWithMaterialTracks'),
                         genParticles = cms.InputTag("prunedGenParticles"),
                         AK4recoCHSJets = cms.InputTag("slimmedJets"),
-                        highMuons = cms.InputTag("slimmedMuons"),
-                        # highMuons = cms.InputTag("tuneIDMuons"),
+                        highMuons = cms.InputTag("tuneIDMuons"),
                         highElectrons = cms.InputTag("heepElectrons"),
                         trigResults = cms.InputTag("TriggerResults","","HLT"),
                         genInfo = cms.InputTag("generator"),
@@ -565,10 +564,10 @@ elif options.era == '2018':
       SkipWarnings = False)
 
 
-# process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
-#                            * process.muonSelectionSeq * process.analysis)# * process.printTree)
 process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
-                           * process.analysis)# * process.printTree)
+                           * process.muonSelectionSeq * process.analysis)# * process.printTree)
+# process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
+#                            * process.analysis)# * process.printTree)
 #process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
 #                           * process.muonSelectionSeq * process.prefiringweight * process.analysis * process.printTree)
 

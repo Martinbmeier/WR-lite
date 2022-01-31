@@ -147,7 +147,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		// ----------member data ---------------------------
 
 		edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
-		//edm::EDGetToken m_genParticleToken;
+		edm::EDGetToken m_genParticleToken;
 		edm::EDGetToken m_recoMETToken;
 		edm::EDGetToken m_highMuonToken;
 		edm::EDGetToken m_highElectronToken;
@@ -189,7 +189,7 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 cut_flow2::cut_flow2(const edm::ParameterSet& iConfig)
 	:
 	tracksToken_(consumes<TrackCollection>(iConfig.getUntrackedParameter<edm::InputTag>("tracks"))),
-	// m_genParticleToken(consumes<std::vector<reco::GenParticle>> (iConfig.getParameter<edm::InputTag>("genParticles"))),
+	m_genParticleToken(consumes<std::vector<reco::GenParticle>> (iConfig.getParameter<edm::InputTag>("genParticles"))),
 	m_recoMETToken(consumes<std::vector<pat::MET>> (iConfig.getParameter<edm::InputTag>("recoMET"))),
 	m_highMuonToken (consumes<std::vector<pat::Muon>> (iConfig.getParameter<edm::InputTag>("highMuons"))),
 	m_highElectronToken (consumes<std::vector<pat::Electron>> (iConfig.getParameter<edm::InputTag>("highElectrons"))),
@@ -226,7 +226,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	//bool background = true;
 	//background = !m_isSignal;
 
-	// bool electronTrigger=false;  
+	bool electronTrigger=false;  
 	bool twoJets=false;			  
 	bool angularSeparation=false;
 	// bool angularSeparation2B=false;
@@ -361,8 +361,8 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 
-//check electron trigger
-//if (passElectronTrig(iEvent)){ electronTrigger=true; }
+check electron trigger
+if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 //muon/electron reconstruction
 
@@ -839,8 +839,6 @@ cut_flow2::beginJob() {
 	edm::Service<TFileService> fs;
 
 	TFileDirectory countFolder = fs->mkdir("event_count");
-
-	// TFileDirectory variableCorrelations = fs->mkdir("variable_correlations");
 	
 	m_histoMaker.book(fs->mkdir("cuts1"),0);  //2jets
 
