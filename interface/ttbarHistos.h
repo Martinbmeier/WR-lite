@@ -20,12 +20,8 @@
 class ttbarHistos {
 	public:
 	ttbarHistos();
-	//void book(TFileDirectory histoFolder);
 	void book(TFileDirectory histoFolder);
 	void fill(double mupT, double epT, double weight);
-	//ttbarHistos() : m_histoFolder(5) {}
-
-
 
 	private:
 	
