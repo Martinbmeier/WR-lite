@@ -362,7 +362,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 // // check electron trigger
-if (passElectronTrig(iEvent)){ electronTrigger=true; }
+// if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 //muon/electron reconstruction
 
