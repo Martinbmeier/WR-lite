@@ -417,7 +417,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 			if(genLeptonCount == 2 && electronTrigger){
 			
-				m_histoMaker.fill(genMuonPT, genElectronPt, eventCount);
+				m_histoMaker.fill(genMuonpT, genElectronpT, eventCount);
 
 		}
 
