@@ -269,7 +269,7 @@ ttbarstudy::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	const pat::MET Met = recoMET->front();
 
-	math::XYZTLorentzVector combinedJetsP4 = {0., 0., 0., 0.};
+	// math::XYZTLorentzVector combinedJetsP4 = {0., 0., 0., 0.};
 
 	edm::Handle<std::vector<pat::Jet>> recoJetsAK4;  
 	iEvent.getByToken(m_AK4recoCHSJetsToken, recoJetsAK4);  

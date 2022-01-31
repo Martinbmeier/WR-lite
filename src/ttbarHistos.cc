@@ -20,7 +20,7 @@ void ttbarHistos::book(TFileDirectory histoFolder) {
 	gStyle->SetOptStat("omen");
 	m_histoFolder=histoFolder;
 
-	m_electronpT = m_histoFolder.make<TH1D>("electronpT","gen electron pT",100,0,1000);
+	m_electronpT = m_histoFolder.make<TH1D>("electronpT","gen electron pT",100,0,800);
 	m_electronpT->GetXaxis()->SetTitle("pT (GeV)");
 
 	m_electronMuonpT = m_histoFolder.make<TH2D>("electronmuonpt","electron pT vs. muon pT",50,0,800,50,0,800);
