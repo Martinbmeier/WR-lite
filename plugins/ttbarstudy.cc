@@ -110,7 +110,7 @@ class ttbarstudy : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		double misIDrate(const pat::Muon*);
 		
 		
-		cutFlowHistos m_histoMaker;
+		ttbarHistos m_histoMaker;
 
 		TH1D* m_eventsWeight;
 
@@ -357,7 +357,8 @@ ttbarstudy::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		}	
 	}
 
-check electron trigger
+
+	//	//check electron trigger
 if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 //muon/electron reconstruction
@@ -606,7 +607,7 @@ ttbarstudy::beginJob() {
 
 	TFileDirectory countFolder = fs->mkdir("event_count");
 	
-	m_histoMaker.book(fs->mkdir("cuts1"));  //2jets
+	m_histoMaker.book(fs->mkdir("Analysis"));
 
 
 	m_eventsWeight = {countFolder.make<TH1D>("eventsWeight","number of events weighted", 1, 0.0, 1)};
