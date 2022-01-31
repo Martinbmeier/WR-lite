@@ -27,8 +27,8 @@ class ttbarHistos {
 	
 	TFileDirectory m_histoFolder;
 
-	TH1D m_electronpT;
-	TH2D m_electronMuonpT;
+	TH1D* m_electronpT;
+	TH2D* m_electronMuonpT;
 
 	//std::vector<TH1D*> m_recoMuonPt{3};
    
