@@ -71,10 +71,8 @@
 
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 
-//#include "ExoAnalysis/WR_lite/interface/eventBits2.h"
 #include "ExoAnalysis/WR_lite/interface/eventInfo.h"
-//#include "ExoAnalysis/WR_lite/interface/eventHistos2.h"
-#include "ExoAnalysis/WR_lite/interface/cutFlowHistos.h"
+#include "ExoAnalysis/WR_lite/interface/ttbarHistos.h"
 
 
 //
