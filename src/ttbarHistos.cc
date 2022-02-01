@@ -36,7 +36,7 @@ void ttbarHistos::book(TFileDirectory histoFolder) {
 void ttbarHistos::fill(double mupT, double epT, double weight) {
 	
 		if(mupT>100){ m_electronpT100->Fill(epT,weight); }
-		m_electronpT->Fill(epT, weight)
+		m_electronpT->Fill(epT, weight);
 		m_electronMuonpT->Fill(mupT,epT,weight);
 
 }
