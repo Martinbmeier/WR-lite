@@ -511,7 +511,7 @@ elif options.era == '2018':
 #                       genTrainData = cms.untracked.bool(options.genTrainData)
 #)
 
-process.analysis = cms.EDAnalyzer('cut_flow2',
+process.analysis = cms.EDAnalyzer('ttbarstudy',
                         tracks = cms.untracked.InputTag('ctfWithMaterialTracks'),
                         genParticles = cms.InputTag("prunedGenParticles"),
                         AK4recoCHSJets = cms.InputTag("slimmedJets"),

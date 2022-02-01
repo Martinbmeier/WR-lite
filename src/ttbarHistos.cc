@@ -23,6 +23,9 @@ void ttbarHistos::book(TFileDirectory histoFolder) {
 	m_electronpT = m_histoFolder.make<TH1D>("electronpT","gen electron pT",100,0,800);
 	m_electronpT->GetXaxis()->SetTitle("pT (GeV)");
 
+	m_electronpT100 = m_histoFolder.make<TH1D>("electronpT100","gen electron pT (muon pT > 100 GeV)",100,0,800);
+	m_electronpT100->GetXaxis()->SetTitle("pT (GeV)");
+
 	m_electronMuonpT = m_histoFolder.make<TH2D>("electronmuonpt","electron pT vs. muon pT",50,0,800,50,0,800);
 	m_electronMuonpT->GetXaxis()->SetTitle("gen muon pT (GeV)");
 	m_electronMuonpT->GetYaxis()->SetTitle("genm electron pT (GeV)");
@@ -32,7 +35,8 @@ void ttbarHistos::book(TFileDirectory histoFolder) {
 //General histogram filling
 void ttbarHistos::fill(double mupT, double epT, double weight) {
 	
-		m_electronpT->Fill(epT,weight);
+		if(mupT>100){ m_electronpT100->Fill(epT,weight); }
+		m_electronpT->Fill(epT, weight)
 		m_electronMuonpT->Fill(mupT,epT,weight);
 
 }
