@@ -105,44 +105,13 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		double dPhi(double phi1, double phi2);
 		bool tWfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event&);
-		void csvTable(double genMuonPt, double genElectronPt, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
-		void csvTable(const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
-		double misIDrate(const pat::Muon*);
+		void csvTable(double genMuonPt, int binNumber, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
+		int binNumber(const pat::Muon*);
 		
 		
-		cutFlowHistos m_histoMaker;
+		//cutFlowHistos m_histoMaker;
 
 		TH1D* m_eventsWeight;
-
-	  // TH2D* m_cosJets;
-	  // TH2D* m_cosJet1electron;
-	  // TH2D* m_cosJet2electron; 
-	  // TH2D* m_cosJet1muon; 
-	  // TH2D* m_cosJet2muon; 
-	  // TH2D* m_cosLeptons; 
-	  // TH2D* m_dRjets;
-	  // TH2D* m_dRLeptons;
-	  // TH2D* m_dRJet1muon;
-	  // TH2D* m_dRJet2muon;
-	  // TH2D* m_dRJet1electron;
-	  // TH2D* m_dRJet2electron;
-
-	  // TH1D* m_deltaPhiJet2Electron;
-	  // TH1D* m_deltaPhiLeptons;
-	  // TH1D* m_deltaPhiJet1Muon;
-	  // TH1D* m_deltaPhiJets;
-	  // TH1D* m_deltaPhiJet1Electron;
-	  // TH1D* m_deltaPhiJet2Muon;
-
-	  // TH2D* m_cosMetJet1;
-	  // TH2D* m_cosMetJet2;
-	  // TH2D* m_cosMetElectron;
-	  // TH2D* m_cosMetMuon;
-
-	  // TH1D* m_deltaPhiMetJet1;
-	  // TH1D* m_deltaPhiMetJet2;
-	  // TH1D* m_deltaPhiMetMuon;
-	  // TH1D* m_deltaPhiMetElectron; 
 
 		// ----------member data ---------------------------
 
@@ -166,12 +135,9 @@ class cut_flow2 : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		std::string  cSV_bTag2      = "pfDeepCSVJetTags:probbb";
 
 		double binEdges[17] = {0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 120.0, 140.0, 160.0, 180.0, 200.0, 220.0, 250.0, 300.0, 350.0, 400.0, 1000.0};
-		double rates[16] = {0.001, 0.002, 0.003, 0.005, 0.01, 0.012, 0.015, 0.018, 0.02, 0.021, 0.024, 0.026, 0.029, 0.04, 0.06, 0.07};
-
+		//double center[17] = {10.0, 30.0, 50.0, 70.0, 90.0, 110.0, 130.0, 150.0, 170.0, 190.0, 210.0, 235.0, 275.0, 325.0, 375.0, 700.0,};
 		
 		edm::Service<TFileService> fs; 
-
-		//std::ofstream myfile;
 		
 };
 
@@ -223,17 +189,8 @@ void
 cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
-	//bool background = true;
-	//background = !m_isSignal;
-
-	bool electronTrigger=false;  
-	bool twoJets=false;			  
-	bool angularSeparation=false;
-	// bool angularSeparation2B=false;
-	// bool angularSeparation1B=false;
-	// bool oneBTag=false;			  
-	// bool twoBTag=false;		
-	bool dileptonMass=false;	  
+	bool electronTrigger=false;  		  
+	bool angularSeparation=false; 
 
 	eventBits2 iBit; 
    eventInfo myEvent; 
@@ -247,8 +204,8 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	edm::Handle<std::vector<pat::Electron>> highElectrons;
 	iEvent.getByToken(m_highElectronToken, highElectrons);
 
-	// edm::Handle<std::vector<reco::GenParticle>> genParticles;
-	// iEvent.getByToken(m_genParticleToken, genParticles);
+	edm::Handle<std::vector<reco::GenParticle>> genParticles;
+	iEvent.getByToken(m_genParticleToken, genParticles);
 
 	edm::Handle<std::vector<pat::MET>> recoMET;
 	iEvent.getByToken(m_recoMETToken, recoMET);
@@ -256,7 +213,6 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
 	double eventWeight = eventInfo->weight();
-	//double eventCountmiss = 0;
 	
 	edm::Handle<std::vector<reco::Vertex>> vertices;
 	iEvent.getByToken(m_offlineVerticesToken, vertices);
@@ -276,15 +232,11 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	edm::Handle<std::vector<pat::Jet>> recoJetsAK4;  
 	iEvent.getByToken(m_AK4recoCHSJetsToken, recoJetsAK4);  
 
-
-	int jetCount = 0;
-	// int btagcount = 0;
-
-	// const pat::Jet* bJet1=0;
+	const pat::Jet* bJet1 = 0;
 	// const pat::Jet* bJet2=0;
 
-	const pat::Jet* Jet1=0;
-	const pat::Jet* Jet2=0;
+	const pat::Jet* Jet1 = 0;
+	//const pat::Jet* Jet2=0;
 
 
 	//Get jets with maximum pt
@@ -300,7 +252,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			double MUF      =       iJet->muonEnergyFraction();
 			double EUF      =       iJet->electronEnergyFraction();
 			double CHM      =       iJet->chargedMultiplicity();
-			// double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2);
+			double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2);
 			//APPLYING TIGHT QUALITY CUTS
 			if (NHF > .9) continue;
 			if (NEMF > .9) continue;
@@ -313,56 +265,39 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			//if (CEMF > .99) continue;
 			if (CEMF > .90)  continue;
 
-			if(jetCount==0){
-				Jet1=&(*(iJet));
+			if(BJP > 0.4184){ 
+				if(bJet1==0){
+					bJet1=&(*(iJet));
+				}
+				else if(Jet1==0){
+					Jet1=&(*(iJet));
+				}
 			}
-			if(jetCount==1){
-				Jet2=&(*(iJet));
+
+			if(BJP < 0.4184){
+				if(Jet1==0){
+					Jet1=&(*(iJet));
+				}
 			}
-			jetCount++;
-
-			// if(BJP > 0.4184){ 
-	
-
-			// 	if(btagcount==0){
-			// 		bJet1=&(*(iJet));
-			// 	}
-			// 	if(btagcount==1){
-			// 		bJet2=&(*(iJet));
-			// 	}
-			// 	btagcount++; 
-			// }
 		}
 
-		if(jetCount>1){twoJets=true;}
-		// if(btagcount>0){oneBTag=true; oneBTag=false;}
-		// if(btagcount>1){twoBTag=true; twoBTag=false;}
 
 
+gen lepton info
 
-//gen lepton info
-
-// 	double genMuon1pT=-1000;
-// 	double genMuon2pT=-1000;
+double genMuonpT=-1000;
 	
-// 	// bool genMuons = false;
-// 	int genLeptonCount = 0;
-
-// for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
-// 	if( ! iParticle->isHardProcess() ){ continue; }
-// 	//if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
-// 	if(abs(iParticle->pdgId())==13 || abs(iParticle->pdgId())==11){
-// 		genLeptonCount+=1;
-
-// 		if(abs(iParticle->pdgId())==13 && genMuon1pT<0){genMuon1pT=iParticle->pt();}
-// 		else if(abs(iParticle->pdgId())==13 && genMuon2pT<0){genMuon2pT=iParticle->pt();}
-// 	}	
-// }
+for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
+	if( ! iParticle->isHardProcess() ){ continue; }
+	//if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
+	if(abs(iParticle->pdgId())==13){
+		if(genMuon1pT<0){genMuonpT=iParticle->pt();}	
+	}	
+}
 
 
-
-// // check electron trigger
-// if (passElectronTrig(iEvent)){ electronTrigger=true; }
+// check electron trigger
+if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 //muon/electron reconstruction
 
@@ -372,302 +307,56 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	//muon reco
 
 	  const pat::Muon* recoMuon1=0;
-	  const pat::Muon* recoMuon2=0;
-	  int muonCount = 0;
-	  double recoMuonpT = -1000;
 
    	for(std::vector<pat::Muon>::const_iterator iMuon = highMuons->begin(); iMuon != highMuons->end(); iMuon++){
 
    		if(!(iMuon->isHighPtMuon(*myEvent.PVertex))) continue; // || !iMuon->passed(reco::Muon::TkIsoTight)) continue; //preliminary cut
-   		
-   		if(muonCount==0){ 
-   				recoMuon1=&(*(iMuon)); muonCount += 1;
-   		}
-   		else if(muonCount==1){ 
-   				recoMuon2=&(*(iMuon)); muonCount += 1; 
-   		}
 
-   		leptonCount += 1;
+   		if(recoMuon1==0){
+   				recoMuon1=&(*(iMuon));
+   		}
    		
+   		leptonCount += 1;	
 		}
 
 	//electron reco
 
 		const pat::Electron* recoElectron1=0;
-		const pat::Electron* recoElectron2=0;
-		int electronCount = 0;
-
-		//double recoElectronpT = -1000;
-		//double newrecoElectronpT = -1000;
 
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
 
 				const vid::CutFlowResult* vidResult =  iElectron->userData<vid::CutFlowResult>("heepElectronID_HEEPV70");
 				const bool heepIDVID = vidResult->cutFlowPassed();
-				if (heepIDVID == false) continue;
+				if(heepIDVID == false){continue;}
+				if(iElectron->pt()<35){continue;}
 				
-				//recoElectronpT=iElectron->pt();
-				if(electronCount==0){ 
-						recoElectron1=&(*(iElectron)); electronCount+=1; 
-				}
-				else if(electronCount==1){ 
-					recoElectron2=&(*(iElectron)); electronCount+=1;
+				if(recoElectron1==0){ 
+						recoElectron1=&(*(iElectron)); 
 				}
 
 				leptonCount+=1;
 				
 			}
 
+		m_eventsWeight->Fill(0.5, eventCount);
 
-			//This code checks that the leading lepton has pt of >60 GeV and the subleading lepton has pt >53 GeV
-			if(muonCount==2){
-				if(recoMuon1->pt()<60){ muonCount=0; }
-				else if(recoMuon2->pt()<53){ muonCount=0; }
-			}
+		if(leptonCount == 2 && electronTrigger){
 
-			if(electronCount==2){
-				if(recoElectron1->pt()<60){ electronCount=0; }
-				else if(recoElectron2->pt()<53){ electronCount=0; }
-			}
+				if(recoMuon1!=0 && recoElectron1!=0 && bJet1!=0 && Jet1!=0){
+					double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoElectron1->eta(), recoMuon1->phi(), recoElectron1->phi()));
+			   	double muonJet1Sep=sqrt(dR2(bJet1->eta(), recoMuon1->eta(), bJet1->phi(), recoMuon1->phi()));
+			   	double muonJet2Sep=sqrt(dR2(Jet1->eta(), recoMuon1->eta(), Jet1->phi(), recoMuon1->phi()));
+			   	double electronJet1Sep=sqrt(dR2(bJet1->eta(), recoElectron1->eta(), bJet1->phi(), recoElectron1->phi()));
+					double electronJet2Sep=sqrt(dR2(Jet1->eta(), recoElectron1->eta(), Jet1->phi(), recoElectron1->phi()));
+					double jetSeparation=sqrt(dR2(bJet1->eta(), Jet1->eta(), bJet1->phi(), Jet1->phi()));		
 
-			if(muonCount==1 && electronCount==1){
-				if(recoMuon1->pt()>recoElectron1->pt()){
-					if(recoMuon1->pt()<60){ muonCount=0; }
-					else if(recoElectron1->pt()<53){ electronCount=0; }
+	
+				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){	
+					csvTable(genMuonpT,binNumber(recoMuon1),center[binNumber(recoMuon1)],recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount)	
 				}
-				else{
-					if(recoElectron1->pt()<60){ electronCount=0; }
-					else if(recoMuon1->pt()<53){ muonCount=0; }
-				}
-			}
-
-
-
-
-
-			double invMassSS_mu_mu = -1000;
-			double invMassOS_mu_mu = -1000;
-			double invMassSS_mu_e = -1000;
-			double invMassOS_mu_e = -1000;
-			double invMassSS_e_e = -1000;
-			double invMassOS_e_e = -1000;
-
-			double invMass_mu_mu = -1000;
-			double invMass_mu_e = -1000;
-			double invMass_e_e = -1000;
-
-			double leadpT = -1000;
-			double subleadpT = -1000;
-			bool sameSign = false;
-
-			m_eventsWeight->Fill(0.5, eventCount);
-
-			// std::cout <<"jet count: " <<jetCount << std::endl;
-			// std::cout <<"muon count: " <<muonCount << std::endl;
-			// std::cout <<"electron count: " <<electronCount << std::endl;
-			// std::cout <<"lepton count: " <<leptonCount << std::endl;
-			// std::cout <<"--------------" << std::endl;
-
-
-			if(leptonCount == 2 ){
-
-			//muon-electron
-			if(muonCount==1 && electronCount==1){
-
-			 // 	if(twoBTag){
-				// //std::cout <<"checking separation - 1e1u 2bjet" << std::endl;
-				// double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoElectron1->eta(), recoMuon1->phi(), recoElectron1->phi()));
-			 //   double muonJet1Sep=sqrt(dR2(bJet1->eta(), recoMuon1->eta(), bJet1->phi(), recoMuon1->phi()));
-			 //   double muonJet2Sep=sqrt(dR2(bJet2->eta(), recoMuon1->eta(), bJet2->phi(), recoMuon1->phi()));
-			 //   double electronJet1Sep=sqrt(dR2(bJet1->eta(), recoElectron1->eta(), bJet1->phi(), recoElectron1->phi()));
-				// double electronJet2Sep=sqrt(dR2(bJet2->eta(), recoElectron1->eta(), bJet2->phi(), recoElectron1->phi()));
-				// double jetSeparation=sqrt(dR2(bJet2->eta(), bJet1->eta(), bJet2->phi(), bJet1->phi()));
-				// invMass_mu_e = (recoMuon1->p4() + recoElectron1->p4() + bJet1->p4() + bJet2->p4()).mass();
-				// if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation2B=true; } // jet/lepton separation cut
-				// } 
-
-				if(twoJets){
-				//std::cout <<"checking separation - 1e1u 2jet" << std::endl;
-				double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoElectron1->eta(), recoMuon1->phi(), recoElectron1->phi()));
-			   double muonJet1Sep=sqrt(dR2(Jet1->eta(), recoMuon1->eta(), Jet1->phi(), recoMuon1->phi()));
-			   double muonJet2Sep=sqrt(dR2(Jet2->eta(), recoMuon1->eta(), Jet2->phi(), recoMuon1->phi()));
-			   double electronJet1Sep=sqrt(dR2(Jet1->eta(), recoElectron1->eta(), Jet1->phi(), recoElectron1->phi()));
-				double electronJet2Sep=sqrt(dR2(Jet2->eta(), recoElectron1->eta(), Jet2->phi(), recoElectron1->phi()));
-				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
-				invMass_mu_e = (recoMuon1->p4() + recoElectron1->p4() + Jet1->p4() + Jet2->p4()).mass();
-				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true; } // jet/lepton separation cut
-				} 
-
-				// if(oneBTag){
-				// //std::cout <<"checking separation - 1e1u 1bjet" << std::endl;
-				// double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoElectron1->eta(), recoMuon1->phi(), recoElectron1->phi()));
-			 //   double muonJet1Sep=sqrt(dR2(bJet1->eta(), recoMuon1->eta(), bJet1->phi(), recoMuon1->phi()));
-			 //   double electronJet1Sep=sqrt(dR2(Jet1->eta(), recoElectron1->eta(), Jet1->phi(), recoElectron1->phi()));
-			 //   invMass_mu_e = (recoMuon1->p4() + recoElectron1->p4() + bJet1->p4()).mass();
-				// if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && electronJet1Sep > 0.4){angularSeparation1B=true; } // jet/lepton separation cut
-				// } 
-
-				if((recoMuon1->p4() + recoElectron1->p4()).mass()>200){dileptonMass=true;}
-
-				if((recoMuon1->pdgId()*recoElectron1->pdgId()) > 0){
-					invMassSS_mu_e = invMass_mu_e;
-				}
-				else if(recoMuon1->pdgId()*recoElectron1->pdgId() < 0){
-					invMassOS_mu_e = invMass_mu_e;
-				}
-
-				if(recoMuon1->pt() > recoElectron1->pt()){
-					leadpT = recoMuon1->pt();
-					subleadpT = recoElectron1->pt();
-				}
-				else{
-					subleadpT = recoMuon1->pt();
-					leadpT = recoElectron1->pt();
-				}
-
-				//if(recoMuon1->pdgId() * recoElectron1->pdgId() > 0){sameSign = true;}
-			}
-
-			//muon-muon
-			if(muonCount==2){ 
-
-				//
-				//eventCountmiss = (misIDrate(recoMuon1)+misIDrate(recoMuon2)-misIDrate(recoMuon1)*misIDrate(recoMuon2))*eventCount;
-
-				// if(twoBTag){
-				// //std::cout <<"checking separation - 2u 2bjet" << std::endl;
-				// double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoMuon2->eta(), recoMuon1->phi(), recoMuon2->phi()));
-			 //   double muon1Jet1Sep=sqrt(dR2(bJet1->eta(), recoMuon1->eta(), bJet1->phi(), recoMuon1->phi()));
-			 //   double muon1Jet2Sep=sqrt(dR2(bJet2->eta(), recoMuon1->eta(), bJet2->phi(), recoMuon1->phi()));
-			 //   double muon2Jet1Sep=sqrt(dR2(bJet1->eta(), recoMuon2->eta(), bJet1->phi(), recoMuon2->phi()));
-				// double muon2Jet2Sep=sqrt(dR2(bJet2->eta(), recoMuon2->eta(), bJet2->phi(), recoMuon2->phi()));
-				// double jetSeparation=sqrt(dR2(bJet2->eta(), bJet1->eta(), bJet2->phi(), bJet1->phi()));
-				// invMass_mu_mu = (recoMuon1->p4() + recoMuon2->p4() + bJet1->p4() + bJet2->p4()).mass();
-				// if(dileptonSeparation>0.4 && muon1Jet1Sep>0.4 && muon1Jet2Sep>0.4 && muon2Jet1Sep > 0.4 && muon2Jet2Sep>0.4 && jetSeparation>0.4){angularSeparation2B=true; } // jet/lepton separation cut
-				// } 
-
-				if(twoJets){
-				//std::cout <<"checking separation - 2u 2jet" << std::endl;
-				double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoMuon2->eta(), recoMuon1->phi(), recoMuon2->phi()));
-			   double muon1Jet1Sep=sqrt(dR2(Jet1->eta(), recoMuon1->eta(), Jet1->phi(), recoMuon1->phi()));
-			   double muon1Jet2Sep=sqrt(dR2(Jet2->eta(), recoMuon1->eta(), Jet2->phi(), recoMuon1->phi()));
-			   double muon2Jet1Sep=sqrt(dR2(Jet1->eta(), recoMuon2->eta(), Jet1->phi(), recoMuon2->phi()));
-				double muon2Jet2Sep=sqrt(dR2(Jet2->eta(), recoMuon2->eta(), Jet2->phi(), recoMuon2->phi()));
-				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
-				invMass_mu_mu = (recoMuon1->p4() + recoMuon2->p4() + Jet1->p4() + Jet2->p4()).mass();
-				if(dileptonSeparation>0.4 && muon1Jet1Sep>0.4 && muon1Jet2Sep>0.4 && muon2Jet1Sep > 0.4 && muon2Jet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true; } // jet/lepton separation cut
-				} 
-
-				// if(oneBTag){
-				// //std::cout <<"checking separation - 2u 1bjet" << std::endl;
-				// double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoMuon2->eta(), recoMuon1->phi(), recoMuon2->phi()));
-			 //   double muon1Jet1Sep=sqrt(dR2(bJet1->eta(), recoMuon1->eta(), bJet1->phi(), recoMuon1->phi()));
-			 //   double muon2Jet1Sep=sqrt(dR2(bJet1->eta(), recoMuon2->eta(), bJet1->phi(), recoMuon2->phi()));
-			 //   invMass_mu_mu = (recoMuon1->p4() + recoMuon2->p4() + bJet1->p4()).mass();
-				// if(dileptonSeparation>0.4 && muon1Jet1Sep>0.4 && muon2Jet1Sep > 0.4){angularSeparation1B=true; } // jet/lepton separation cut
-				
-				// } 
-
-				if((recoMuon1->p4() + recoMuon2->p4()).mass()>200){dileptonMass=true;}
-
-				if((recoMuon1->pdgId()*recoMuon2->pdgId()) > 0){
-					invMassSS_mu_mu = invMass_mu_mu;
-				}
-				else if(recoMuon1->pdgId()*recoMuon2->pdgId() < 0){
-					invMassOS_mu_mu = invMass_mu_mu;
-				}
-
-				if(recoMuon1->pt() > recoMuon2->pt()){
-					leadpT = recoMuon1->pt();
-					subleadpT = recoMuon2->pt();
-				}
-				else{
-					subleadpT = recoMuon1->pt();
-					leadpT = recoMuon2->pt();
-				}
-
-				if(recoMuon1->pdgId() * recoMuon2->pdgId() > 0){sameSign = true;}
-
-			}
-
-			//electron-electron
-			if(electronCount==2){
-
-			 // 	if(twoBTag){
-				// //std::cout <<"checking separation - 2e 2bjet" << std::endl;
-				// double dileptonSeparation=sqrt(dR2(recoElectron1->eta(), recoElectron2->eta(), recoElectron1->phi(), recoElectron2->phi()));
-			 //   double electron1Jet1Sep=sqrt(dR2(bJet1->eta(), recoElectron1->eta(), bJet1->phi(), recoElectron1->phi()));
-			 //   double electron1Jet2Sep=sqrt(dR2(bJet2->eta(), recoElectron1->eta(), bJet2->phi(), recoElectron1->phi()));
-			 //   double electron2Jet1Sep=sqrt(dR2(bJet1->eta(), recoElectron2->eta(), bJet1->phi(), recoElectron2->phi()));
-				// double electron2Jet2Sep=sqrt(dR2(bJet2->eta(), recoElectron2->eta(), bJet2->phi(), recoElectron2->phi()));
-				// double jetSeparation=sqrt(dR2(bJet2->eta(), bJet1->eta(), bJet2->phi(), bJet1->phi()));
-				// invMass_e_e = (recoElectron1->p4() + recoElectron2->p4() + bJet1->p4() + bJet2->p4()).mass();
-				// if(dileptonSeparation>0.4 && electron1Jet1Sep>0.4 && electron1Jet2Sep>0.4 && electron2Jet1Sep > 0.4 && electron2Jet2Sep>0.4 && jetSeparation>0.4){angularSeparation2B=true; } // jet/lepton separation cut
-				// } 
-
-				if(twoJets){
-				double dileptonSeparation=sqrt(dR2(recoElectron1->eta(), recoElectron2->eta(), recoElectron1->phi(), recoElectron2->phi()));
-			   double electron1Jet1Sep=sqrt(dR2(Jet1->eta(), recoElectron1->eta(), Jet1->phi(), recoElectron1->phi()));
-			   double electron1Jet2Sep=sqrt(dR2(Jet2->eta(), recoElectron1->eta(), Jet2->phi(), recoElectron1->phi()));
-			   double electron2Jet1Sep=sqrt(dR2(Jet1->eta(), recoElectron2->eta(), Jet1->phi(), recoElectron2->phi()));
-				double electron2Jet2Sep=sqrt(dR2(Jet2->eta(), recoElectron2->eta(), Jet2->phi(), recoElectron2->phi()));
-				double jetSeparation=sqrt(dR2(Jet2->eta(), Jet1->eta(), Jet2->phi(), Jet1->phi()));
-				invMass_e_e = (recoElectron1->p4() + recoElectron2->p4() + Jet1->p4() + Jet2->p4()).mass();
-				if(dileptonSeparation>0.4 && electron1Jet1Sep>0.4 && electron1Jet2Sep>0.4 && electron2Jet1Sep > 0.4 && electron2Jet2Sep>0.4 && jetSeparation>0.4){angularSeparation=true; } // jet/lepton separation cut
-				} 
-
-				// if(oneBTag){
-				// //std::cout <<"checking separation - 2e 1bjet" << std::endl;
-				// double dileptonSeparation=sqrt(dR2(recoElectron1->eta(), recoElectron2->eta(), recoElectron1->phi(), recoElectron2->phi()));
-			 //   double electron1Jet1Sep=sqrt(dR2(bJet1->eta(), recoElectron1->eta(), bJet1->phi(), recoElectron1->phi()));
-			 //   double electron2Jet1Sep=sqrt(dR2(bJet1->eta(), recoElectron2->eta(), bJet1->phi(), recoElectron2->phi()));
-			 //   invMass_e_e = (recoElectron1->p4() + recoElectron2->p4() + bJet1->p4()).mass();
-				// if(dileptonSeparation>0.4 && electron1Jet1Sep>0.4 && electron2Jet1Sep > 0.4){angularSeparation1B=true;} // jet/lepton separation cut
-				// } 
-
-				if((recoElectron1->p4() + recoElectron2->p4()).mass()>200){dileptonMass=true;}
-
-				if((recoElectron1->pdgId()*recoElectron2->pdgId()) > 0){
-					invMassSS_e_e = invMass_e_e;
-				}
-				else if(recoElectron1->pdgId()*recoElectron2->pdgId() < 0){
-					invMassOS_e_e = invMass_e_e;
-				}
-
-				if(recoElectron1->pt() > recoElectron2->pt()){
-					leadpT = recoElectron1->pt();
-					subleadpT = recoElectron2->pt();
-				}
-				else{
-					subleadpT = recoElectron1->pt();
-					leadpT = recoElectron2->pt();
-				}
-
-				//if(recoElectron1->pdgId() * recoElectron2->pdgId() > 0){sameSign = true;}
-
 			}
 
 		}
-
-
-	if((dileptonMass==true || dileptonMass==false) && (angularSeparation==true || angularSeparation==false)){
-
-	if(twoJets == true && sameSign == true){ //&& angularSeparation == true){
-		m_histoMaker.fill(leadpT,subleadpT,invMass_mu_mu,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,0,eventCount);
-		//m_histoMaker.fill(leadpT,subleadpT,invMass_mu_mu,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,1,eventCountmiss);
-	}
-
-	// if(oneBTag == true && angularSeparation1B == true){
-	// 	m_histoMaker.fill(recoMuonpT,invMassAS_mu_mu,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,1,eventCount);
-	// }
-	// if(twoBTag == true && angularSeparation2B == true){
-	// 	m_histoMaker.fill(recoMuonpT,invMassAS_mu_mu,invMassSS_mu_mu,invMassOS_mu_mu,invMassSS_e_e,invMassOS_e_e,invMassSS_mu_e,invMassOS_mu_e,2,eventCount);
-	// }
-
-	}
-	
-}
-
 
 
 
@@ -740,58 +429,20 @@ bool cut_flow2::passElectronTrig(const edm::Event& iEvent) {
   return passTriggers;
 }
 
-double cut_flow2::misIDrate(const pat::Muon* muon){
+int cut_flow2::binNumber(const pat::Muon* muon){
 
 	double muonPT = muon->pt();
 
 	for(int i=0; i<16; i++){
 		if(muonPT >= binEdges[i] && muonPT < binEdges[i+1]){
-			return rates[i];
+			return i+1;
 		}
 	}
-	if(muonPT > binEdges[16]){return 0.1;}
-	return 0.0;
+	if(muonPT > binEdges[16]){return 18;}
+	return 0;
 }
 
-void cut_flow2::csvTable(double genMuonPt, double genElectronPt, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* bjet2, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
-
-std::ofstream myfile;
-myfile.open("neuralNetDataWW1.csv",std::ios_base::app);
-myfile << muon->pt() << ", "
-		 << muon->phi() << ", "
-       << muon->eta() << ", "
-       << electron->pt() << ", "
-       << electron->phi() << ", "
-       << electron->eta() << ", "
-       << bjet1->pt() << ", "
-       << bjet1->phi() << ", "
-       << bjet1->eta() << ", "
-       << bjet2->pt() << ", "
-       << bjet2->phi() << ", "
-       << bjet2->eta() << ", "
-       << jet1->pt() << ", "
-       << jet1->phi() << ", "
-       << jet1->eta() << ", "
-       << jet2->pt() << ", "
-       << jet2->phi() << ", "
-       << jet2->eta() << ", "
-       << combinedJets.pt() <<", "
-       << combinedJets.phi() <<", "
-       << combinedJets.eta() <<", "
-       << combinedJets.mass() <<", "
-       << Met.pt() << ", "
-       << Met.phi() <<", "
-       << genElectronPt << ", "
-       << genMuonPt << ", "
-       << weight << ", "
-       << genMuonPt/genElectronPt << "\n ";
-
-myfile.close();
-
-}
-
-//no gen info here
-void cut_flow2::csvTable(const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* bjet2, const pat::Jet* jet1, const pat::Jet* jet2, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
+void cut_flow2::csvTable(double genMuonPt, int binNumber, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* jet1, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
 std::ofstream myfile;
 myfile.open("neuralNetDataTT1.csv",std::ios_base::app);
@@ -804,22 +455,19 @@ myfile << muon->pt() << ", "
        << bjet1->pt() << ", "
        << bjet1->phi() << ", "
        << bjet1->eta() << ", "
-       << bjet2->pt() << ", "
-       << bjet2->phi() << ", "
-       << bjet2->eta() << ", "
        << jet1->pt() << ", "
        << jet1->phi() << ", "
        << jet1->eta() << ", "
-       << jet2->pt() << ", "
-       << jet2->phi() << ", "
-       << jet2->eta() << ", "
        << combinedJets.pt() <<", "
        << combinedJets.phi() <<", "
        << combinedJets.eta() <<", "
        << combinedJets.mass() <<", "
        << Met.pt() << ", "
        << Met.phi() <<", "
-       << weight << "\n ";
+       << weight << ", "
+       << binNumber << ", "
+       << genMuonPt << "\n ";
+
 
 myfile.close();
 
@@ -832,51 +480,17 @@ cut_flow2::beginJob() {
 
 	std::ofstream myfile;
 
-	// myfile.open("neuralNetDataZZ1.csv",std::ios_base::app);
-	// myfile<<"muon pt, muon phi, muon eta, electron pt, electron phi, electron eta, bjet 1 pt, bjet 1 phi, bjet 1 eta, bjet 2 pt, bjet 2 phi, bjet 2 eta, jet 1 pt, jet 1 phi, jet 1 eta, jet 2 pt, jet 2 phi, jet 2 eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, gen electron pt, gen muon pt, gen muon/electron pt ratio, event weight\n";
-	// myfile.close();
+	myfile.open("neuralNetDataTT1.csv",std::ios_base::app);
+	myfile<<"muon pt, muon phi, muon eta, electron pt, electron phi, electron eta, bjet pt, bjet phi, bjet eta, jet pt, jet phi, jet eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, event weight, bin number, gen muon pt\n";
+	myfile.close();
 
 	edm::Service<TFileService> fs;
 
 	TFileDirectory countFolder = fs->mkdir("event_count");
 	
-	m_histoMaker.book(fs->mkdir("cuts1"),0);  //2jets
+	//m_histoMaker.book(fs->mkdir("Analysis"));  //2jets
 
-	m_histoMaker.book(fs->mkdir("cuts2"),1);	//1btag
-
-	m_histoMaker.book(fs->mkdir("cuts3"),2);	//2btag
-
-
-	m_eventsWeight = {countFolder.make<TH1D>("eventsWeight","number of events weighted", 1, 0.0, 1)};
-
-	// m_cosJets = {variableCorrelations.make<TH2D>("cosJets","muon electron pt ratio vs. cos(delta Phi) for two jets",50,-1,1,50,0,2.5)};
-	// m_cosJet1electron = {variableCorrelations.make<TH2D>("cosJet1Electron","muon electron pt ratio vs. cos(delta Phi) for jet1 and electron",50,-1,1,50,0,2.5)};
-	// m_cosJet2electron = {variableCorrelations.make<TH2D>("cosJet2Electron","muon electron pt ratio vs. cos(delta Phi) for jet2 and electron",50,-1,1,50,0,2.5)};
-	// m_cosJet1muon = {variableCorrelations.make<TH2D>("cosJet1Muon","muon electron pt ratio vs. cos(delta Phi) for jet1 and muon",50,-1,1,50,0,2.5)};
-	// m_cosJet2muon = {variableCorrelations.make<TH2D>("cosJet2Muon","muon electron pt ratio vs. cos(delta Phi) for jet2 and muon",50,-1,1,50,0,2.5)};
-	// m_cosLeptons = {variableCorrelations.make<TH2D>("cosleptons","muon electron pt ratio vs. cos(delta Phi) for electron and muon",50,-1,1,50,0,2.5)};
-	// m_cosMetJet1 = {variableCorrelations.make<TH2D>("cosMetJet1","muon electron pt ratio vs. cos(delta Phi) for MET and jet1",50,-1,1,50,0,2.5)};
-	// m_cosMetJet2 = {variableCorrelations.make<TH2D>("cosMetJet2","muon electron pt ratio vs. cos(delta Phi) for MET and jet2",50,-1,1,50,0,2.5)};
-	// m_cosMetElectron = {variableCorrelations.make<TH2D>("cosMetElectron","muon electron pt ratio vs. cos(delta Phi) for MET and Electron",50,-1,1,50,0,2.5)};
-	// m_cosMetMuon = {variableCorrelations.make<TH2D>("cosMetMuon","muon electron pt ratio vs. cos(delta Phi) for MET and Muon",50,-1,1,50,0,2.5)};
-
-	// m_deltaPhiLeptons = {variableCorrelations.make<TH1D>("deltaPhileptons","muon electron pt ratio vs. delta Phi for electron and muon",50,-3.3,3.3)};
-	// m_deltaPhiJet1Muon = {variableCorrelations.make<TH1D>("deltaPhiJet1Muon","muon electron pt ratio vs. delta Phi for jet1 and muon",50,-3.3,3.3)};
-	// m_deltaPhiJets = {variableCorrelations.make<TH1D>("deltaPhiJets","muon electron pt ratio vs. delta Phi for jet1 and jet2",50,-3.3,3.3)};
-	// m_deltaPhiJet1Electron = {variableCorrelations.make<TH1D>("deltaPhiJet1Electron","muon electron pt ratio vs. delta Phi for jet1 and electron",50,-3.3,3.3)};
-	// m_deltaPhiJet2Muon = {variableCorrelations.make<TH1D>("deltaPhiJet2Muon","muon electron pt ratio vs. delta Phi for jet2 and muon",50,-3.3,3.3)};
-	// m_deltaPhiJet2Electron = {variableCorrelations.make<TH1D>("deltaPhiJet2Electron","muon electron pt ratio vs. delta Phi for jet2 and electron",50,-3.3,3.3)};
-	// m_deltaPhiMetElectron = {variableCorrelations.make<TH1D>("deltaPhiMetElectron","muon electron pt ratio vs. delta Phi for Met and electron",50,-3.3,3.3)};
-	// m_deltaPhiMetMuon = {variableCorrelations.make<TH1D>("deltaPhiMetMuon","muon electron pt ratio vs. delta Phi for Met and muon",50,-3.3,3.3)};
-	// m_deltaPhiMetJet1 = {variableCorrelations.make<TH1D>("deltaPhiMetJet1","muon electron pt ratio vs. delta Phi for Met and jet1",50,-3.3,3.3)};
-	// m_deltaPhiMetJet2 = {variableCorrelations.make<TH1D>("deltaPhiMetJet2","muon electron pt ratio vs. delta Phi for Met and jet2",50,-3.3,3.3)};
-
-	// m_dRjets = {variableCorrelations.make<TH2D>("dRjets","muon electron pt ratio vs. deltaR for jets",50,0,7.5,50,0,2.5)};
-	// m_dRLeptons = {variableCorrelations.make<TH2D>("dRLeptons","muon electron pt ratio vs. deltaR for muon and electron",50,0,7.5,50,0,2.5)};
-	// m_dRJet1muon = {variableCorrelations.make<TH2D>("dRJet1muon","muon electron pt ratio vs. deltaR for jet1 and muon",50,0,7.5,50,0,2.5)};
-	// m_dRJet2muon = {variableCorrelations.make<TH2D>("dRJet2muon","muon electron pt ratio vs. deltaR for jet2 and muon",50,0,7.5,50,0,2.5)};
-	// m_dRJet1electron = {variableCorrelations.make<TH2D>("dRJet1electron","muon electron pt ratio vs. deltaR for jet1 and electron",50,0,7.5,50,0,2.5)};
-	// m_dRJet2electron = {variableCorrelations.make<TH2D>("dRJet2electron","muon electron pt ratio vs. deltaR for jet2 and electron",50,0,7.5,50,0,2.5)};
+	//m_eventsWeight = {countFolder.make<TH1D>("eventsWeight","number of events weighted", 1, 0.0, 1)};
 
 	
 }
