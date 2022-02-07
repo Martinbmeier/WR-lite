@@ -190,7 +190,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
 	bool electronTrigger=false;  		  
-	bool angularSeparation=false; 
+	//bool angularSeparation=false; 
 
 	eventBits2 iBit; 
    eventInfo myEvent; 
@@ -212,7 +212,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
-	double eventWeight = eventInfo->weight();
+	// double eventWeight = eventInfo->weight();
 	
 	edm::Handle<std::vector<reco::Vertex>> vertices;
 	iEvent.getByToken(m_offlineVerticesToken, vertices);
@@ -352,7 +352,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){	
-					csvTable(genMuonpT,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount)	
+					csvTable(genMuonpT,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);	
 				}
 			}
 
