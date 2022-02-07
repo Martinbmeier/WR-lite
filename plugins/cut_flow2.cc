@@ -283,7 +283,7 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 
-gen lepton info
+// gen lepton info
 
 double genMuonpT=-1000;
 	
@@ -291,7 +291,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	if( ! iParticle->isHardProcess() ){ continue; }
 	//if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
 	if(abs(iParticle->pdgId())==13){
-		if(genMuon1pT<0){genMuonpT=iParticle->pt();}	
+		if(genMuonpT<0){genMuonpT=iParticle->pt();}	
 	}	
 }
 
@@ -352,11 +352,12 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 	
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){	
-					csvTable(genMuonpT,binNumber(recoMuon1),center[binNumber(recoMuon1)],recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount)	
+					csvTable(genMuonpT,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount)	
 				}
 			}
 
 		}
+	}
 
 
 
@@ -490,7 +491,7 @@ cut_flow2::beginJob() {
 	
 	//m_histoMaker.book(fs->mkdir("Analysis"));  //2jets
 
-	//m_eventsWeight = {countFolder.make<TH1D>("eventsWeight","number of events weighted", 1, 0.0, 1)};
+	m_eventsWeight = {countFolder.make<TH1D>("eventsWeight","number of events weighted", 1, 0.0, 1)};
 
 	
 }
