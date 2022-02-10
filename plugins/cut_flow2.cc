@@ -344,7 +344,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 		genMatchMuon=false;
 
 		if(genMuon != 0 && recoMuon1 != 0 ){
-			if(sqrt(dR2(genMuon->eta(), recoMuon1->eta(), genMuon-phi(), recoMuon1->phi()))<0.3){ genMatchMuon=true; }
+			if(sqrt(dR2(genMuon->eta(), recoMuon1->eta(), genMuon->phi(), recoMuon1->phi()))<0.3){ genMatchMuon=true; }
 		}
 
 		if(leptonCount == 2 && electronTrigger){
