@@ -292,7 +292,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	if( ! iParticle->isHardProcess() ){ continue; }
 	if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
 	if(abs(iParticle->pdgId())==13){
-		if(genMuonpT<0){genMuonpT=iParticle->pt(); genMuon = (*(iParticle));}	
+		if(genMuonpT<0){genMuonpT=iParticle->pt(); genMuon = &(*(iParticle));}	
 	}	
 }
 
