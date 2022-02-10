@@ -453,7 +453,7 @@ int cut_flow2::binNumber(const pat::Muon* muon){
 void cut_flow2::csvTable(double genMuonPt, int binNumber, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* jet1, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT4.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT1.csv",std::ios_base::app);
 myfile << muon->pt() << ", "
 		 << muon->phi() << ", "
        << muon->eta() << ", "
@@ -488,9 +488,9 @@ cut_flow2::beginJob() {
 
 	std::ofstream myfile;
 
-	// myfile.open("neuralNetDataTT1.csv",std::ios_base::app);
-	// myfile<<"muon pt, muon phi, muon eta, electron pt, electron phi, electron eta, bjet pt, bjet phi, bjet eta, jet pt, jet phi, jet eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, event weight, bin number, gen muon pt\n";
-	// myfile.close();
+	myfile.open("neuralNetDataTT1.csv",std::ios_base::app);
+	myfile<<"muon pt, muon phi, muon eta, electron pt, electron phi, electron eta, bjet pt, bjet phi, bjet eta, jet pt, jet phi, jet eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, event weight, bin number, gen muon pt\n";
+	myfile.close();
 
 	edm::Service<TFileService> fs;
 
