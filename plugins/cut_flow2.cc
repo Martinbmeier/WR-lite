@@ -286,12 +286,13 @@ cut_flow2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 // gen lepton info
 
 double genMuonpT=-1000;
+const reco::GenParticle* genMuon = 0;
 	
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 	if( ! iParticle->isHardProcess() ){ continue; }
-	//if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
+	if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
 	if(abs(iParticle->pdgId())==13){
-		if(genMuonpT<0){genMuonpT=iParticle->pt();}	
+		if(genMuonpT<0){genMuonpT=iParticle->pt(); genMuon = iParticle;}	
 	}	
 }
 
@@ -340,6 +341,12 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		m_eventsWeight->Fill(0.5, eventCount);
 
+		genMatchMuon=false;
+
+		if(genMuon != 0 && recoMuon1 != 0 ){
+			if(sqrt(dR2(genMuon->eta(), recoMuon1->eta(), genMuon-phi(), recoMuon1->phi()))<0.3){ genMatchMuon=true; }
+		}
+
 		if(leptonCount == 2 && electronTrigger){
 
 				if(recoMuon1!=0 && recoElectron1!=0 && bJet1!=0 && Jet1!=0){
@@ -351,7 +358,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 					double jetSeparation=sqrt(dR2(bJet1->eta(), Jet1->eta(), bJet1->phi(), Jet1->phi()));		
 
 	
-				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){	
+				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4 && genMatchMuon==true){	
 					csvTable(genMuonpT,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);	
 				}
 			}
