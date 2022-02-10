@@ -292,7 +292,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	if( ! iParticle->isHardProcess() ){ continue; }
 	if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
 	if(abs(iParticle->pdgId())==13){
-		if(genMuonpT<0){genMuonpT=iParticle->pt(); genMuon = iParticle;}	
+		if(genMuonpT<0){genMuonpT=iParticle->pt(); genMuon = (*(iParticle));}	
 	}	
 }
 
@@ -341,7 +341,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		m_eventsWeight->Fill(0.5, eventCount);
 
-		genMatchMuon=false;
+		bool genMatchMuon=false;
 
 		if(genMuon != 0 && recoMuon1 != 0 ){
 			if(sqrt(dR2(genMuon->eta(), recoMuon1->eta(), genMuon->phi(), recoMuon1->phi()))<0.3){ genMatchMuon=true; }
