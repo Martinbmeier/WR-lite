@@ -374,19 +374,21 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			// 	}
 			// }
 
-			if(genMuon!=0 && genElectron!=0 && bJet1!=0 && Jet1!=0 && muNu!=0 && eNu!=0){
-					double dileptonSeparation=sqrt(dR2(genMuon->eta(), genElectron->eta(), genMuon->phi(), genElectron->phi()));
-			   	double muonJet1Sep=sqrt(dR2(bJet1->eta(), genMuon->eta(), bJet1->phi(), genMuon->phi()));
-			   	double muonJet2Sep=sqrt(dR2(Jet1->eta(), genMuon->eta(), Jet1->phi(), genMuon->phi()));
-			   	double electronJet1Sep=sqrt(dR2(bJet1->eta(), genElectron->eta(), bJet1->phi(), genElectron->phi()));
-					double electronJet2Sep=sqrt(dR2(Jet1->eta(), genElectron->eta(), Jet1->phi(), genElectron->phi()));
-					double jetSeparation=sqrt(dR2(bJet1->eta(), Jet1->eta(), bJet1->phi(), Jet1->phi()));		
+
+			// if(genMuon!=0 && genElectron!=0 && bJet1!=0 && Jet1!=0 && muNu!=0 && eNu!=0){
+			// 		double dileptonSeparation=sqrt(dR2(genMuon->eta(), genElectron->eta(), genMuon->phi(), genElectron->phi()));
+			//    	double muonJet1Sep=sqrt(dR2(bJet1->eta(), genMuon->eta(), bJet1->phi(), genMuon->phi()));
+			//    	double muonJet2Sep=sqrt(dR2(Jet1->eta(), genMuon->eta(), Jet1->phi(), genMuon->phi()));
+			//    	double electronJet1Sep=sqrt(dR2(bJet1->eta(), genElectron->eta(), bJet1->phi(), genElectron->phi()));
+			// 		double electronJet2Sep=sqrt(dR2(Jet1->eta(), genElectron->eta(), Jet1->phi(), genElectron->phi()));
+			// 		double jetSeparation=sqrt(dR2(bJet1->eta(), Jet1->eta(), bJet1->phi(), Jet1->phi()));		
 
 	
-				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){	
-					csvTable(genMuon,genElectron,muNu,eNu,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);	
-				}
-			}
+			// 	if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){	
+			// 		csvTable(genMuon,genElectron,muNu,eNu,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);	
+			// 	}
+			// }
+
 
 		}
 	}
