@@ -374,7 +374,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 			// 	}
 			// }
 
-			if(genMuon!=0 && genElectron!=0 && bJet1!=0 && Jet1!=0){
+			if(genMuon!=0 && genElectron!=0 && bJet1!=0 && Jet1!=0 && muNu!=0 && eNu!=0){
 					double dileptonSeparation=sqrt(dR2(genMuon->eta(), genElectron->eta(), genMuon->phi(), genElectron->phi()));
 			   	double muonJet1Sep=sqrt(dR2(bJet1->eta(), genMuon->eta(), bJet1->phi(), genMuon->phi()));
 			   	double muonJet2Sep=sqrt(dR2(Jet1->eta(), genMuon->eta(), Jet1->phi(), genMuon->phi()));
