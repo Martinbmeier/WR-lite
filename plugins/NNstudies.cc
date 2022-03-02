@@ -290,6 +290,8 @@ const reco::GenParticle* genElectron = 0;
 const reco::GenParticle* muNu = 0;
 const reco::GenParticle* eNu = 0;
 	
+int leptonCount = 0;
+
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 	if( ! iParticle->isHardProcess() ){ continue; }
 	if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
@@ -313,9 +315,6 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 //muon/electron reconstruction
-
-	int leptonCount = 0;
-
 
 	//muon reco
 
