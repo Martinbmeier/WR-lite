@@ -479,7 +479,7 @@ int NNstudies::binNumber(const pat::Muon* muon){
 void NNstudies::csvTable(const reco::GenParticle* genMuon, const reco::GenParticle* genElectron, const reco::GenParticle* muNu, const reco::GenParticle* eNu, int binNumber, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* jet1, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT8.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
 myfile << muon->pt() << ", "
 		   << muon->phi() << ", "
        << muon->eta() << ", "
@@ -525,7 +525,7 @@ NNstudies::beginJob() {
 
 	std::ofstream myfile;
 
-	myfile.open("neuralNetDataTT.csv",std::ios_base::app);
+	myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
 	myfile<<"muon pt, muon phi, muon eta, electron pt, electron phi, electron eta, bjet pt, bjet phi, bjet eta, jet pt, jet phi, jet eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, event weight, bin number, gen muon pt, gen muon phi, gen muon eta, gen electron pt, gen electron phi, gen electron eta, muNu pt, muNu phi, muNu eta, eNu pt, eNu phi, eNu eta \n";
 	myfile.close();
 
