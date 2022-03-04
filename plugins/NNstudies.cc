@@ -223,6 +223,46 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	iBit.hasPVertex = myEvent.PVselection(vertices);
 
 
+// gen lepton info
+
+const reco::GenParticle* genMuon = 0;
+const reco::GenParticle* genElectron = 0;
+const reco::GenParticle* muNu = 0;
+const reco::GenParticle* eNu = 0;
+
+const reco::GenParticle* bquark = 0;
+const reco::GenParticle* antibquark = 0;
+
+int leptonCount = 0;
+
+for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
+	if( ! iParticle->isHardProcess() ){ continue; }
+
+	if(tfinder(iEvent, &(*iParticle))){ // check if the gen particle comes from a top
+		if(iParticle->pdgId()==5){ bquark = &(*(iParticle)); }
+		if(iParticle->pdgId()==-5){ antibquark = &(*(iParticle)); }
+
+		if(tWfinder(iEvent, &(*iParticle))){  // check if the gen particle comes from a top->W->lepton
+			if(abs(iParticle->pdgId())==13){
+				leptonCount += 1;
+				if(genMuon==0){genMuon = &(*(iParticle));}
+			}	
+			else if(abs(iParticle->pdgId())==11){
+				leptonCount += 1;
+				if(genElectron==0){genElectron = &(*(iParticle));}
+			}
+			else if(abs(iParticle->pdgId())==12){
+				if(eNu==0){eNu = &(*(iParticle));}
+			}
+			else if(abs(iParticle->pdgId())==14){
+				if(muNu==0){muNu = &(*(iParticle));}
+			}
+
+		}
+	}
+}
+
+
 //start reco
 
 	const pat::MET Met = recoMET->front();
@@ -232,12 +272,14 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	edm::Handle<std::vector<pat::Jet>> recoJetsAK4;  
 	iEvent.getByToken(m_AK4recoCHSJetsToken, recoJetsAK4);  
 
-	const pat::Jet* bJet1 = 0;
-	// const pat::Jet* bJet2=0;
+	// const pat::Jet* bJet1 = 0;
+	// // const pat::Jet* bJet2=0;
 
-	const pat::Jet* Jet1 = 0;
-	//const pat::Jet* Jet2=0;
+	// const pat::Jet* Jet1 = 0;
+	// //const pat::Jet* Jet2=0;
 
+	const pat::Jet* bJet=0;
+	const pat::Jet* antibJet=0;
 
 	//Get jets with maximum pt
 		for(std::vector<pat::Jet>::const_iterator iJet = recoJetsAK4->begin(); iJet != recoJetsAK4->end(); iJet++) {
@@ -264,52 +306,30 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			if (CHM == 0) continue;
 			//if (CEMF > .99) continue;
 			if (CEMF > .90)  continue;
-
-			if(BJP > 0.4184){ 
-				if(bJet1==0){
-					bJet1=&(*(iJet));
+			if(BJP > 0.4184) {
+				if(bjet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3 ){
+					bJet=&(*(iJet));
 				}
-				else if(Jet1==0){
-					Jet1=&(*(iJet));
-				}
-			}
-
-			if(BJP < 0.4184){
-				if(Jet1==0){
-					Jet1=&(*(iJet));
+				else if(antibjet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
+					antibJet=&(*(iJet));
 				}
 			}
+			// if(BJP > 0.4184){ 
+			// 	if(bJet1==0){
+			// 		bJet1=&(*(iJet));
+			// 	}
+			// 	else if(Jet1==0){
+			// 		Jet1=&(*(iJet));
+			// 	}
+			// }
+
+			// if(BJP < 0.4184){
+			// 	if(Jet1==0){
+			// 		Jet1=&(*(iJet));
+			// 	}
+			// }
 		}
 
-
-
-// gen lepton info
-
-const reco::GenParticle* genMuon = 0;
-const reco::GenParticle* genElectron = 0;
-const reco::GenParticle* muNu = 0;
-const reco::GenParticle* eNu = 0;
-	
-int leptonCount = 0;
-
-for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
-	if( ! iParticle->isHardProcess() ){ continue; }
-	if( ! tWfinder(iEvent, &(*iParticle))){ continue; }  //could check if the gen particle comes from a top->W->lepton
-	if(abs(iParticle->pdgId())==13){
-		leptonCount += 1;
-		if(genMuon==0){genMuon = &(*(iParticle));}
-	}	
-	else if(abs(iParticle->pdgId())==11){
-		leptonCount += 1;
-		if(genElectron==0){genElectron = &(*(iParticle));}
-	}
-	else if(abs(iParticle->pdgId())==12){
-		if(eNu==0){eNu = &(*(iParticle));}
-	}
-	else if(abs(iParticle->pdgId())==14){
-		if(muNu==0){muNu = &(*(iParticle));}
-	}
-}
 
 // check electron trigger
 if (passElectronTrig(iEvent)){ electronTrigger=true; }
@@ -376,6 +396,8 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 
 			if(genMuon!=0 && genElectron!=0 && bJet1!=0 && Jet1!=0){
+				if(genMuon->pdgId()>0){bJet1=bJet; Jet1=antibJet; }
+				if(genMuon->pdgId()<0){bJet1=antibJet; Jet1=bJet;}
 					double dileptonSeparation=sqrt(dR2(genMuon->eta(), genElectron->eta(), genMuon->phi(), genElectron->phi()));
 			   	double muonJet1Sep=sqrt(dR2(bJet1->eta(), genMuon->eta(), bJet1->phi(), genMuon->phi()));
 			   	double muonJet2Sep=sqrt(dR2(Jet1->eta(), genMuon->eta(), Jet1->phi(), genMuon->phi()));
@@ -431,6 +453,28 @@ bool NNstudies::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
 					}
 
     			}
+
+    			iParticle = iParticle->mother();
+    		}
+
+		if(ttbar==true){return true;}
+		else{return false;}
+}
+
+bool NNstudies::tfinder(const edm::Event& iEvent, const reco::GenParticle* quark) {
+
+    		bool ttbar=false;
+
+    		const reco::Candidate* iParticle = quark->mother();
+    		iStatus = iParticle->status();
+
+    		while(iStatus!=4){  //status=4 is the initial proton
+
+    			   	if(abs(iParticle->pdgId())==6){ ttbar=true; 
+    			   		break;
+    			   	}
+    			   iParticle = iParticle->mother();
+    			   iStatus = iParticle->status();
 
     			iParticle = iParticle->mother();
     		}
