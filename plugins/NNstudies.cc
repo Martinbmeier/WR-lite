@@ -104,6 +104,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		double dR2(double eta1, double eta2, double phi1, double phi2);
 		double dPhi(double phi1, double phi2);
 		bool tWfinder(const edm::Event&, const reco::GenParticle* );
+		bool tfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event&);
 		void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
 		int binNumber(const pat::Muon*);
@@ -307,10 +308,10 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 			//if (CEMF > .99) continue;
 			if (CEMF > .90)  continue;
 			if(BJP > 0.4184) {
-				if(bjet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3 ){
+				if(bJet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3 ){
 					bJet=&(*(iJet));
 				}
-				else if(antibjet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
+				else if(antibJet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
 					antibJet=&(*(iJet));
 				}
 			}
