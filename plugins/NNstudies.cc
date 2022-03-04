@@ -472,13 +472,12 @@ bool NNstudies::tfinder(const edm::Event& iEvent, const reco::GenParticle* quark
 
     		while(iStatus!=4){  //status=4 is the initial proton
 
-    			   	if(abs(iParticle->pdgId())==6){ ttbar=true; 
+    			   	if(abs(iParticle->pdgId())==6){ 
+    			   		ttbar=true; 
     			   		break;
     			   	}
     			   iParticle = iParticle->mother();
     			   iStatus = iParticle->status();
-
-    			iParticle = iParticle->mother();
     		}
 
 		if(ttbar==true){return true;}
