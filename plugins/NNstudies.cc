@@ -373,30 +373,10 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		m_eventsWeight->Fill(0.5, eventCount);
 
-		// bool genMatchMuon=false;
-
-		// if(genMuon != 0 && recoMuon1 != 0 ){
-		// 	if(sqrt(dR2(genMuon->eta(), recoMuon1->eta(), genMuon->phi(), recoMuon1->phi()))<0.3){ genMatchMuon=true; }
-		// }
-
 		if(leptonCount == 2 && electronTrigger){
 
-			// 	if(recoMuon1!=0 && recoElectron1!=0 && bJet1!=0 && Jet1!=0){
-			// 		double dileptonSeparation=sqrt(dR2(recoMuon1->eta(), recoElectron1->eta(), recoMuon1->phi(), recoElectron1->phi()));
-			//    	double muonJet1Sep=sqrt(dR2(bJet1->eta(), recoMuon1->eta(), bJet1->phi(), recoMuon1->phi()));
-			//    	double muonJet2Sep=sqrt(dR2(Jet1->eta(), recoMuon1->eta(), Jet1->phi(), recoMuon1->phi()));
-			//    	double electronJet1Sep=sqrt(dR2(bJet1->eta(), recoElectron1->eta(), bJet1->phi(), recoElectron1->phi()));
-			// 		double electronJet2Sep=sqrt(dR2(Jet1->eta(), recoElectron1->eta(), Jet1->phi(), recoElectron1->phi()));
-			// 		double jetSeparation=sqrt(dR2(bJet1->eta(), Jet1->eta(), bJet1->phi(), Jet1->phi()));		
 
-	
-			// 	if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4){	
-			// 		csvTable(genMuon,genElectron,muNu,eNu,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);	
-			// 	}
-			// }
-
-
-			if(genMuon!=0 && genElectron!=0 && bJet1!=0 && Jet1!=0){
+			if(genMuon!=0 && genElectron!=0 && antibJet!=0 && bJet!=0){
 				if(genMuon->pdgId()>0){bJet1=bJet; Jet1=antibJet; }
 				if(genMuon->pdgId()<0){bJet1=antibJet; Jet1=bJet;}
 					double dileptonSeparation=sqrt(dR2(genMuon->eta(), genElectron->eta(), genMuon->phi(), genElectron->phi()));
