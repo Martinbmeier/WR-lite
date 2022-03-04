@@ -273,10 +273,10 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	edm::Handle<std::vector<pat::Jet>> recoJetsAK4;  
 	iEvent.getByToken(m_AK4recoCHSJetsToken, recoJetsAK4);  
 
-	// const pat::Jet* bJet1 = 0;
+	const pat::Jet* bJet1 = 0;
 	// // const pat::Jet* bJet2=0;
 
-	// const pat::Jet* Jet1 = 0;
+	const pat::Jet* Jet1 = 0;
 	// //const pat::Jet* Jet2=0;
 
 	const pat::Jet* bJet=0;
@@ -465,6 +465,7 @@ bool NNstudies::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lept
 bool NNstudies::tfinder(const edm::Event& iEvent, const reco::GenParticle* quark) {
 
     		bool ttbar=false;
+    		int iStatus;
 
     		const reco::Candidate* iParticle = quark->mother();
     		iStatus = iParticle->status();
