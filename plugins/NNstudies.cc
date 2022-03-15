@@ -110,7 +110,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		int binNumber(const pat::Muon*);
 		
 		
-		//cutFlowHistos m_histoMaker;
+		cutFlowHistos m_histoMaker;
 
 		TH1D* m_eventsWeight;
 
@@ -233,12 +233,15 @@ const reco::GenParticle* eNu = 0;
 
 const reco::GenParticle* bquark = 0;
 const reco::GenParticle* antibquark = 0;
+const reco::GenParticle* tquark = 0;
+const reco::GenParticle* antitquark = 0;
 
 int leptonCount = 0;
 
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 	if( ! iParticle->isHardProcess() ){ continue; }
-
+	if(iParticle->pdgId()==6){ tquark =  &(*(iParticle)); }
+	if(iParticle->pdgId()==-6){ antitquark =  &(*(iParticle)); }
 	if(tfinder(iEvent, &(*iParticle))){ // check if the gen particle comes from a top
 		if(iParticle->pdgId()==5){ bquark = &(*(iParticle)); }
 		if(iParticle->pdgId()==-5){ antibquark = &(*(iParticle)); }
@@ -387,8 +390,10 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 					double jetSeparation=sqrt(dR2(bJet1->eta(), Jet1->eta(), bJet1->phi(), Jet1->phi()));		
 
 	
-				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4 && muNu!=0 && eNu!=0 && recoMuon1!=0 && recoElectron1!=0){	
-					csvTable(genMuon,genElectron,muNu,eNu,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);	
+				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4 && muNu!=0 && eNu!=0 && recoMuon1!=0 && recoElectron1!=0 && tquark
+					!= 0 && antitquark != 0){	
+					// csvTable(genMuon,genElectron,muNu,eNu,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);
+						m_histoMaker.fill((tquark->p4()+antitquark->p4()).pt(),genMuon.pt());
 				}
 			}
 
@@ -559,7 +564,7 @@ NNstudies::beginJob() {
 
 	TFileDirectory countFolder = fs->mkdir("event_count");
 	
-	//m_histoMaker.book(fs->mkdir("Analysis"));  //2jets
+	m_histoMaker.book(fs->mkdir("Analysis"));  //2jets
 
 	m_eventsWeight = {countFolder.make<TH1D>("eventsWeight","number of events weighted", 1, 0.0, 1)};
 
