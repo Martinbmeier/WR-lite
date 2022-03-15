@@ -63,8 +63,8 @@ void cutFlowHistos::book(TFileDirectory histoFolder) {
 // void cutFlowHistos::fill(double pT1, double pT2, double ASmass_mu_mu, double SSmass_mu_mu, double OSmass_mu_mu, double SSmass_e_e, double OSmass_e_e, double SSmass_mu_e, double OSmass_mu_e,  int cutNumber, double weight) {
 void cutFlowHistos::fill(double topSum, double muonPt) {
 	
-		m_topSum[cutNumber]->Fill(topSum);
-		m_topSumMuon[cutNumber]->Fill(topSum, muonPt);
+		m_topSum->Fill(topSum);
+		m_topSumMuon->Fill(topSum, muonPt);
 
 		// m_recoMuonPt[cutNumber]->Fill(pT1,weight);
 		// m_recoMuonPt[cutNumber]->Fill(pT2,weight);
