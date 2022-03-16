@@ -393,9 +393,22 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4 && muNu!=0 && eNu!=0 && recoMuon1!=0 && recoElectron1!=0 && tquark
 					!= 0 && antitquark != 0){	
 					// csvTable(genMuon,genElectron,muNu,eNu,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);
-					TLorentzVector t4 = tquark->p4();
-				  TLorentzVector antit4 = antitquark->p4();
-					m_histoMaker.fill(( (t4).Boost(-combinedJetsP4.BoostVector()).p4() + (antit4).Boost(-combinedJetsP4.BoostVector()).p4() ).pt(),genMuon->pt());
+					ROOT::Math::LorentzVector t4 = tquark->p4();
+				  ROOT::Math::LorentzVector antit4 = antitquark->p4();
+				  TLorentzVector Tt4(1., 1., 1., 1.);
+				  TLorentzVector Tantit4(1., 1., 1., 1.);
+				  Tt4[0] = t4[0]
+				  Tt4[1] = t4[1]
+				  Tt4[2] = t4[2]
+				  Tt4[3] = t4[3]
+
+				  Tantit4[0] = antit4[0]
+				  Tantit4[1] = antit4[1]
+				  Tantit4[2] = antit4[2]
+				  Tantit4[3] = antit4[3]
+
+
+					m_histoMaker.fill(( (Tt4).Boost(-combinedJetsP4.BoostVector()).p4() + (Tantit4).Boost(-combinedJetsP4.BoostVector()).p4() ).pt(),genMuon->pt());
 				}
 			}
 
