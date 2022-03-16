@@ -397,15 +397,15 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				  ROOT::Math::LorentzVector antit4 = antitquark->p4();
 				  TLorentzVector Tt4(1., 1., 1., 1.);
 				  TLorentzVector Tantit4(1., 1., 1., 1.);
-				  Tt4[0] = t4[0]
-				  Tt4[1] = t4[1]
-				  Tt4[2] = t4[2]
-				  Tt4[3] = t4[3]
+				  Tt4(0) = t4[0];
+				  Tt4(1) = t4[1];
+				  Tt4(2) = t4[2];
+				  Tt4(3) = t4[3];
 
-				  Tantit4[0] = antit4[0]
-				  Tantit4[1] = antit4[1]
-				  Tantit4[2] = antit4[2]
-				  Tantit4[3] = antit4[3]
+				  Tantit4(0) = antit4[0];
+				  Tantit4(1) = antit4[1];
+				  Tantit4(2) = antit4[2];
+				  Tantit4(3) = antit4[3];
 
 
 					m_histoMaker.fill(( (Tt4).Boost(-combinedJetsP4.BoostVector()).p4() + (Tantit4).Boost(-combinedJetsP4.BoostVector()).p4() ).pt(),genMuon->pt());
