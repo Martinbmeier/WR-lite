@@ -396,8 +396,8 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 					// csvTable(genMuon,genElectron,muNu,eNu,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);
 					ROOT::Math::Boost boostTT;
 				  boostTT.SetComponents(combinedJetsP4.BoostToCM());
-				  auto tquarkP4 = boostTT(tquark->p4())
-				  auto antitquarkP4 = boostTT(antitquark->p4())
+				  auto tquarkP4 = boostTT(tquark->p4());
+				  auto antitquarkP4 = boostTT(antitquark->p4());
 					m_histoMaker.fill( (tquarkP4 + antitquarkP4 ).pt(), genMuon->pt());
 				}
 			}
