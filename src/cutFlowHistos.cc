@@ -20,7 +20,7 @@ void cutFlowHistos::book(TFileDirectory histoFolder) {
 	gStyle->SetOptStat("omen");
 	m_histoFolder=histoFolder;
 
-	m_topSum = m_histoFolder.make<TH1D>("topSum","Pt of combined boosted top-antitop",100,0,800);
+	m_topSum = m_histoFolder.make<TH1D>("topSum","Pt of combined boosted top-antitop",100,0,1000);
 	m_topSumMuon = m_histoFolder.make<TH2D>("topSumMuon","Pt of combined boosted top-antitop vs. muon pT",100,0,1000,100,0,1000);
 
 	// m_recoMuonPt[nCut] =  {m_histoFolder.make<TH1D>("recoMuonPt","Pt for reco muons",100,0,1000)};
