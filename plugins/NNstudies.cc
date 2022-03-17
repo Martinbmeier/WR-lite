@@ -394,11 +394,12 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4 && muNu!=0 && eNu!=0 && recoMuon1!=0 && recoElectron1!=0 && tquark
 					!= 0 && antitquark != 0){	
 					// csvTable(genMuon,genElectron,muNu,eNu,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);
-					ROOT::Math::Boost boostTT;
-				  boostTT.SetComponents(combinedJetsP4.BoostToCM());
-				  auto tquarkP4 = boostTT(tquark->p4());
-				  auto antitquarkP4 = boostTT(antitquark->p4());
-					m_histoMaker.fill( (tquarkP4 + antitquarkP4 ).pt(), genMuon->pt());
+					// ROOT::Math::Boost boostTT;
+				  // boostTT.SetComponents(combinedJetsP4.BoostToCM());
+				  // auto tquarkP4 = boostTT(tquark->p4());
+				  // auto antitquarkP4 = boostTT(antitquark->p4());
+					// m_histoMaker.fill( (tquarkP4 + antitquarkP4 ).pt(), genMuon->pt());
+					m_histoMaker.fill( (tquark->p4() + antitquark->p4() ).pt(), genMuon->pt());
 				}
 			}
 
