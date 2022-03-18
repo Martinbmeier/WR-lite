@@ -522,7 +522,7 @@ std::ofstream myfile;
 myfile.open("neuralNetDataTT_7.csv",std::ios_base::app);
 myfile << boostJets(muon->p4()).pt() << ", "
 		   << boostJets(muon->p4()).phi() << ", "
-       << boostJets(muon->p4())eta() << ", "
+       << boostJets(muon->p4()).eta() << ", "
        << boostJets(electron->p4()).pt() << ", "
        << boostJets(electron->p4()).phi() << ", "
        << boostJets(electron->p4()).eta() << ", "
