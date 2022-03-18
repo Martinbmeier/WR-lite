@@ -519,7 +519,7 @@ ROOT::Math::Boost boostJets;
 boostJets.SetComponents(combinedJets.BoostToCM());
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT_7.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_boost_1.csv",std::ios_base::app);
 myfile << boostJets(muon->p4()).pt() << ", "
 		   << boostJets(muon->p4()).phi() << ", "
        << boostJets(muon->p4()).eta() << ", "
@@ -565,9 +565,9 @@ NNstudies::beginJob() {
 
 	std::ofstream myfile;
 
-	// myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
-	// myfile<<"muon pt, muon phi, muon eta, electron pt, electron phi, electron eta, bjet pt, bjet phi, bjet eta, jet pt, jet phi, jet eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, event weight, bin number, gen muon pt, gen muon phi, gen muon eta, gen electron pt, gen electron phi, gen electron eta, muNu pt, muNu phi, muNu eta, eNu pt, eNu phi, eNu eta \n";
-	// myfile.close();
+	myfile.open("neuralNetDataTT_boost_1.csv",std::ios_base::app);
+	myfile<<"muon pt, muon phi, muon eta, electron pt, electron phi, electron eta, bjet pt, bjet phi, bjet eta, jet pt, jet phi, jet eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, event weight, bin number, gen muon pt, gen muon phi, gen muon eta, gen electron pt, gen electron phi, gen electron eta, muNu pt, muNu phi, muNu eta, eNu pt, eNu phi, eNu eta \n";
+	myfile.close();
 
 	edm::Service<TFileService> fs;
 
