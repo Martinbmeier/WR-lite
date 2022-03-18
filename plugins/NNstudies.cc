@@ -393,7 +393,7 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 	
 				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4 && muNu!=0 && eNu!=0 && recoMuon1!=0 && recoElectron1!=0 && tquark
 					!= 0 && antitquark != 0){	
-					// csvTable(genMuon,genElectron,muNu,eNu,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);
+					csvTable(genMuon,genElectron,muNu,eNu,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);
 					// ROOT::Math::Boost boostTT;
 				  // boostTT.SetComponents(combinedJetsP4.BoostToCM());
 				  // auto tquarkP4 = boostTT(tquark->p4());
@@ -515,20 +515,23 @@ int NNstudies::binNumber(const pat::Muon* muon){
 
 void NNstudies::csvTable(const reco::GenParticle* genMuon, const reco::GenParticle* genElectron, const reco::GenParticle* muNu, const reco::GenParticle* eNu, int binNumber, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* jet1, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
+ROOT::Math::Boost boostJets;
+boostJets.SetComponents(combinedJets.BoostToCM())
+
 std::ofstream myfile;
 myfile.open("neuralNetDataTT_7.csv",std::ios_base::app);
-myfile << muon->pt() << ", "
-		   << muon->phi() << ", "
-       << muon->eta() << ", "
-       << electron->pt() << ", "
-       << electron->phi() << ", "
-       << electron->eta() << ", "
-       << bjet1->pt() << ", "
-       << bjet1->phi() << ", "
-       << bjet1->eta() << ", "
-       << jet1->pt() << ", "
-       << jet1->phi() << ", "
-       << jet1->eta() << ", "
+myfile << boostJets(muon->p4()).pt() << ", "
+		   << boostJets(muon->p4()).phi() << ", "
+       << boostJets(muon->p4())eta() << ", "
+       << boostJets(electron->p4()).pt() << ", "
+       << boostJets(electron->p4()).phi() << ", "
+       << boostJets(electron->p4()).eta() << ", "
+       << boostJets(bjet1->p4()).pt() << ", "
+       << boostJets(bjet1->p4()).phi() << ", "
+       << boostJets(bjet1->p4()).eta() << ", "
+       << boostJets(jet1->p4()).pt() << ", "
+       << boostJets(jet1->p4()).phi() << ", "
+       << boostJets(jet1->p4()).eta() << ", "
        << combinedJets.pt() <<", "
        << combinedJets.phi() <<", "
        << combinedJets.eta() <<", "
@@ -537,18 +540,18 @@ myfile << muon->pt() << ", "
        << Met.phi() <<", "
        << weight << ", "
        << binNumber << ", "
-       << genMuon->pt() << ", "
-       << genMuon->phi() << ", "
-       << genMuon->eta() << ", "
-       << genElectron->pt() << ", "
-       << genElectron->phi() << ", "
-       << genElectron->eta() << ", "
-       << muNu->pt() << ", "
-       << muNu->phi() << ", "
-       << muNu->eta() << ", "
-       << eNu->pt() << ", "
-       << eNu->phi() << ", "
-       << eNu->eta() << "\n ";
+       << boostJets(genMuon->p4()).pt() << ", "
+       << boostJets(genMuon->p4()).phi() << ", "
+       << boostJets(genMuon->p4()).eta() << ", "
+       << boostJets(genElectron->p4()).pt() << ", "
+       << boostJets(genElectron->p4()).phi() << ", "
+       << boostJets(genElectron->p4()).eta() << ", "
+       << boostJets(muNu->p4()).pt() << ", "
+       << boostJets(muNu->p4()).phi() << ", "
+       << boostJets(muNu->p4()).eta() << ", "
+       << boostJets(eNu->p4()).pt() << ", "
+       << boostJets(eNu->p4()).phi() << ", "
+       << boostJets(eNu->p4()).eta() << "\n ";
 
 
 myfile.close();
