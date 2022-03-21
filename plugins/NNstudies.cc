@@ -522,7 +522,7 @@ eNu->p4().GetCoordinates(eNuP4);
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT_boost_1.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
 myfile << muonP4[0] << ", "
 		   << muonP4[1] << ", "
        << muonP4[2] << ", "
@@ -530,7 +530,7 @@ myfile << muonP4[0] << ", "
        << electronP4[0] << ", "
        << electronP4[1] << ", "
        << electronP4[2] << ", "
-       << electronP4[3] << ", "       
+       << electronP4[3] << ", "
        << bjet1P4[0] << ", "
        << bjet1P4[1] << ", "
        << bjet1P4[2] << ", "
@@ -558,7 +558,7 @@ myfile << muonP4[0] << ", "
        << muNuP4[0] << ", "
        << muNuP4[1] << ", "
        << muNuP4[2] << ", "
-       << muNuP4[3] << ", "       
+       << muNuP4[3] << ", "
        << eNuP4[0] << ", "
        << eNuP4[1] << ", "
        << eNuP4[2] << ", "
@@ -576,8 +576,8 @@ NNstudies::beginJob() {
 
 	std::ofstream myfile;
 
-	myfile.open("neuralNetDataTT_boost_1.csv",std::ios_base::app);
-	myfile<<"muon pt, muon phi, muon eta, electron pt, electron phi, electron eta, bjet pt, bjet phi, bjet eta, jet pt, jet phi, jet eta, combined jets pt, combined jets phi, combined jets eta, combined jets mass, MET pt, MET phi, event weight, bin number, gen muon pt, gen muon phi, gen muon eta, gen electron pt, gen electron phi, gen electron eta, muNu pt, muNu phi, muNu eta, eNu pt, eNu phi, eNu eta \n";
+	myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
+	myfile<<"muonP1, muonP2, muonP3, muonP4, electronP1, electronP2, electronP3, electronP4, bjetP1, bjetP2, bjetP3, bjetP4, jetP1, jetP2, jetP3, jetP4, combinedJetsP1, combinedJetsP2, combinedJetsP3, combinedJetsP4, MET pt, MET phi, event weight, bin number, genMuonP1, genMuonP2, genMuonP3, genMuonP4, genElectronP1, genElectronP2, genElectronP3, genElectronP4, muNuP1, muNuP2, muNuP3,muNuP4 eNu1, eNuP2, eNuP3, eNuP4 \n";
 	myfile.close();
 
 	edm::Service<TFileService> fs;
