@@ -241,8 +241,8 @@ int leptonCount = 0;
 
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 	if( ! iParticle->isHardProcess() ){ continue; }
-	if(iParticle->pdgId()==6){ tquark =  &(*(iParticle)); }
-	if(iParticle->pdgId()==-6){ antitquark =  &(*(iParticle)); }
+	if(iParticle->pdgId()==6 && tquark==0){ tquark =  &(*(iParticle)); }
+	if(iParticle->pdgId()==-6 && antitquark==0){ antitquark =  &(*(iParticle)); }
 	if(tfinder(iEvent, &(*iParticle))){ // check if the gen particle comes from a top
 		if(iParticle->pdgId()==5){ bquark = &(*(iParticle)); }
 		if(iParticle->pdgId()==-5){ antibquark = &(*(iParticle)); }
@@ -337,7 +337,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 
 // check electron trigger
-if (passElectronTrig(iEvent)){ electronTrigger=true; }
+//if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 //muon/electron reconstruction
 
@@ -377,21 +377,13 @@ if (passElectronTrig(iEvent)){ electronTrigger=true; }
 
 		m_eventsWeight->Fill(0.5, eventCount);
 
-		if(leptonCount == 2 && electronTrigger){
-
+		if(leptonCount == 2){
 
 			if(genMuon!=0 && genElectron!=0 && antibJet!=0 && bJet!=0){
 				if(genMuon->pdgId()>0){bJet1=bJet; Jet1=antibJet; }
 				if(genMuon->pdgId()<0){bJet1=antibJet; Jet1=bJet;}
-					double dileptonSeparation=sqrt(dR2(genMuon->eta(), genElectron->eta(), genMuon->phi(), genElectron->phi()));
-			   	double muonJet1Sep=sqrt(dR2(bJet1->eta(), genMuon->eta(), bJet1->phi(), genMuon->phi()));
-			   	double muonJet2Sep=sqrt(dR2(Jet1->eta(), genMuon->eta(), Jet1->phi(), genMuon->phi()));
-			   	double electronJet1Sep=sqrt(dR2(bJet1->eta(), genElectron->eta(), bJet1->phi(), genElectron->phi()));
-					double electronJet2Sep=sqrt(dR2(Jet1->eta(), genElectron->eta(), Jet1->phi(), genElectron->phi()));
-					double jetSeparation=sqrt(dR2(bJet1->eta(), Jet1->eta(), bJet1->phi(), Jet1->phi()));		
 
-	
-				if(dileptonSeparation>0.4 && muonJet1Sep>0.4 && muonJet2Sep>0.4 && electronJet1Sep > 0.4 && electronJet2Sep>0.4 && jetSeparation>0.4 && muNu!=0 && eNu!=0 && recoMuon1!=0 && recoElectron1!=0 && tquark
+				if(muNu!=0 && eNu!=0 && recoMuon1!=0 && recoElectron1!=0 && tquark
 					!= 0 && antitquark != 0){	
 					csvTable(genMuon,genElectron,muNu,eNu,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);
 					// ROOT::Math::Boost boostTT;
@@ -518,40 +510,59 @@ void NNstudies::csvTable(const reco::GenParticle* genMuon, const reco::GenPartic
 ROOT::Math::Boost boostJets;
 boostJets.SetComponents(combinedJets.BoostToCM());
 
+muon->p4().GetCoordinates(muonP4); 
+electron->p4().GetCoordinates(electronP4); 
+bjet1->p4().GetCoordinates(bjet1P4);
+jet1->p4().GetCoordinates(jet1P4);
+combinedJets->p4().GetCoordinates(combinedJetsP4);
+genMuon->p4().GetCoordinates(genMuonP4);
+genElectron->p4().GetCoordinates(genElectronP4);
+muNu->p4().GetCoordinates(muNuP4);
+eNu->p4().GetCoordinates(eNuP4);
+
+
 std::ofstream myfile;
 myfile.open("neuralNetDataTT_boost_1.csv",std::ios_base::app);
-myfile << boostJets(muon->p4()).pt() << ", "
-		   << boostJets(muon->p4()).phi() << ", "
-       << boostJets(muon->p4()).eta() << ", "
-       << boostJets(electron->p4()).pt() << ", "
-       << boostJets(electron->p4()).phi() << ", "
-       << boostJets(electron->p4()).eta() << ", "
-       << boostJets(bjet1->p4()).pt() << ", "
-       << boostJets(bjet1->p4()).phi() << ", "
-       << boostJets(bjet1->p4()).eta() << ", "
-       << boostJets(jet1->p4()).pt() << ", "
-       << boostJets(jet1->p4()).phi() << ", "
-       << boostJets(jet1->p4()).eta() << ", "
-       << combinedJets.pt() <<", "
-       << combinedJets.phi() <<", "
-       << combinedJets.eta() <<", "
-       << combinedJets.mass() <<", "
+myfile << muonP4[0] << ", "
+		   << muonP4[1] << ", "
+       << muonP4[2] << ", "
+       << muonP4[3] << ", "
+       << electronP4[0] << ", "
+       << electronP4[1] << ", "
+       << electronP4[2] << ", "
+       << electronP4[3] << ", "       
+       << bjet1P4[0] << ", "
+       << bjet1P4[1] << ", "
+       << bjet1P4[2] << ", "
+       << bjet1P4[3] << ", "
+       << jet1P4[0] << ", "
+       << jet1P4[1] << ", "
+       << jet1P4[2] << ", "
+       << jet1P4[3] << ", "
+       << combinedJetsP4[0] <<", "
+       << combinedJetsP4[1] <<", "
+       << combinedJetsP4[2] <<", "
+       << combinedJetsP4[3] <<", "
        << Met.pt() << ", "
        << Met.phi() <<", "
        << weight << ", "
        << binNumber << ", "
-       << boostJets(genMuon->p4()).pt() << ", "
-       << boostJets(genMuon->p4()).phi() << ", "
-       << boostJets(genMuon->p4()).eta() << ", "
-       << boostJets(genElectron->p4()).pt() << ", "
-       << boostJets(genElectron->p4()).phi() << ", "
-       << boostJets(genElectron->p4()).eta() << ", "
-       << boostJets(muNu->p4()).pt() << ", "
-       << boostJets(muNu->p4()).phi() << ", "
-       << boostJets(muNu->p4()).eta() << ", "
-       << boostJets(eNu->p4()).pt() << ", "
-       << boostJets(eNu->p4()).phi() << ", "
-       << boostJets(eNu->p4()).eta() << "\n ";
+       << genMuonP4[0] << ", "
+       << genMuonP4[1] << ", "
+       << genMuonP4[2] << ", "
+       << genMuonP4[3] << ", "
+       << genElectronP4[0] << ", "
+       << genElectronP4[1] << ", "
+       << genElectronP4[2] << ", "
+       << genElectronP4[3] << ", "
+       << muNuP4[0] << ", "
+       << muNuP4[1] << ", "
+       << muNuP4[2] << ", "
+       << muNuP4[3] << ", "       
+       << eNuP4[0] << ", "
+       << eNuP4[1] << ", "
+       << eNuP4[2] << ", "
+       << eNuP4[3] << "\n ";
 
 
 myfile.close();
