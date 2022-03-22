@@ -511,70 +511,69 @@ ROOT::Math::Boost boostJets;
 boostJets.SetComponents(combinedJets.BoostToCM());
 
 
-ROOT::Math::LorentzVector< CoordSystem >::Scalar muonP4;
-ROOT::Math::LorentzVector< CoordSystem >::Scalar electronP4;
-ROOT::Math::LorentzVector< CoordSystem >::Scalar bjet1P4;
-ROOT::Math::LorentzVector< CoordSystem >::Scalar jet1P4;
-ROOT::Math::LorentzVector< CoordSystem >::Scalar combinedJetsP4;
-ROOT::Math::LorentzVector< CoordSystem >::Scalar genMuonP4;
-ROOT::Math::LorentzVector< CoordSystem >::Scalar genElectronP4;
-ROOT::Math::LorentzVector< CoordSystem >::Scalar muNuP4;
-ROOT::Math::LorentzVector< CoordSystem >::Scalar enuP4;
+// ROOT::Math::LorentzVector< CoordSystem >::Scalar muonP4;
+// ROOT::Math::LorentzVector< CoordSystem >::Scalar electronP4;
+// ROOT::Math::LorentzVector< CoordSystem >::Scalar bjet1P4;
+// ROOT::Math::LorentzVector< CoordSystem >::Scalar jet1P4;
+// ROOT::Math::LorentzVector< CoordSystem >::Scalar combinedJetsP4;
+// ROOT::Math::LorentzVector< CoordSystem >::Scalar genMuonP4;
+// ROOT::Math::LorentzVector< CoordSystem >::Scalar genElectronP4;
+// ROOT::Math::LorentzVector< CoordSystem >::Scalar muNuP4;
+// ROOT::Math::LorentzVector< CoordSystem >::Scalar enuP4;
 
 
-muon->p4().GetCoordinates(muonP4); 
-electron->p4().GetCoordinates(electronP4); 
-bjet1->p4().GetCoordinates(bjet1P4);
-jet1->p4().GetCoordinates(jet1P4);
-combinedJets->p4().GetCoordinates(combinedJetsP4);
-genMuon->p4().GetCoordinates(genMuonP4);
-genElectron->p4().GetCoordinates(genElectronP4);
-muNu->p4().GetCoordinates(muNuP4);
-eNu->p4().GetCoordinates(eNuP4);
+math::XYZTLorentzVector muonP4 = muon->p4();
+math::XYZTLorentzVector electronP4 = electron->p4();
+math::XYZTLorentzVector bjet1P4 = bjet1->p4();
+math::XYZTLorentzVector jet1P4=jet1->p4();
+math::XYZTLorentzVector genMuonP4 = genMuon->p4();
+math::XYZTLorentzVector genElectronP4 = genElectron->p4();
+math::XYZTLorentzVector muNuP4 = muNu->p4();
+math::XYZTLorentzVector eNuP4 = eNu->p4();
 
 
 std::ofstream myfile;
 myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
-myfile << muonP4[0] << ", "
-		   << muonP4[1] << ", "
-       << muonP4[2] << ", "
-       << muonP4[3] << ", "
-       << electronP4[0] << ", "
-       << electronP4[1] << ", "
-       << electronP4[2] << ", "
-       << electronP4[3] << ", "
-       << bjet1P4[0] << ", "
-       << bjet1P4[1] << ", "
-       << bjet1P4[2] << ", "
-       << bjet1P4[3] << ", "
-       << jet1P4[0] << ", "
-       << jet1P4[1] << ", "
-       << jet1P4[2] << ", "
-       << jet1P4[3] << ", "
-       << combinedJetsP4[0] <<", "
-       << combinedJetsP4[1] <<", "
-       << combinedJetsP4[2] <<", "
-       << combinedJetsP4[3] <<", "
+myfile << muonP4.Px() << ", "
+		   << muonP4.Py() << ", "
+       << muonP4.Pz() << ", "
+       << muonP4.E() << ", "
+       << electronP4.Px() << ", "
+       << electronP4.Py() << ", "
+       << electronP4.Pz() << ", "
+       << electronP4.E()  << ", "
+       << bjet1P4.Px() << ", "
+       << bjet1P4.Py() << ", "
+       << bjet1P4.Pz() << ", "
+       << bjet1P4.E()  << ", "
+       << jet1P4.Px() << ", "
+       << jet1P4.Py() << ", "
+       << jet1P4.Pz() << ", "
+       << jet1P4.E()  << ", "
+       << combinedJets.Px() <<", "
+       << combinedJets.Py() <<", "
+       << combinedJets.Pz() <<", "
+       << combinedJets.E()  <<", "
        << Met.pt() << ", "
        << Met.phi() <<", "
        << weight << ", "
        << binNumber << ", "
-       << genMuonP4[0] << ", "
-       << genMuonP4[1] << ", "
-       << genMuonP4[2] << ", "
-       << genMuonP4[3] << ", "
-       << genElectronP4[0] << ", "
-       << genElectronP4[1] << ", "
-       << genElectronP4[2] << ", "
-       << genElectronP4[3] << ", "
-       << muNuP4[0] << ", "
-       << muNuP4[1] << ", "
-       << muNuP4[2] << ", "
-       << muNuP4[3] << ", "
-       << eNuP4[0] << ", "
-       << eNuP4[1] << ", "
-       << eNuP4[2] << ", "
-       << eNuP4[3] << "\n ";
+       << genMuonP4.Px() << ", "
+       << genMuonP4.Py() << ", "
+       << genMuonP4.Pz() << ", "
+       << genMuonP4.E()  << ", "
+       << genElectronP4.Px() << ", "
+       << genElectronP4.Py() << ", "
+       << genElectronP4.Pz() << ", "
+       << genElectronP4.E()  << ", "
+       << muNuP4.Px() << ", "
+       << muNuP4.Py() << ", "
+       << muNuP4.Pz() << ", "
+       << muNuP4.E()  << ", "
+       << eNuP4.Px() << ", "
+       << eNuP4.Py() << ", "
+       << eNuP4.Pz() << ", "
+       << eNuP4.E()  << "\n ";
 
 
 myfile.close();
