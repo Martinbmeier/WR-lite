@@ -191,7 +191,7 @@ void
 NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
-	bool electronTrigger=false;  		  
+	//bool electronTrigger=false;  		  
 	//bool angularSeparation=false; 
 
 	eventBits2 iBit; 
@@ -509,6 +509,18 @@ void NNstudies::csvTable(const reco::GenParticle* genMuon, const reco::GenPartic
 
 ROOT::Math::Boost boostJets;
 boostJets.SetComponents(combinedJets.BoostToCM());
+
+
+CoordSystem::Scalar muonP4;
+CoordSystem::Scalar electronP4;
+CoordSystem::Scalar bjet1P4;
+CoordSystem::Scalar jet1P4;
+CoordSystem::Scalar combinedJetsP4;
+CoordSystem::Scalar genMuonP4;
+CoordSystem::Scalar genElectronP4;
+CoordSystem::Scalar muNuP4;
+CoordSystem::Scalar enuP4;
+
 
 muon->p4().GetCoordinates(muonP4); 
 electron->p4().GetCoordinates(electronP4); 
