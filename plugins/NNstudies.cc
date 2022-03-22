@@ -511,15 +511,15 @@ ROOT::Math::Boost boostJets;
 boostJets.SetComponents(combinedJets.BoostToCM());
 
 
-CoordSystem::Scalar muonP4;
-CoordSystem::Scalar electronP4;
-CoordSystem::Scalar bjet1P4;
-CoordSystem::Scalar jet1P4;
-CoordSystem::Scalar combinedJetsP4;
-CoordSystem::Scalar genMuonP4;
-CoordSystem::Scalar genElectronP4;
-CoordSystem::Scalar muNuP4;
-CoordSystem::Scalar enuP4;
+ROOT::Math::LorentzVector< CoordSystem >::Scalar muonP4;
+ROOT::Math::LorentzVector< CoordSystem >::Scalar electronP4;
+ROOT::Math::LorentzVector< CoordSystem >::Scalar bjet1P4;
+ROOT::Math::LorentzVector< CoordSystem >::Scalar jet1P4;
+ROOT::Math::LorentzVector< CoordSystem >::Scalar combinedJetsP4;
+ROOT::Math::LorentzVector< CoordSystem >::Scalar genMuonP4;
+ROOT::Math::LorentzVector< CoordSystem >::Scalar genElectronP4;
+ROOT::Math::LorentzVector< CoordSystem >::Scalar muNuP4;
+ROOT::Math::LorentzVector< CoordSystem >::Scalar enuP4;
 
 
 muon->p4().GetCoordinates(muonP4); 
