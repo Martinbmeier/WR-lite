@@ -107,7 +107,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		bool tWfinder(const edm::Event&, const reco::GenParticle* );
 		bool tfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event&);
-		void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
+		void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const pat::Electron*, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
 		int binNumber(const pat::Muon*);
 		
 		
@@ -385,7 +385,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 				if(muNu!=0 && eNu!=0 && recoMuon1!=0 && recoElectron1!=0 && tquark
 					!= 0 && antitquark != 0){	
-					csvTable(genMuon,genElectron,muNu,eNu,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);
+					csvTable(genMuon,genElectron,muNu,eNu,tquark,antitquark,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);
 					// ROOT::Math::Boost boostTT;
 				  // boostTT.SetComponents(combinedJetsP4.BoostToCM());
 				  // auto tquarkP4 = boostTT(tquark->p4());
@@ -505,7 +505,7 @@ int NNstudies::binNumber(const pat::Muon* muon){
 	return 0;
 }
 
-void NNstudies::csvTable(const reco::GenParticle* genMuon, const reco::GenParticle* genElectron, const reco::GenParticle* muNu, const reco::GenParticle* eNu, int binNumber, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* jet1, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
+void NNstudies::csvTable(const reco::GenParticle* genMuon, const reco::GenParticle* genElectron, const reco::GenParticle* muNu, const reco::GenParticle* eNu, const reco::GenParticle* tquark, const reco::GenParticle* antitquark, int binNumber, const pat::Muon* muon, const pat::Electron* electron, const pat::Jet* bjet1, const pat::Jet* jet1, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
 ROOT::Math::Boost boostJets;
 boostJets.SetComponents(combinedJets.BoostToCM());
