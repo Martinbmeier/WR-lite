@@ -511,17 +511,6 @@ ROOT::Math::Boost boostJets;
 boostJets.SetComponents(combinedJets.BoostToCM());
 
 
-// ROOT::Math::LorentzVector< CoordSystem >::Scalar muonP4;
-// ROOT::Math::LorentzVector< CoordSystem >::Scalar electronP4;
-// ROOT::Math::LorentzVector< CoordSystem >::Scalar bjet1P4;
-// ROOT::Math::LorentzVector< CoordSystem >::Scalar jet1P4;
-// ROOT::Math::LorentzVector< CoordSystem >::Scalar combinedJetsP4;
-// ROOT::Math::LorentzVector< CoordSystem >::Scalar genMuonP4;
-// ROOT::Math::LorentzVector< CoordSystem >::Scalar genElectronP4;
-// ROOT::Math::LorentzVector< CoordSystem >::Scalar muNuP4;
-// ROOT::Math::LorentzVector< CoordSystem >::Scalar enuP4;
-
-
 math::XYZTLorentzVector muonP4 = muon->p4();
 math::XYZTLorentzVector electronP4 = electron->p4();
 math::XYZTLorentzVector bjet1P4 = bjet1->p4();
@@ -539,11 +528,11 @@ myfile.open("neuralNetDataTT_2.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 		   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
-       << muonP4.E() << ", "
+       << muonP4.E()*abs(genMuon.pdgId)/genMuon.pdgId << ", "
        << electronP4.Px() << ", "
        << electronP4.Py() << ", "
        << electronP4.Pz() << ", "
-       << electronP4.E()  << ", "
+       << electronP4.E()*abs(genElectron.pdgId)/genElectron.pdgId  << ", "
        << bjet1P4.Px() << ", "
        << bjet1P4.Py() << ", "
        << bjet1P4.Pz() << ", "
