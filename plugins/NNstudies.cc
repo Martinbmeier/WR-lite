@@ -524,7 +524,7 @@ math::XYZTLorentzVector antitquarkP4 = antitquark->p4();
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT_2.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_3.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 		   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
