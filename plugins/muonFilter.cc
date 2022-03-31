@@ -74,8 +74,8 @@
    iEvent.getByToken(m_genParticleToken, genParticles);
  
    for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
-     //if( ! tWfinder(iEvent, &(*iParticle))){ continue;}
      if( ! iParticle->isHardProcess() ){ continue; }
+     if( ! tWfinder(iEvent, &(*iParticle))){ continue;}
      pdgId = iParticle->pdgId();
      if (abs(pdgId == 13)) {
      	muon = true;
