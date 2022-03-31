@@ -23,7 +23,7 @@ class cutFlowHistos {
 	//void book(TFileDirectory histoFolder);
 	void book(TFileDirectory histoFolder);
 	// void fill(double pT1, double pT2, double ASmass_mu_mu, double SSmass_mu_mu, double OSmass_mu_mu, double SSmass_e_e, double OSmass_e_e, double SSmass_mu_e, double OSmass_mu_e, int cutNumber, double weight);
-	void fill(double topSum, double muonPt);
+	void fill(double muonPt);
 
 	//cutFlowHistos() : m_histoFolder(5) {}
 
@@ -34,7 +34,7 @@ class cutFlowHistos {
 	TFileDirectory m_histoFolder;
 
 	TH1D* m_topSum;
-	TH2D* m_topSumMuon;
+	//TH2D* m_topSumMuon;
 
 	// std::vector<TH1D*> m_recoMuonPt{3};
 	// std::vector<TH1D*> m_invMassAS_mu_mu{3};

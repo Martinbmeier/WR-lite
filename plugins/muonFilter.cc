@@ -39,6 +39,7 @@
    bool filter(edm::StreamID, edm::Event&, const edm::EventSetup&) const override;
  
  private:
+ 	bool tWfinder(const edm::Event&, const reco::GenParticle* );
    // ----------member data ---------------------------
  
    double ptMin_;          // number of particles required to pass filter
@@ -73,6 +74,8 @@
    iEvent.getByToken(m_genParticleToken, genParticles);
  
    for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
+     if( ! tfinder(iEvent, &(*iParticle))){ continue;}
+     if( ! iParticle->isHardProcess() ){ continue; }
      pdgId = iParticle->pdgId();
      if (abs(pdgId == 13)) {
      	muon = true;
@@ -86,6 +89,35 @@
    }
 
 return highPT & muon & electron;
+}
+
+bool muonFilter::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lepton) {
+
+    		bool ttbar=false;
+    		int iStatus;
+
+    		const reco::Candidate* iParticle = lepton->mother();
+
+    		while(iStatus!=4){  //status=4 is the initial proton
+    			iStatus = iParticle->status();
+    			
+    			if(abs(iParticle->pdgId())==24){ //found W
+    				while(iStatus!=4){
+    				iParticle = iParticle->mother();
+    				iStatus = iParticle->status();
+
+    			   	if(abs(iParticle->pdgId())==6){ ttbar=true; 
+    			   		break;
+    			   	}
+					}
+
+    			}
+
+    			iParticle = iParticle->mother();
+    		}
+
+		if(ttbar==true){return true;}
+		else{return false;}
 }
 
 //define this as a plug-in

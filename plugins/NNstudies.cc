@@ -379,6 +379,8 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 		if(leptonCount == 2){
 
+			if(genMuon!=0 && genElectron!=0){m_histoMaker.fill(genMuon->pt());}
+
 			if(genMuon!=0 && genElectron!=0 && antibJet!=0 && bJet!=0){
 				if(genMuon->pdgId()>0){bJet1=bJet; Jet1=antibJet; }
 				if(genMuon->pdgId()<0){bJet1=antibJet; Jet1=bJet;}
@@ -391,7 +393,6 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				  // auto tquarkP4 = boostTT(tquark->p4());
 				  // auto antitquarkP4 = boostTT(antitquark->p4());
 					// m_histoMaker.fill( (tquarkP4 + antitquarkP4 ).pt(), genMuon->pt());
-					m_histoMaker.fill( (tquark->p4() + antitquark->p4() ).pt(), genMuon->pt());
 				}
 			}
 
