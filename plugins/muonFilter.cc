@@ -39,7 +39,7 @@
    bool filter(edm::StreamID, edm::Event&, const edm::EventSetup&) const override;
  
  private:
- 	bool tWfinder(const edm::Event&, const reco::GenParticle* );
+ 	bool tWfinder(const edm::Event&, const reco::GenParticle* ) const;
    // ----------member data ---------------------------
  
    double ptMin_;          // number of particles required to pass filter
@@ -91,7 +91,7 @@
 return highPT & muon & electron;
 }
 
-bool muonFilter::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lepton) {
+bool muonFilter::tWfinder(const edm::Event& iEvent, const reco::GenParticle* lepton) const {
 
     		bool ttbar=false;
     		int iStatus;
