@@ -302,10 +302,6 @@ process.tuneIDMuons = cms.EDFilter("PATMuonSelector",
                                cut = cms.string(muonID),
 )
 
-# process.muonPtCut = cms.EDFilter("PATMuonSelector",
-#                                src = cms.InputTag("tunePMuons"),
-#                                cut = cms.string(muonID),
-# )
 
 #HERE WE RUN A MODULE FROM SAM HARPER WHICH INSERTS HEEP CUT INFO INTO THE PAT ELECTRON USER DATA
 #we setup the HEEP ID V7.0 and enable VID via the following function
@@ -366,6 +362,14 @@ elif options.era == '2018':
 #                       genTrainData = cms.untracked.bool(options.genTrainData)
 #)
 
+process.muonpPtFilter = cms.EDFilter("MCSingleParticleFilter",
+    MaxEta = cms.untracked.vdouble(2.4, 2.4),
+    Status = cms.untracked.vint32(1,  1),
+    MinEta = cms.untracked.vdouble(-2.4, -2.4),
+    MinPt = cms.untracked.vdouble(200, 200),
+    ParticleID = cms.untracked.vint32(13, -13)
+)
+
 process.analysis = cms.EDAnalyzer('NNstudies',
                         tracks = cms.untracked.InputTag('ctfWithMaterialTracks'),
                         genParticles = cms.InputTag("prunedGenParticles"),
@@ -420,7 +424,7 @@ elif options.era == '2018':
 
 
 process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
-                           * process.muonSelectionSeq * process.analysis)# * process.printTree)
+                           * process.muonSelectionSeq * process.muonpPtFilter * process.analysis * process.printTree)
 # process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
 #                            * process.analysis)# * process.printTree)
 #process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
