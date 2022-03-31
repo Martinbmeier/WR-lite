@@ -51,7 +51,7 @@
  muonFilter::muonFilter(const edm::ParameterSet& iConfig)
      : 
      ptMin_(iConfig.getParameter<double>("ptMin")),
-	 m_genParticleToken(consumes<std::vector<reco::GenParticle>>(iConfig.getParameter<edm::InputTag>("genParticles"))),
+	 m_genParticleToken(consumes<std::vector<reco::GenParticle>>(iConfig.getParameter<edm::InputTag>("genParticles")))
  {
    //here do whatever other initialization is needed
  }
