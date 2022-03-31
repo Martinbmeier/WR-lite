@@ -34,9 +34,9 @@
  class muonFilter : public edm::global::EDFilter<> {
  public:
    explicit muonFilter(const edm::ParameterSet&);
-   ~muonFilter();
+   ~muonFilter() override;
  
-   bool filter(edm::Event&, const edm::EventSetup&) const;
+   bool filter(edm::StreamID, edm::Event&, const edm::EventSetup&) const override;
  
  private:
    // ----------member data ---------------------------
@@ -62,7 +62,7 @@
  }
  
  // ------------ method called to skim the data  ------------
- bool muonFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup) const {
+ bool muonFilter::filter(edm::StreamID, edm::Event& iEvent, const edm::EventSetup& iSetup) const {
 
     bool highPT = false;
     bool electron = false;
