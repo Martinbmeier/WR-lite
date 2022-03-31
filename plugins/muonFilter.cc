@@ -36,7 +36,7 @@
    explicit muonFilter(const edm::ParameterSet&);
    ~muonFilter() override;
  
-   bool filter(edm::Event&, const edm::EventSetup&) const override;
+   virtual bool filter(edm::Event&, const edm::EventSetup&) const override;
  
  private:
    // ----------member data ---------------------------
