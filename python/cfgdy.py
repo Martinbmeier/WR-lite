@@ -362,12 +362,18 @@ elif options.era == '2018':
 #                       genTrainData = cms.untracked.bool(options.genTrainData)
 #)
 
-process.muonpPtFilter = cms.EDFilter("MCSingleParticleFilter",
-    MaxEta = cms.untracked.vdouble(2.4, 2.4),
-    Status = cms.untracked.vint32(1,  1),
-    MinEta = cms.untracked.vdouble(-2.4, -2.4),
-    MinPt = cms.untracked.vdouble(200, 200),
-    ParticleID = cms.untracked.vint32(13, -13)
+# process.muonpPtFilter = cms.EDFilter("MCSingleParticleFilter",
+#     MaxEta = cms.untracked.vdouble(2.4, 2.4),
+#     Status = cms.untracked.vint32(1,  1),
+#     MinEta = cms.untracked.vdouble(-2.4, -2.4),
+#     MinPt = cms.untracked.vdouble(200, 200),
+#     ParticleID = cms.untracked.vint32(13, -13)
+# )
+
+process.muonpPtFilter = cms.EDFilter("LHEPtFilter",
+      selectedPdgIds = cms.untracked.vint32(13, -13),
+      ptMin = cms.untracked.double(200)
+      ptMax = cms.untracked.double(2000)
 )
 
 process.analysis = cms.EDAnalyzer('NNstudies',
