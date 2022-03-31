@@ -76,8 +76,9 @@
      pdgId = iParticle->pdgId();
      if (abs(pdgId == 13)) {
      	muon = true;
-     	if iParticle->pt() > ptMin_:
+     	if (iParticle->pt() > ptMin_){
      		highPT = true;
+     	}
      }
      else if(abs(pdgId == 11)){
      	electron = true;
