@@ -372,7 +372,7 @@ elif options.era == '2018':
 
 process.muonpPtFilter = cms.EDFilter("LHEPtFilter",
       selectedPdgIds = cms.untracked.vint32(13, -13),
-      ptMin = cms.untracked.double(200)
+      ptMin = cms.untracked.double(200),
       ptMax = cms.untracked.double(2000)
 )
 
