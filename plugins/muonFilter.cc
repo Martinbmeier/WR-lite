@@ -34,9 +34,9 @@
  class muonFilter : public edm::global::EDFilter<> {
  public:
    explicit muonFilter(const edm::ParameterSet&);
-   ~muonFilter() override;
+   ~muonFilter();
  
-   virtual bool filter(edm::Event&, const edm::EventSetup&) const override;
+   bool filter(edm::Event&, const edm::EventSetup&) const;
  
  private:
    // ----------member data ---------------------------
