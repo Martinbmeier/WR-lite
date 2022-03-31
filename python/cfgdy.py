@@ -370,10 +370,9 @@ elif options.era == '2018':
 #     ParticleID = cms.untracked.vint32(13, -13)
 # )
 
-process.muonpPtFilter = cms.EDFilter("LHEPtFilter",
-      selectedPdgIds = cms.untracked.vint32(13, -13),
+process.muonpPtFilter = cms.EDFilter("muonFilter",
       ptMin = cms.untracked.double(200),
-      ptMax = cms.untracked.double(2000)
+      genParticles = cms.InputTag("prunedGenParticles"),
 )
 
 process.analysis = cms.EDAnalyzer('NNstudies',
