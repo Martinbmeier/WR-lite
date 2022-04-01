@@ -371,7 +371,7 @@ elif options.era == '2018':
 # )
 
 process.muonpPtFilter = cms.EDFilter("muonFilter",
-      ptMin = cms.double(200),
+      ptMin = cms.double(300),
       genParticles = cms.InputTag("prunedGenParticles"),
 )
 
