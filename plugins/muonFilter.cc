@@ -77,13 +77,13 @@
      if( ! iParticle->isHardProcess() ){ continue; }
      if( ! tWfinder(iEvent, &(*iParticle))){ continue;}
      pdgId = iParticle->pdgId();
-     if (abs(pdgId == 13)) {
+     if (abs(pdgId) == 13) {
      	muon = true;
      	if (iParticle->pt() > ptMin_){
      		highPT = true;
      	}
      }
-     else if(abs(pdgId == 11)){
+     else if(abs(pdgId) == 11){
      	electron = true;
      }
    }
