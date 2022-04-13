@@ -391,7 +391,7 @@ process.analysis = cms.EDAnalyzer('NNstudies',
                         electronPathsToPass = electronPaths,
                         recoMET = cms.InputTag("slimmedMETs"),
                         packedGenParticles = cms.InputTag("packedGenParticles"),
-                        packedPFCandidates = cms.InputTag("packedPFCandidates")
+                        pfCandidates = cms.InputTag("packedPFCandidates")
 
 )
 
