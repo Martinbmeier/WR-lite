@@ -274,8 +274,8 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 	math::XYZTLorentzVector combinedJetsP4 = {0., 0., 0., 0.};
 
-	edm::Handle<std::vector<reco::GenJet>> genJetsAK4;  
-	iEvent.getByToken(m_AK4genCHSJetsToken, genJetsAK4);  
+	edm::Handle<std::vector<reco::GenJet>> genJets;  
+	iEvent.getByToken(m_AK4genCHSJetsToken, genJets);  
 
 	const reco::GenJet* bJet1 = 0;
 	// // const pat::Jet* bJet2=0;
@@ -287,12 +287,12 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	const reco::GenJet* antibJet=0;
 
   for( std::vector<reco::GenJet>::const_iterator iJet = genJets->begin(); iJet!= genJets->end(); iJet++) {
-  	CandidateCollection iJetC = iJet->getGenConstituents();
+  	reco::CandidateCollection iJetC = iJet->getGenConstituents();
     double bRatio = EnergyRatioFromBHadrons(iJetC);
     double cRatio = EnergyRatioFromCHadrons(iJetC);
 
-    for( Candidate::const_iterator c  = iJetC->begin(); c != iJetC->end(); c ++) {
-      const Candidate* theMasterClone;
+    for( reco::Candidate::const_iterator c  = iJetC->begin(); c != iJetC->end(); c ++) {
+      const reco::Candidate* theMasterClone;
       bool isB = false;
       bool isC = false;
       if (c->hasMasterClone ()) {
