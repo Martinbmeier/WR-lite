@@ -123,7 +123,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_highMuonToken;
 		edm::EDGetToken m_highElectronToken;
 		edm::EDGetToken m_AK4genCHSJetsToken;
-		edm::EDGetToken m_packedPFCandidates;
+		edm::EDGetToken m_packedPFCandidatesToken;
 		edm::EDGetToken m_genEventInfoToken;
 		edm::EDGetToken m_offlineVerticesToken;
 		std::vector<std::string>  m_electronPathsToPass;
@@ -163,7 +163,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_highMuonToken (consumes<std::vector<pat::Muon>> (iConfig.getParameter<edm::InputTag>("highMuons"))),
 	m_highElectronToken (consumes<std::vector<pat::Electron>> (iConfig.getParameter<edm::InputTag>("highElectrons"))),
 	m_AK4genCHSJetsToken (consumes<std::vector<reco::GenJet>> (iConfig.getParameter<edm::InputTag>("AK4genCHSJets"))),
-	m_packedPFCandidates (consumes<std::vector<reco::Candidate>> (iConfig.getParameter<edm::InputTag>("packedPFCandidates"))),
+	m_packedPFCandidatesToken (consumes<std::vector<reco::Candidate>> (iConfig.getParameter<edm::InputTag>("packedPFCandidates"))),
 	m_genEventInfoToken (consumes<GenEventInfoProduct> (iConfig.getParameter<edm::InputTag>("genInfo"))),
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
@@ -212,7 +212,7 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	iEvent.getByToken(m_genParticleToken, genParticles);
 
 	edm::Handle<std::vector<reco::Candidate>> pfCandidates;
-	iEvent.getByToken(m_packedPFCandidates, pfCandidates);
+	iEvent.getByToken(m_packedPFCandidatesToken, pfCandidates);
 
 	edm::Handle<std::vector<pat::MET>> recoMET;
 	iEvent.getByToken(m_recoMETToken, recoMET);

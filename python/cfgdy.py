@@ -1,6 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 import HLTrigger.HLTfilters.hltHighLevel_cfi
 from FWCore.ParameterSet.VarParsing import VarParsing
+from PhysicsTools.PatAlgos.tools.jetTools import *
 import os
 #INPUT PARSING SECTION
 options = VarParsing ('analysis')
@@ -392,7 +393,6 @@ process.analysis = cms.EDAnalyzer('NNstudies',
                         recoMET = cms.InputTag("slimmedMETs"),
                         packedGenParticles = cms.InputTag("packedGenParticles"),
                         pfCandidates = cms.InputTag("packedPFCandidates")
-
 )
 
 
