@@ -287,26 +287,26 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	const reco::GenJet* antibJet=0;
 
   for( std::vector<reco::GenJet>::const_iterator iJet = genJets->begin(); iJet!= genJets->end(); iJet++) {
-  	reco::CandidateCollection iJetC = iJet->getGenConstituents();
-    double bRatio = EnergyRatioFromBHadrons(iJetC);
-    double cRatio = EnergyRatioFromCHadrons(iJetC);
+  	// std::vector<const GenParticle*> iJetC = iJet->getGenConstituents();
+    double bRatio = EnergyRatioFromBHadrons(iJet);
+    double cRatio = EnergyRatioFromCHadrons(iJet);
 
-    for( reco::Candidate::const_iterator c  = iJetC->begin(); c != iJetC->end(); c ++) {
-      const reco::Candidate* theMasterClone;
-      bool isB = false;
-      bool isC = false;
-      if (c->hasMasterClone ()) {
-        theMasterClone = c->masterClone().get();
-        isB = decayFromBHadron(*theMasterClone);
-        isC = decayFromCHadron(*theMasterClone);
-        if (isB && bJet1 == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3  ){
+    // for( reco::Candidate::const_iterator c  = iJetC->begin(); c != iJetC->end(); c ++) {
+    //   const reco::Candidate* theMasterClone;
+    //   bool isB = false;
+    //   bool isC = false;
+    //   if (c->hasMasterClone ()) {
+    //     theMasterClone = c->masterClone().get();
+    //     isB = decayFromBHadron(*theMasterClone);
+    //     isC = decayFromCHadron(*theMasterClone);
+        if (bRatio > 0.2 && bJet1 == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3  ){
         	bJet = &(*(iJet));
         }
-        else if(isB && Jet1 == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
+        else if(bRatio > 0.2 && Jet1 == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
         	antibJet = &(*(iJet));
         }
       }
-    }
+    
   }
 
 
