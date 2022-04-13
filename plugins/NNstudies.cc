@@ -122,7 +122,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_recoMETToken;
 		edm::EDGetToken m_highMuonToken;
 		edm::EDGetToken m_highElectronToken;
-		edm::EDGetToken m_AK4recoCHSJetsToken;
+		edm::EDGetToken m_AK4genCHSJetsToken;
 		edm::EDGetToken m_genEventInfoToken;
 		edm::EDGetToken m_offlineVerticesToken;
 		std::vector<std::string>  m_electronPathsToPass;
@@ -161,7 +161,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_recoMETToken(consumes<std::vector<pat::MET>> (iConfig.getParameter<edm::InputTag>("recoMET"))),
 	m_highMuonToken (consumes<std::vector<pat::Muon>> (iConfig.getParameter<edm::InputTag>("highMuons"))),
 	m_highElectronToken (consumes<std::vector<pat::Electron>> (iConfig.getParameter<edm::InputTag>("highElectrons"))),
-	m_AK4recoCHSJetsToken (consumes<std::vector<pat::Jet>> (iConfig.getParameter<edm::InputTag>("AK4recoCHSJets"))),
+	m_AK4genCHSJetsToken (consumes<std::vector<reco::GenJet>> (iConfig.getParameter<edm::InputTag>("AK4genCHSJets"))),
 	m_genEventInfoToken (consumes<GenEventInfoProduct> (iConfig.getParameter<edm::InputTag>("genInfo"))),
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
@@ -274,66 +274,93 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 	math::XYZTLorentzVector combinedJetsP4 = {0., 0., 0., 0.};
 
-	edm::Handle<std::vector<pat::Jet>> recoJetsAK4;  
-	iEvent.getByToken(m_AK4recoCHSJetsToken, recoJetsAK4);  
+	edm::Handle<std::vector<reco::GenJet>> genJetsAK4;  
+	iEvent.getByToken(m_AK4genCHSJetsToken, genJetsAK4);  
 
-	const pat::Jet* bJet1 = 0;
+	const reco::GenJet* bJet1 = 0;
 	// // const pat::Jet* bJet2=0;
 
-	const pat::Jet* Jet1 = 0;
+	const reco::GenJet* Jet1 = 0;
 	// //const pat::Jet* Jet2=0;
 
-	const pat::Jet* bJet=0;
-	const pat::Jet* antibJet=0;
+	const reco::GenJet* bJet=0;
+	const reco::GenJet* antibJet=0;
+
+  for( std::vector<reco::GenJet>::const_iterator iJet = genJets->begin(); iJet!= genJets->end(); iJet++) {
+  	CandidateCollection iJetC = iJet->getGenConstituents();
+    double bRatio = EnergyRatioFromBHadrons(iJetC);
+    double cRatio = EnergyRatioFromCHadrons(iJetC);
+
+    for( Candidate::const_iterator c  = iJetC->begin(); c != iJetC->end(); c ++) {
+      const Candidate* theMasterClone;
+      bool isB = false;
+      bool isC = false;
+      if (c->hasMasterClone ()) {
+        theMasterClone = c->masterClone().get();
+        isB = decayFromBHadron(*theMasterClone);
+        isC = decayFromCHadron(*theMasterClone);
+        if (isB && bJet1 == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3  ){
+        	bJet = &(*(iJet));
+        }
+        else if(isB && Jet1 == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
+        	antibJet = &(*(iJet));
+        }
+      }
+    }
+  }
+
 
 	//Get jets with maximum pt
-		for(std::vector<pat::Jet>::const_iterator iJet = recoJetsAK4->begin(); iJet != recoJetsAK4->end(); iJet++) {
+		// for(std::vector<reco::GenJet>::const_iterator iJet = genJetsAK4->begin(); iJet != genJetsAK4->end(); iJet++) {
 
-			combinedJetsP4=combinedJetsP4+iJet->p4();
+			
 
-			double NHF  =           iJet->neutralHadronEnergyFraction();
-			double NEMF =           iJet->neutralEmEnergyFraction();
-			double CHF  =           iJet->chargedHadronEnergyFraction();
-			double CEMF =           iJet->chargedEmEnergyFraction();
-			double NumConst =       iJet->chargedMultiplicity()+iJet->neutralMultiplicity();
-			double MUF      =       iJet->muonEnergyFraction();
-			double EUF      =       iJet->electronEnergyFraction();
-			double CHM      =       iJet->chargedMultiplicity();
-			double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2);
-			//APPLYING TIGHT QUALITY CUTS
-			if (NHF > .9) continue;
-			if (NEMF > .9) continue;
-			if (NumConst <= 1) continue;
-			if (MUF >= .8) continue; //MAKE SURE THE AREN'T MUONS
-			if (EUF >= .8) continue; //MAKE SURE THE AREN'T ELECTRONS
-			//ADDITIONAL CUTS BECAUSE OF TIGHT ETA CUT
-			if (CHF == 0) continue;
-			if (CHM == 0) continue;
-			//if (CEMF > .99) continue;
-			if (CEMF > .90)  continue;
-			if(BJP > 0.4184) {
-				if(bJet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3 ){
-					bJet=&(*(iJet));
-				}
-				else if(antibJet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
-					antibJet=&(*(iJet));
-				}
-			}
-			// if(BJP > 0.4184){ 
-			// 	if(bJet1==0){
-			// 		bJet1=&(*(iJet));
-			// 	}
-			// 	else if(Jet1==0){
-			// 		Jet1=&(*(iJet));
-			// 	}
-			// }
+		// 	double NHF  =           iJet->neutralHadronEnergyFraction();
+		// 	double NEMF =           iJet->neutralEmEnergyFraction();
+		// 	double CHF  =           iJet->chargedHadronEnergyFraction();
+		// 	double CEMF =           iJet->chargedEmEnergyFraction();
+		// 	double NumConst =       iJet->chargedMultiplicity()+iJet->neutralMultiplicity();
+		// 	double MUF      =       iJet->muonEnergyFraction();
+		// 	double EUF      =       iJet->electronEnergyFraction();
+		// 	double CHM      =       iJet->chargedMultiplicity();
+		// 	double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2);
+		// 	//APPLYING TIGHT QUALITY CUTS
+		// 	if (NHF > .9) continue;
+		// 	if (NEMF > .9) continue;
+		// 	if (NumConst <= 1) continue;
+		// 	if (MUF >= .8) continue; //MAKE SURE THE AREN'T MUONS
+		// 	if (EUF >= .8) continue; //MAKE SURE THE AREN'T ELECTRONS
+		// 	//ADDITIONAL CUTS BECAUSE OF TIGHT ETA CUT
+		// 	if (CHF == 0) continue;
+		// 	if (CHM == 0) continue;
+		// 	//if (CEMF > .99) continue;
+		// 	if (CEMF > .90)  continue;
+		// 	if(BJP > 0.4184) {
+		// 		if(bJet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3 ){
+		// 			bJet=&(*(iJet));
+		// 		}
+		// 		else if(antibJet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
+		// 			antibJet=&(*(iJet));
+		// 		}
+		// 		else{
+		// 			combinedJetsP4=combinedJetsP4+iJet->p4();
+		// 		}
+		// 	}
+		// 	// if(BJP > 0.4184){ 
+		// 	// 	if(bJet1==0){
+		// 	// 		bJet1=&(*(iJet));
+		// 	// 	}
+		// 	// 	else if(Jet1==0){
+		// 	// 		Jet1=&(*(iJet));
+		// 	// 	}
+		// 	// }
 
-			// if(BJP < 0.4184){
-			// 	if(Jet1==0){
-			// 		Jet1=&(*(iJet));
-			// 	}
-			// }
-		}
+		// 	// if(BJP < 0.4184){
+		// 	// 	if(Jet1==0){
+		// 	// 		Jet1=&(*(iJet));
+		// 	// 	}
+		// 	// }
+		// }
 
 
 // check electron trigger
@@ -525,7 +552,7 @@ math::XYZTLorentzVector antitquarkP4 = antitquark->p4();
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT_10.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 		   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
@@ -587,9 +614,9 @@ NNstudies::beginJob() {
 
 	std::ofstream myfile;
 
-	// myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
-	// myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bjetP1,bjetP2,bjetP3,bjetP4,jetP1,jetP2,jetP3,jetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,METpt,METphi,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
-	// myfile.close();
+	myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
+	myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bjetP1,bjetP2,bjetP3,bjetP4,jetP1,jetP2,jetP3,jetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,METpt,METphi,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
+	myfile.close();
 
 	edm::Service<TFileService> fs;
 
