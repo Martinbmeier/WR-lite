@@ -123,6 +123,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_highMuonToken;
 		edm::EDGetToken m_highElectronToken;
 		edm::EDGetToken m_AK4genCHSJetsToken;
+		edm::EDGetToken m_packedPFCandidates;
 		edm::EDGetToken m_genEventInfoToken;
 		edm::EDGetToken m_offlineVerticesToken;
 		std::vector<std::string>  m_electronPathsToPass;
@@ -196,7 +197,7 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	//bool angularSeparation=false; 
 
 	eventBits2 iBit; 
-   eventInfo myEvent; 
+  eventInfo myEvent; 
 	
 	edm::Handle<GenEventInfoProduct> eventInfo;
 	iEvent.getByToken(m_genEventInfoToken, eventInfo);
