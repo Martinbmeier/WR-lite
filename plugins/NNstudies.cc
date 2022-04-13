@@ -305,6 +305,9 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
         else if(bRatio > 0.2 && Jet1 == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
         	antibJet = &(*(iJet));
         }
+        else(
+        	combinedJetsP4 = combinedJetsP4 + iJet->p4();
+        	)
       }
     
   }
