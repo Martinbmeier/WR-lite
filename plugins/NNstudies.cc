@@ -162,6 +162,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_highMuonToken (consumes<std::vector<pat::Muon>> (iConfig.getParameter<edm::InputTag>("highMuons"))),
 	m_highElectronToken (consumes<std::vector<pat::Electron>> (iConfig.getParameter<edm::InputTag>("highElectrons"))),
 	m_AK4genCHSJetsToken (consumes<std::vector<reco::GenJet>> (iConfig.getParameter<edm::InputTag>("AK4genCHSJets"))),
+	m_packedPFCandidates (consumes<std::vector<reco::Candidate>> (iConfig.getParameter<edm::InputTag>("packedPFCandidates"))),
 	m_genEventInfoToken (consumes<GenEventInfoProduct> (iConfig.getParameter<edm::InputTag>("genInfo"))),
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
@@ -208,6 +209,9 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	edm::Handle<std::vector<reco::GenParticle>> genParticles;
 	iEvent.getByToken(m_genParticleToken, genParticles);
+
+	edm::Handle<std::vector<reco::Candidate>> pfCandidates;
+	iEvent.getByToken(m_packedPFCandidates, pfCandidates);
 
 	edm::Handle<std::vector<pat::MET>> recoMET;
 	iEvent.getByToken(m_recoMETToken, recoMET);
@@ -288,8 +292,22 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
   for( std::vector<reco::GenJet>::const_iterator iJet = genJets->begin(); iJet!= genJets->end(); iJet++) {
   	// std::vector<const GenParticle*> iJetC = iJet->getGenConstituents();
-    double bRatio = EnergyRatioFromBHadrons(iJet);
-    double cRatio = EnergyRatioFromCHadrons(iJet);
+  	int numberOfdaughters = iJet.numberOfDaughters();
+  	//bool fromB = false;
+  	double ratioForBjet=0;
+    double ratio = 0;
+  	for( int i = numberOfdaughters; i !=0; i--){
+  		reco::Candidate iDaughter = iJet->daughter(i);
+  		bool isFromB = decayFromBHadron(iDaughter);
+  		ratio = iDaughter->energy() / iJet.energy()
+  		if( isFromB ) { ratioForBjet += ratio; }
+  	}
+  	if (ratioForBjet > 0.2 && bJet = 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3 ){bJet = &(*(iJet));}
+  	else if(ratioForBjet > 0.2 && antibJet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){antibJet = &(*(iJet));}
+  	else{ combinedJetsP4 = combinedJetsP4 + iJet->p4();}
+
+    // double bRatio = EnergyRatioFromBHadrons(iJet);
+    // double cRatio = EnergyRatioFromCHadrons(iJet);
 
     // for( reco::Candidate::const_iterator c  = iJetC->begin(); c != iJetC->end(); c ++) {
     //   const reco::Candidate* theMasterClone;
@@ -299,18 +317,18 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
     //     theMasterClone = c->masterClone().get();
     //     isB = decayFromBHadron(*theMasterClone);
     //     isC = decayFromCHadron(*theMasterClone);
-        if (bRatio > 0.2 && bJet1 == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3  ){
-        	bJet = &(*(iJet));
-        }
-        else if(bRatio > 0.2 && Jet1 == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
-        	antibJet = &(*(iJet));
-        }
-        else(
-        	combinedJetsP4 = combinedJetsP4 + iJet->p4();
-        	)
-      }
+        // if (bRatio > 0.2 && bJet1 == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3  ){
+        // 	bJet = &(*(iJet));
+        // }
+        // else if(bRatio > 0.2 && Jet1 == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
+        // 	antibJet = &(*(iJet));
+        // }
+        // else{
+        // 	combinedJetsP4 = combinedJetsP4 + iJet->p4();
+        // 	}
+    }
     
-  }
+  
 
 
 	//Get jets with maximum pt

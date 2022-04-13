@@ -389,7 +389,9 @@ process.analysis = cms.EDAnalyzer('NNstudies',
                         isSignal = cms.untracked.bool(options.isSignal),
                         genTrainData = cms.untracked.bool(options.genTrainData),
                         electronPathsToPass = electronPaths,
-                        recoMET = cms.InputTag("slimmedMETs")
+                        recoMET = cms.InputTag("slimmedMETs"),
+                        packedGenParticles = cms.InputTag("packedGenParticles"),
+                        packedPFCandidates = cms.InputTag("packedPFCandidates")
 
 )
 
