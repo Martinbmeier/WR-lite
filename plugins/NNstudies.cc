@@ -163,7 +163,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_highMuonToken (consumes<std::vector<pat::Muon>> (iConfig.getParameter<edm::InputTag>("highMuons"))),
 	m_highElectronToken (consumes<std::vector<pat::Electron>> (iConfig.getParameter<edm::InputTag>("highElectrons"))),
 	m_AK4genCHSJetsToken (consumes<std::vector<reco::GenJet>> (iConfig.getParameter<edm::InputTag>("AK4genCHSJets"))),
-	m_packedGenParticlesToken (consumes<std::vector<reco::Candidate>> (iConfig.getParameter<edm::InputTag>("packedGenParticles"))),
+	m_packedGenParticlesToken (consumes<std::vector<pat::PackedGenParticle>> (iConfig.getParameter<edm::InputTag>("packedGenParticles"))),
 	m_genEventInfoToken (consumes<GenEventInfoProduct> (iConfig.getParameter<edm::InputTag>("genInfo"))),
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
@@ -211,7 +211,7 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	edm::Handle<std::vector<reco::GenParticle>> genParticles;
 	iEvent.getByToken(m_genParticleToken, genParticles);
 
-	edm::Handle<std::vector<reco::Candidate>> packedGenParticles;
+	edm::Handle<std::vector<pat::PackedGenParticle>> packedGenParticles;
 	iEvent.getByToken(m_packedGenParticlesToken, packedGenParticles);
 
 	edm::Handle<std::vector<pat::MET>> recoMET;
