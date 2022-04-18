@@ -301,7 +301,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
   	// std::vector<const GenParticle*> iJetC = iJet->getGenConstituents();
   	// std::cout <<" found constituents "<<std::endl;
   	int numberOfdaughters = iJet->numberOfDaughters();
-  	std::cout <<"daughters: "<< numberOfdaughter << std::endl;
+  	std::cout <<"daughters: "<< numberOfdaughters << std::endl;
   	bool fromB = false;
   	bool fromaB = false;
   	// double ratioForBjet=0;
