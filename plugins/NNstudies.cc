@@ -307,6 +307,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
   	// double ratioForBjet=0;
    //  double ratio = 0;
   	for( int i = numberOfdaughters; i !=0; i--){
+  		std::cout << i << std::endl;
   		const reco::Candidate* iDaughter = iJet->daughter(i);
   		// bool isFromB = decayFromBHadron(*iDaughter);
   		// ratio = iDaughter->energy() / iJet->energy();
