@@ -306,15 +306,20 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
   	bool fromaB = false;
   	// double ratioForBjet=0;
    //  double ratio = 0;
-  	for( int i = numberOfdaughters; i !=0; i--){
-  		std::cout << i << std::endl;
-  		const reco::Candidate* iDaughter = iJet->daughter(i);
-  		// bool isFromB = decayFromBHadron(*iDaughter);
-  		// ratio = iDaughter->energy() / iJet->energy();
-  		// if( isFromB ) { ratioForBjet += ratio; }
-  		if(iDaughter->pdgId()==2){ fromB = true; }
-  		else if(iDaughter->pdgId()==-2){ fromaB = true; }
-  	}
+  	GenParticleRefVector daughters = iJet->daughterRefVector();
+  	for (GenParticleRefVector::const_iterator i = daughters.begin(); i != daughters.end(); ++i) {
+			index = i->key();
+			std::cout << index << std::endl;
+		}
+  	// for( int i = numberOfdaughters; i !=0; i--){
+  	// 	std::cout << i << std::endl;
+  	// 	const reco::Candidate* iDaughter = iJet->daughter(i);
+  	// 	// bool isFromB = decayFromBHadron(*iDaughter);
+  	// 	// ratio = iDaughter->energy() / iJet->energy();
+  	// 	// if( isFromB ) { ratioForBjet += ratio; }
+  	// 	if(iDaughter->pdgId()==2){ fromB = true; }
+  	// 	else if(iDaughter->pdgId()==-2){ fromaB = true; }
+  	// }
   	if (fromB && bJet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3 ){bJet = &(*(iJet)); }
   	else if(fromaB && antibJet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){antibJet = &(*(iJet)); }
   	else{ combinedJetsP4 = combinedJetsP4 + iJet->p4(); }
