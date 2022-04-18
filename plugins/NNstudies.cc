@@ -125,6 +125,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_highElectronToken;
 		edm::EDGetToken m_AK4genCHSJetsToken;
 		edm::EDGetToken m_packedGenParticlesToken;
+		edm::EDGetToken m_packedPFCandidatesToken;
 		edm::EDGetToken m_genEventInfoToken;
 		edm::EDGetToken m_offlineVerticesToken;
 		std::vector<std::string>  m_electronPathsToPass;
@@ -297,8 +298,8 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	const reco::GenJet* antibJet=0;
 
   for( std::vector<reco::GenJet>::const_iterator iJet = genJets->begin(); iJet!= genJets->end(); iJet++) {
-  	std::vector<const GenParticle*> iJetC = iJet->getGenConstituents();
-  	std::cout <<" found constituents "<<std::endl;
+  	// std::vector<const GenParticle*> iJetC = iJet->getGenConstituents();
+  	// std::cout <<" found constituents "<<std::endl;
   	int numberOfdaughters = iJet->numberOfDaughters();
   	std::cout <<"daughters: "<< numberOfdaughter << std::endl;
   	bool fromB = false;
