@@ -44,6 +44,7 @@
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
+#include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
@@ -164,6 +165,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_highElectronToken (consumes<std::vector<pat::Electron>> (iConfig.getParameter<edm::InputTag>("highElectrons"))),
 	m_AK4genCHSJetsToken (consumes<std::vector<reco::GenJet>> (iConfig.getParameter<edm::InputTag>("AK4genCHSJets"))),
 	m_packedGenParticlesToken (consumes<std::vector<pat::PackedGenParticle>> (iConfig.getParameter<edm::InputTag>("packedGenParticles"))),
+	m_packedPFCandidatesToken (consumes<std::vector<reco::PFCandidate>> (iConfig.getParameter<edm::InputTag>("packedPFCandidates"))),
 	m_genEventInfoToken (consumes<GenEventInfoProduct> (iConfig.getParameter<edm::InputTag>("genInfo"))),
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
@@ -213,6 +215,9 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	edm::Handle<std::vector<pat::PackedGenParticle>> packedGenParticles;
 	iEvent.getByToken(m_packedGenParticlesToken, packedGenParticles);
+
+	edm::Handle<std::vector<reco::PFCandidate>> packedPFCandidates;
+	iEvent.getByToken(m_packedPFCandidatesToken, packedPFCandidates);
 
 	edm::Handle<std::vector<pat::MET>> recoMET;
 	iEvent.getByToken(m_recoMETToken, recoMET);
@@ -292,8 +297,10 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	const reco::GenJet* antibJet=0;
 
   for( std::vector<reco::GenJet>::const_iterator iJet = genJets->begin(); iJet!= genJets->end(); iJet++) {
-  	// std::vector<const GenParticle*> iJetC = iJet->getGenConstituents();
+  	std::vector<const GenParticle*> iJetC = iJet->getGenConstituents();
+  	std::cout <<" found constituents "<<std::endl;
   	int numberOfdaughters = iJet->numberOfDaughters();
+  	std::cout <<"daughters: "<< numberOfdaughter << std::endl;
   	bool fromB = false;
   	bool fromaB = false;
   	// double ratioForBjet=0;
