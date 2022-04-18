@@ -308,7 +308,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
    //  double ratio = 0;
   	GenParticleRefVector daughters = iJet->daughterRefVector();
   	for (GenParticleRefVector::const_iterator i = daughters.begin(); i != daughters.end(); ++i) {
-			index = i->key();
+		size_t	index = i->key();
 			std::cout << index << std::endl;
 		}
   	// for( int i = numberOfdaughters; i !=0; i--){
