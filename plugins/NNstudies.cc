@@ -314,7 +314,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
   	// }
   	for(int i=0; i==numberOfdaughters-1; i++){
   		// const reco::Candidate* iDaughter = iJet->daughter(i);
-  		std::cout << iJet->daughter(i).pdgId() << std::endl;
+  		std::cout << iJet->daughter(i)->pdgId() << std::endl;
   	}
 
   	// for( int i = numberOfdaughters; i !=0; i--){
