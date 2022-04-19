@@ -309,7 +309,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
   	const std::vector<edm::Ptr<reco::Candidate> > daughters = iJet->daughterPtrVector();
 
   	for(int i = numberOfdaughters; i!=0; i--){
-  		std::cout << daughters[i] << std::endl;
+  		std::cout << daughters.at(i) << std::endl;
   	}
   // 	for (edm::Ptr<reco::Candidate> ::const_iterator i = daughters.begin(); i != daughters.end(); ++i) {
 		// size_t	index = i->key();
