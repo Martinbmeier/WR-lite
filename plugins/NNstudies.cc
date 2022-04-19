@@ -306,7 +306,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
   	bool fromaB = false;
   	// double ratioForBjet=0;
    //  double ratio = 0;
-  	GenParticleRefVector daughters = iJet->daughterRefVector();
+  	rerco::GenParticleRefVector daughters = iJet->daughterRefVector();
   	for (GenParticleRefVector::const_iterator i = daughters.begin(); i != daughters.end(); ++i) {
 		size_t	index = i->key();
 			std::cout << index << std::endl;
