@@ -298,14 +298,12 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	const reco::GenJet* antibJet=0;
 
   for( std::vector<reco::GenJet>::const_iterator iJet = genJets->begin(); iJet!= genJets->end(); iJet++) {
-  	// std::vector<const GenParticle*> iJetC = iJet->getGenConstituents();
-  	// std::cout <<" found constituents "<<std::endl;
   	int numberOfdaughters = iJet->numberOfDaughters();
   	bool fromB = false;
   	bool fromaB = false;
   	// double ratioForBjet=0;
     // double ratio = 0;
-  	// const std::vector<edm::Ptr<reco::Candidate> > daughters = iJet->daughterPtrVector();
+  	const std::vector<edm::Ptr<reco::Candidate> > daughters = iJet->daughterPtrVector();
   	// std::cout << "new jet iterate" << std::endl;
   	// for(int i = 0; i == numberOfdaughters-1; i++){
   	// 	std::cout << "i: " << i <<std::endl;
@@ -313,11 +311,11 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
   	// }
   	for(int i=0; i!=numberOfdaughters; i++){
   		// const reco::Candidate* iDaughter = iJet->daughter(i);
-  		int ID = iJet->daughter(i)->pdgId();
+  		int ID = daughters[i]->pdgId();
 
-  		if(abs(ID)==4){
-  			std::cout << ID << " numberOfdaughters" << std::endl;
-  		}
+  		// if(abs(ID)==5){
+  			std::cout << ID << " " << numberOfdaughters << std::endl;
+  		// }
   	}
 
   	// for( int i = numberOfdaughters; i !=0; i--){
