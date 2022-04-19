@@ -306,8 +306,10 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
         	antibJet = &(*(iJet));
         }
         else{
-        	if(sqrt(dR2(iJet->eta(), genMuon->eta(), iJet->phi(), genMuon->phi())) > 0.3 && sqrt(dR2(iJet->eta(), genElectron->eta(), iJet->phi(), genElectron->phi())) > 0.3 ){
-        		combinedJetsP4 = combinedJetsP4 + iJet->p4();
+        	if(genMuon!=0 && genElectron!=0){
+        		if(sqrt(dR2(iJet->eta(), genMuon->eta(), iJet->phi(), genMuon->phi())) > 0.3 && sqrt(dR2(iJet->eta(), genElectron->eta(), iJet->phi(), genElectron->phi())) > 0.3 ){
+        			combinedJetsP4 = combinedJetsP4 + iJet->p4();
+        		}
         	}
   			}
 
