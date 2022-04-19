@@ -298,38 +298,22 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	const reco::GenJet* antibJet=0;
 
   for( std::vector<reco::GenJet>::const_iterator iJet = genJets->begin(); iJet!= genJets->end(); iJet++) {
-  	int numberOfdaughters = iJet->numberOfDaughters();
-  	bool fromB = false;
-  	bool fromaB = false;
-  	// double ratioForBjet=0;
-    // double ratio = 0;
-  	const std::vector<edm::Ptr<reco::Candidate> > daughters = iJet->daughterPtrVector();
-  	// std::cout << "new jet iterate" << std::endl;
-  	// for(int i = 0; i == numberOfdaughters-1; i++){
-  	// 	std::cout << "i: " << i <<std::endl;
-  	// 	std::cout << daughters.at(i)->pdgId() << std::endl;
-  	// }
-  	for(int i=0; i!=numberOfdaughters; i++){
-  		// const reco::Candidate* iDaughter = iJet->daughter(i);
-  		int ID = daughters[i]->pdgId();
 
-  		if(abs(ID)==5){
-  			std::cout << ID << " " << numberOfdaughters << std::endl;
-  		}
-  	}
+        if (bJet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3  ){
+        	bJet = &(*(iJet));
+        }
+        else if(antibJet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
+        	antibJet = &(*(iJet));
+        }
+        else{
+        	if(sqrt(dR2(iJet->eta(), genMuon->eta(), iJet->phi(), genMuon->phi())) > 0.3 && sqrt(dR2(iJet->eta(), genElectron->eta(), iJet->phi(), genElectron->phi())) > 0.3 ){
+        		combinedJetsP4 = combinedJetsP4 + iJet->p4();
+        	}
+  			}
 
-  	// for( int i = numberOfdaughters; i !=0; i--){
-  	// 	std::cout << i << std::endl;
-  	// 	const reco::Candidate* iDaughter = iJet->daughter(i);
-  	// 	// bool isFromB = decayFromBHadron(*iDaughter);
-  	// 	// ratio = iDaughter->energy() / iJet->energy();
-  	// 	// if( isFromB ) { ratioForBjet += ratio; }
-  	// 	if(iDaughter->pdgId()==2){ fromB = true; }
-  	// 	else if(iDaughter->pdgId()==-2){ fromaB = true; }
-  	// }
-  	if (fromB && bJet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3 ){bJet = &(*(iJet)); }
-  	else if(fromaB && antibJet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){antibJet = &(*(iJet)); }
-  	else{ combinedJetsP4 = combinedJetsP4 + iJet->p4(); }
+  	// if (fromB && bJet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3 ){bJet = &(*(iJet)); }
+  	// else if(fromaB && antibJet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){antibJet = &(*(iJet)); }
+  	// else{ combinedJetsP4 = combinedJetsP4 + iJet->p4(); }
 
     // double bRatio = EnergyRatioFromBHadrons(iJet);
     // double cRatio = EnergyRatioFromCHadrons(iJet);
