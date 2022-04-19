@@ -306,8 +306,8 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
   	bool fromaB = false;
   	// double ratioForBjet=0;
    //  double ratio = 0;
-  	edm::RefVector<std::vector<reco::GenParticle> > daughters = iJet->daughterPtrVector();
-  	for (std::vector<reco::GenParticle>::const_iterator i = daughters.begin(); i != daughters.end(); ++i) {
+  	const std::vector<edm::Ptr<reco::Candidate> > daughters = iJet->daughterPtrVector();
+  	for (edm::Ptr<reco::Candidate> ::const_iterator i = daughters.begin(); i != daughters.end(); ++i) {
 		size_t	index = i->key();
 			std::cout << index << std::endl;
 		}
