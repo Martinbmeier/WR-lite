@@ -108,7 +108,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		bool tWfinder(const edm::Event&, const reco::GenParticle* );
 		bool tfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event&);
-		void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const pat::Electron*, const reco::GenJet*, const reco::GenJet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
+		void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const pat::Electron*, const reco::GenJet*, const reco::GenJet*, math::XYZTLorentzVector combinedGenJets, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
 		int binNumber(const pat::Muon*);
 		
 		
@@ -124,6 +124,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_highMuonToken;
 		edm::EDGetToken m_highElectronToken;
 		edm::EDGetToken m_AK4genCHSJetsToken;
+		edm::EDGetToken m_AK4CHSJetsToken;
 		edm::EDGetToken m_packedGenParticlesToken;
 		edm::EDGetToken m_packedPFCandidatesToken;
 		edm::EDGetToken m_genEventInfoToken;
@@ -136,8 +137,8 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		bool m_isSignal;
 		bool m_genTrainData;
 
-		std::string  cSV_bTag1      = "pfDeepCSVJetTags:probb";
-		std::string  cSV_bTag2      = "pfDeepCSVJetTags:probbb";
+		// std::string  cSV_bTag1      = "pfDeepCSVJetTags:probb";
+		// std::string  cSV_bTag2      = "pfDeepCSVJetTags:probbb";
 
 		double binEdges[17] = {0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 120.0, 140.0, 160.0, 180.0, 200.0, 220.0, 250.0, 300.0, 350.0, 400.0, 1000.0};
 		//double center[17] = {10.0, 30.0, 50.0, 70.0, 90.0, 110.0, 130.0, 150.0, 170.0, 190.0, 210.0, 235.0, 275.0, 325.0, 375.0, 700.0,};
@@ -165,6 +166,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_highMuonToken (consumes<std::vector<pat::Muon>> (iConfig.getParameter<edm::InputTag>("highMuons"))),
 	m_highElectronToken (consumes<std::vector<pat::Electron>> (iConfig.getParameter<edm::InputTag>("highElectrons"))),
 	m_AK4genCHSJetsToken (consumes<std::vector<reco::GenJet>> (iConfig.getParameter<edm::InputTag>("AK4genCHSJets"))),
+	m_AK4CHSJetsToken (consumes<std::vector<pat::Jet>> (iConfig.getParameter<edm::InputTag>("AK4CHSJets"))),
 	m_packedGenParticlesToken (consumes<std::vector<pat::PackedGenParticle>> (iConfig.getParameter<edm::InputTag>("packedGenParticles"))),
 	m_packedPFCandidatesToken (consumes<std::vector<reco::PFCandidate>> (iConfig.getParameter<edm::InputTag>("packedPFCandidates"))),
 	m_genEventInfoToken (consumes<GenEventInfoProduct> (iConfig.getParameter<edm::InputTag>("genInfo"))),
@@ -283,32 +285,39 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 	const pat::MET Met = recoMET->front();
 
+	math::XYZTLorentzVector combinedGenJetsP4 = {0., 0., 0., 0.};
 	math::XYZTLorentzVector combinedJetsP4 = {0., 0., 0., 0.};
 
 	edm::Handle<std::vector<reco::GenJet>> genJets;  
 	iEvent.getByToken(m_AK4genCHSJetsToken, genJets);  
 
-	const reco::GenJet* bJet1 = 0;
-	// // const pat::Jet* bJet2=0;
+	edm::Handle<std::vector<pat::Jet>> JetsAK4;  
+	iEvent.getByToken(m_AK4CHSJetsToken, JetsAK4);  
 
-	const reco::GenJet* Jet1 = 0;
-	// //const pat::Jet* Jet2=0;
+	const reco::GenJet* bGenJet1 = 0;
+	const pat::Jet* bJet1=0;
 
-	const reco::GenJet* bJet=0;
-	const reco::GenJet* antibJet=0;
+	const reco::GenJet* GenJet1 = 0;
+	const pat::Jet* Jet1=0;
+
+	const pat::Jet* bJet=0;
+	const pat::Jet* antibJet=0;
+
+	const reco::GenJet* bGenJet=0;
+	const reco::GenJet* antibGenJet=0;
 
   for( std::vector<reco::GenJet>::const_iterator iJet = genJets->begin(); iJet!= genJets->end(); iJet++) {
 
-        if (bJet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3  ){
-        	bJet = &(*(iJet));
+        if (bGenJet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3  ){
+        	bGenJet = &(*(iJet));
         }
-        else if(antibJet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
-        	antibJet = &(*(iJet));
+        else if(antibGenJet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
+        	antibGenJet = &(*(iJet));
         }
         else{
         	if(genMuon!=0 && genElectron!=0){
         		if(sqrt(dR2(iJet->eta(), genMuon->eta(), iJet->phi(), genMuon->phi())) > 0.3 && sqrt(dR2(iJet->eta(), genElectron->eta(), iJet->phi(), genElectron->phi())) > 0.3 ){
-        			combinedJetsP4 = combinedJetsP4 + iJet->p4();
+        			combinedGenJetsP4 = combinedGenJetsP4 + iJet->p4();
         		}
         	}
   			}
@@ -339,60 +348,25 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
         // 	}
     }
     
-  
 
+	//Get reco jets
+		for(std::vector<pat::Jet>::const_iterator iJet = JetsAK4->begin(); iJet != JetsAK4->end(); iJet++) {
 
-	//Get jets with maximum pt
-		// for(std::vector<reco::GenJet>::const_iterator iJet = genJetsAK4->begin(); iJet != genJetsAK4->end(); iJet++) {
-
-			
-
-		// 	double NHF  =           iJet->neutralHadronEnergyFraction();
-		// 	double NEMF =           iJet->neutralEmEnergyFraction();
-		// 	double CHF  =           iJet->chargedHadronEnergyFraction();
-		// 	double CEMF =           iJet->chargedEmEnergyFraction();
-		// 	double NumConst =       iJet->chargedMultiplicity()+iJet->neutralMultiplicity();
-		// 	double MUF      =       iJet->muonEnergyFraction();
-		// 	double EUF      =       iJet->electronEnergyFraction();
-		// 	double CHM      =       iJet->chargedMultiplicity();
-		// 	double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2);
-		// 	//APPLYING TIGHT QUALITY CUTS
-		// 	if (NHF > .9) continue;
-		// 	if (NEMF > .9) continue;
-		// 	if (NumConst <= 1) continue;
-		// 	if (MUF >= .8) continue; //MAKE SURE THE AREN'T MUONS
-		// 	if (EUF >= .8) continue; //MAKE SURE THE AREN'T ELECTRONS
-		// 	//ADDITIONAL CUTS BECAUSE OF TIGHT ETA CUT
-		// 	if (CHF == 0) continue;
-		// 	if (CHM == 0) continue;
-		// 	//if (CEMF > .99) continue;
-		// 	if (CEMF > .90)  continue;
-		// 	if(BJP > 0.4184) {
-		// 		if(bJet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3 ){
-		// 			bJet=&(*(iJet));
-		// 		}
-		// 		else if(antibJet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
-		// 			antibJet=&(*(iJet));
-		// 		}
-		// 		else{
-		// 			combinedJetsP4=combinedJetsP4+iJet->p4();
-		// 		}
-		// 	}
-		// 	// if(BJP > 0.4184){ 
-		// 	// 	if(bJet1==0){
-		// 	// 		bJet1=&(*(iJet));
-		// 	// 	}
-		// 	// 	else if(Jet1==0){
-		// 	// 		Jet1=&(*(iJet));
-		// 	// 	}
-		// 	// }
-
-		// 	// if(BJP < 0.4184){
-		// 	// 	if(Jet1==0){
-		// 	// 		Jet1=&(*(iJet));
-		// 	// 	}
-		// 	// }
-		// }
+			// double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2);
+				if(bJet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3 ){
+					bJet=&(*(iJet));
+				}
+				else if(antibJet == 0 && sqrt(dR2(iJet->eta(), antibquark->eta(), iJet->phi(), antibquark->phi())) < 0.3 ){
+					antibJet=&(*(iJet));
+				}
+				else{
+					if(genMuon!=0 && genElectron!=0){
+        		if(sqrt(dR2(iJet->eta(), genMuon->eta(), iJet->phi(), genMuon->phi())) > 0.3 && sqrt(dR2(iJet->eta(), genElectron->eta(), iJet->phi(), genElectron->phi())) > 0.3 ){
+        			combinedGenJetsP4 = combinedJetsP4 + iJet->p4();
+        		}
+        	}
+				}
+		}
 
 
 // check electron trigger
@@ -565,16 +539,18 @@ int NNstudies::binNumber(const pat::Muon* muon){
 	return 0;
 }
 
-void NNstudies::csvTable(const reco::GenParticle* genMuon, const reco::GenParticle* genElectron, const reco::GenParticle* muNu, const reco::GenParticle* eNu, const reco::GenParticle* tquark, const reco::GenParticle* antitquark, int binNumber, const pat::Muon* muon, const pat::Electron* electron, const reco::GenJet* bjet1, const reco::GenJet* jet1, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
+void NNstudies::csvTable(const reco::GenParticle* genMuon, const reco::GenParticle* genElectron, const reco::GenParticle* muNu, const reco::GenParticle* eNu, const reco::GenParticle* tquark, const reco::GenParticle* antitquark, int binNumber, const pat::Muon* muon, const pat::Electron* electron, const reco::GenJet* bgenjet1, const reco::GenJet* genjet1, math::XYZTLorentzVector combinedGenJets, const pat::Jet* bjet1, const pat::Jet* jet1, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
 
-ROOT::Math::Boost boostJets;
-boostJets.SetComponents(combinedJets.BoostToCM());
+// ROOT::Math::Boost boostJets;
+// boostJets.SetComponents(combinedJets.BoostToCM());
 
 
 math::XYZTLorentzVector muonP4 = muon->p4();
 math::XYZTLorentzVector electronP4 = electron->p4();
 math::XYZTLorentzVector bjet1P4 = bjet1->p4();
 math::XYZTLorentzVector jet1P4=jet1->p4();
+math::XYZTLorentzVector bgenjet1P4 = bgenjet1->p4();
+math::XYZTLorentzVector genjet1P4=genjet1->p4();
 math::XYZTLorentzVector genMuonP4 = genMuon->p4();
 math::XYZTLorentzVector genElectronP4 = genElectron->p4();
 math::XYZTLorentzVector muNuP4 = muNu->p4();
@@ -584,7 +560,7 @@ math::XYZTLorentzVector antitquarkP4 = antitquark->p4();
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT_9.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 		   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
@@ -605,6 +581,18 @@ myfile << muonP4.Px() << ", "
        << combinedJets.Py() <<", "
        << combinedJets.Pz() <<", "
        << combinedJets.E()  <<", "
+       << bgenjet1P4.Px() << ", "
+       << bgenjet1P4.Py() << ", "
+       << bgenjet1P4.Pz() << ", "
+       << bgenjet1P4.E()  << ", "
+       << genjet1P4.Px() << ", "
+       << genjet1P4.Py() << ", "
+       << genjet1P4.Pz() << ", "
+       << genjet1P4.E()  << ", "
+       << combinedGenJets.Px() <<", "
+       << combinedGenJets.Py() <<", "
+       << combinedGenJets.Pz() <<", "
+       << combinedGenJets.E()  <<", "
        << Met.pt() << ", "
        << Met.phi() <<", "
        << weight << ", "
@@ -646,9 +634,9 @@ NNstudies::beginJob() {
 
 	std::ofstream myfile;
 
-	// myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
-	// myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bjetP1,bjetP2,bjetP3,bjetP4,jetP1,jetP2,jetP3,jetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,METpt,METphi,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
-	// myfile.close();
+	myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
+	myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bgenjetP1,bgenjetP2,bgenjetP3,bgenjetP4,genjetP1,genjetP2,genjetP3,genjetP4,combinedGenJetsP1,combinedGenJetsP2,combinedGenJetsP3,combinedGenJetsP4,bjetP1,bjetP2,bjetP3,bjetP4,jetP1,jetP2,jetP3,jetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,METpt,METphi,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
+	myfile.close();
 
 	edm::Service<TFileService> fs;
 
