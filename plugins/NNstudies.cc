@@ -414,7 +414,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 			if(genMuon!=0 && genElectron!=0){m_histoMaker.fill(genMuon->pt());}
 
-			if(genMuon!=0 && genElectron!=0 && antibJet!=0 && bJet!=0){
+			if(genMuon!=0 && genElectron!=0 && antibJet!=0 && bJet!=0 && antibGenJet!=0 && bGenJet!=0){
 				if(genMuon->pdgId()<0){bJet1=bJet; Jet1=antibJet; bGenJet1=bGenJet; GenJet1=antibGenJet; }
 				if(genMuon->pdgId()>0){bJet1=antibJet; Jet1=bJet; bGenJet1=antibGenJet; GenJet1=bGenJet; }
 
