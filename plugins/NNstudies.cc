@@ -415,12 +415,12 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 			if(genMuon!=0 && genElectron!=0){m_histoMaker.fill(genMuon->pt());}
 
 			if(genMuon!=0 && genElectron!=0 && antibJet!=0 && bJet!=0){
-				if(genMuon->pdgId()<0){bJet1=bJet; Jet1=antibJet; }
-				if(genMuon->pdgId()>0){bJet1=antibJet; Jet1=bJet; }
+				if(genMuon->pdgId()<0){bJet1=bJet; Jet1=antibJet; bGenJet1=bGenJet; GenJet1=antibGenJet; }
+				if(genMuon->pdgId()>0){bJet1=antibJet; Jet1=bJet; bGenJet1=antibGenJet; GenJet1=bGenJet; }
 
 				if(muNu!=0 && eNu!=0 && recoMuon1!=0 && recoElectron1!=0 && tquark
 					!= 0 && antitquark != 0){	
-					csvTable(genMuon,genElectron,muNu,eNu,tquark,antitquark,binNumber(recoMuon1),recoMuon1,recoElectron1,bJet1,Jet1,combinedJetsP4,Met,eventCount);
+					csvTable(genMuon,genElectron,muNu,eNu,tquark,antitquark,binNumber(recoMuon1),recoMuon1,recoElectron1,bGenJet1,GenJet1,combinedGenJetsP4,bJet1,Jet1,combinedJetsP4,Met,eventCount);
 					// ROOT::Math::Boost boostTT;
 				  // boostTT.SetComponents(combinedJetsP4.BoostToCM());
 				  // auto tquarkP4 = boostTT(tquark->p4());
