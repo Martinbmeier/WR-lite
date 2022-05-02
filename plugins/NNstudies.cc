@@ -353,8 +353,8 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 		for(std::vector<pat::Jet>::const_iterator iJet = JetsAK4->begin(); iJet != JetsAK4->end(); iJet++) {
 
 			// double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2);
-			double NHF  =           iJet->neutralHadronEnergyFraction();
-			// double NEMF =           iJet->neutralEmEnergyFraction();
+			// double NHF  =           iJet->neutralHadronEnergyFraction();
+			double NEMF =           iJet->neutralEmEnergyFraction();
 			// double CHF  =           iJet->chargedHadronEnergyFraction();
 			// double CEMF =           iJet->chargedEmEnergyFraction();
 			// double NumConst =       iJet->chargedMultiplicity()+iJet->neutralMultiplicity();
@@ -363,8 +363,8 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 			// double CHM      =       iJet->chargedMultiplicity();
 			// // double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2);
 			// //APPLYING TIGHT QUALITY CUTS
-			if (NHF > .9) continue;
-			// if (NEMF > .9) continue;
+			// if (NHF > .9) continue;
+			if (NEMF > .9) continue;
 			// if (NumConst <= 1) continue;
 			// if (MUF >= .8) continue; //MAKE SURE THE AREN'T MUONS
 			// if (EUF >= .8) continue; //MAKE SURE THE AREN'T ELECTRONS
@@ -581,7 +581,7 @@ math::XYZTLorentzVector antitquarkP4 = antitquark->p4();
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT_cut1.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_cut2.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 		   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
@@ -655,7 +655,7 @@ NNstudies::beginJob() {
 
 	std::ofstream myfile;
 
-	myfile.open("neuralNetDataTT_cut1.csv",std::ios_base::app);
+	myfile.open("neuralNetDataTT_cut2.csv",std::ios_base::app);
 	myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bjetP1,bjetP2,bjetP3,bjetP4,jetP1,jetP2,jetP3,jetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,bgenjetP1,bgenjetP2,bgenjetP3,bgenjetP4,genjetP1,genjetP2,genjetP3,genjetP4,combinedGenJetsP1,combinedGenJetsP2,combinedGenJetsP3,combinedGenJetsP4,METpt,METphi,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
 	myfile.close();
 
