@@ -581,7 +581,7 @@ math::XYZTLorentzVector antitquarkP4 = antitquark->p4();
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT_1csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_2csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 		   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
@@ -655,9 +655,9 @@ NNstudies::beginJob() {
 
 	std::ofstream myfile;
 
-	myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
-	myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bjetP1,bjetP2,bjetP3,bjetP4,jetP1,jetP2,jetP3,jetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,bgenjetP1,bgenjetP2,bgenjetP3,bgenjetP4,genjetP1,genjetP2,genjetP3,genjetP4,combinedGenJetsP1,combinedGenJetsP2,combinedGenJetsP3,combinedGenJetsP4,METpt,METphi,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
-	myfile.close();
+	// myfile.open("neuralNetDataTT_1.csv",std::ios_base::app);
+	// myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bjetP1,bjetP2,bjetP3,bjetP4,jetP1,jetP2,jetP3,jetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,bgenjetP1,bgenjetP2,bgenjetP3,bgenjetP4,genjetP1,genjetP2,genjetP3,genjetP4,combinedGenJetsP1,combinedGenJetsP2,combinedGenJetsP3,combinedGenJetsP4,METpt,METphi,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
+	// myfile.close();
 
 	edm::Service<TFileService> fs;
 
