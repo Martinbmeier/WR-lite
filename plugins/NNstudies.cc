@@ -578,7 +578,7 @@ math::XYZTLorentzVector muNuP4 = muNu->p4();
 math::XYZTLorentzVector eNuP4 = eNu->p4();
 math::XYZTLorentzVector tquarkP4 = tquark->p4();
 math::XYZTLorentzVector antitquarkP4 = antitquark->p4();
-math::XYZTLorentzVector metP4 = Met->p4();
+math::XYZTLorentzVector metP4 = Met.p4();
 
 
 std::ofstream myfile;
