@@ -249,7 +249,7 @@ const reco::GenParticle* antibquark = 0;
 const reco::GenParticle* tquark = 0;
 const reco::GenParticle* antitquark = 0;
 
-int leptonCount = 0;
+// int leptonCount = 0;
 
 for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->begin(); iParticle != genParticles->end(); iParticle++) {
 	if( ! iParticle->isHardProcess() ){ continue; }
@@ -305,7 +305,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
   for( std::vector<reco::GenJet>::const_iterator iJet = genJets->begin(); iJet!= genJets->end(); iJet++) {
 
-    if(genMuon!=0 && genElectron!=0){
+    if(genMuon!=0 && genElectron!=0 && bquark !=0 && antibquark != 0){
       if(sqrt(dR2(iJet->eta(), genMuon->eta(), iJet->phi(), genMuon->phi())) > 0.35 && sqrt(dR2(iJet->eta(), genElectron->eta(), iJet->phi(), genElectron->phi())) > 0.35 ){
         if (bGenJet == 0 && sqrt(dR2(iJet->eta(), bquark->eta(), iJet->phi(), bquark->phi())) < 0.3  ){
         	bGenJet = &(*(iJet));
