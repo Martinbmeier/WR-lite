@@ -346,47 +346,6 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
     }
     
 
-	//Get reco jets
-
-		for(std::vector<pat::Jet>::const_iterator iJet = JetsAK4->begin(); iJet != JetsAK4->end(); iJet++) {
-
-			double NHF  =           iJet->neutralHadronEnergyFraction(); //cuts 1
-			double NEMF =           iJet->neutralEmEnergyFraction(); //cuts 2
-			double CHF  =           iJet->chargedHadronEnergyFraction(); //cuts 3
-			double CEMF =           iJet->chargedEmEnergyFraction();  //cuts 4
-			double NumConst =       iJet->chargedMultiplicity()+iJet->neutralMultiplicity(); //cuts 5
-			double MUF      =       iJet->muonEnergyFraction(); 
-			double EUF      =       iJet->electronEnergyFraction();
-			double CHM      =       iJet->chargedMultiplicity();
-			double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2);
-			//APPLYING TIGHT QUALITY CUTS
-			if (NHF > .9) continue;
-			if (NEMF > .9) continue;
-			if (NumConst <= 1) continue;
-			if (MUF >= .8) continue; //MAKE SURE THE AREN'T MUONS
-			if (EUF >= .8) continue; //MAKE SURE THE AREN'T ELECTRONS
-			//ADDITIONAL CUTS BECAUSE OF TIGHT ETA CUT
-			if (CHF == 0) continue;
-			if (CHM == 0) continue;
-			//if (CEMF > .99) continue;
-			if (CEMF > .90)  continue;
-
-		if(genMuon!=0 && genElectron!=0){
-    	if(sqrt(dR2(iJet->eta(), genMuon->eta(), iJet->phi(), genMuon->phi())) > 0.35 && sqrt(dR2(iJet->eta(), genElectron->eta(), iJet->phi(), genElectron->phi())) > 0.35 ){
-
-				if(bJet == 0 && BJP > 0.4184){
-					bJet=&(*(iJet));
-				}
-				else if(Jet == 0){
-					Jet=&(*(iJet));
-				}
-				else{
-        	combinedJetsP4 = combinedJetsP4 + iJet->p4();
-        }
-      }
-		}
-	}
-
 
 // check electron trigger
 //if (passElectronTrig(iEvent)){ electronTrigger=true; }
@@ -423,6 +382,47 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				}
 				
 			}
+
+		//Get reco jets
+
+		for(std::vector<pat::Jet>::const_iterator iJet = JetsAK4->begin(); iJet != JetsAK4->end(); iJet++) {
+
+			double NHF  =           iJet->neutralHadronEnergyFraction(); //cuts 1
+			double NEMF =           iJet->neutralEmEnergyFraction(); //cuts 2
+			double CHF  =           iJet->chargedHadronEnergyFraction(); //cuts 3
+			double CEMF =           iJet->chargedEmEnergyFraction();  //cuts 4
+			double NumConst =       iJet->chargedMultiplicity()+iJet->neutralMultiplicity(); //cuts 5
+			double MUF      =       iJet->muonEnergyFraction(); 
+			double EUF      =       iJet->electronEnergyFraction();
+			double CHM      =       iJet->chargedMultiplicity();
+			double BJP		 =       iJet->bDiscriminator(cSV_bTag1) + iJet->bDiscriminator(cSV_bTag2);
+			//APPLYING TIGHT QUALITY CUTS
+			if (NHF > .9) continue;
+			if (NEMF > .9) continue;
+			if (NumConst <= 1) continue;
+			if (MUF >= .8) continue; //MAKE SURE THE AREN'T MUONS
+			if (EUF >= .8) continue; //MAKE SURE THE AREN'T ELECTRONS
+			//ADDITIONAL CUTS BECAUSE OF TIGHT ETA CUT
+			if (CHF == 0) continue;
+			if (CHM == 0) continue;
+			//if (CEMF > .99) continue;
+			if (CEMF > .90)  continue;
+
+		if(recoMuon!=0 && recoElectron!=0){
+    	if(sqrt(dR2(iJet->eta(), recoMuon->eta(), iJet->phi(), recoMuon->phi())) > 0.35 && sqrt(dR2(iJet->eta(), recoElectron->eta(), iJet->phi(), recoElectron->phi())) > 0.35 ){
+
+				if(bJet == 0 && BJP > 0.4184){
+					bJet=&(*(iJet));
+				}
+				else if(Jet == 0){
+					Jet=&(*(iJet));
+				}
+				else{
+        	combinedJetsP4 = combinedJetsP4 + iJet->p4();
+        }
+      }
+		}
+	}
 
 		m_eventsWeight->Fill(0.5, eventCount);
 
