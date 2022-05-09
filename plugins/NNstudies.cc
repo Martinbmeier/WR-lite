@@ -426,7 +426,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 		m_eventsWeight->Fill(0.5, eventCount);
 
-		if(leptonCount == 2){
+		// if(leptonCount == 2){
 
 			if(genMuon!=0 && genElectron!=0){m_histoMaker.fill(genMuon->pt());}
 
@@ -446,7 +446,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 
 		}
-	}
+	// }
 
 
 
