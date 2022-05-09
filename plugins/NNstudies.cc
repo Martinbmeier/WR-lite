@@ -261,11 +261,11 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 		if(tWfinder(iEvent, &(*iParticle))){  // check if the gen particle comes from a top->W->lepton
 			if(abs(iParticle->pdgId())==13){
-				leptonCount += 1;
+				// leptonCount += 1;
 				if(genMuon==0){genMuon = &(*(iParticle));}
 			}	
 			else if(abs(iParticle->pdgId())==11){
-				leptonCount += 1;
+				// leptonCount += 1;
 				if(genElectron==0){genElectron = &(*(iParticle));}
 			}
 			else if(abs(iParticle->pdgId())==12){
