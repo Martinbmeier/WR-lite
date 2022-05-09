@@ -428,13 +428,13 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 		// if(leptonCount == 2){
 
-			if(genMuon!=0 && genElectron!=0){m_histoMaker.fill(genMuon->pt());}
+			// if(genMuon!=0 && genElectron!=0){m_histoMaker.fill(genMuon->pt());}
 
 			if(genMuon!=0 && genElectron!=0 && antibGenJet!=0 && bGenJet!=0){
 				if(genMuon->pdgId()<0){eJet=bGenJet; muJet=antibGenJet; }
 				if(genMuon->pdgId()>0){eJet=antibGenJet; muJet=bGenJet; }
 
-				if(muNu!=0 && eNu!=0 && recoMuon!=0 && recoElectron!=0 && tquark != 0 && antitquark != 0){	
+				if(muNu!=0 && eNu!=0 && recoMuon!=0 && recoElectron!=0 && tquark != 0 && antitquark != 0 && bJet != 0 && Jet != 0){	
 					csvTable(genMuon,genElectron,muNu,eNu,tquark,antitquark,binNumber(genMuon),recoMuon,recoElectron,muJet,eJet,combinedGenJetsP4,bJet,Jet,combinedJetsP4,Met,eventCount);
 					// ROOT::Math::Boost boostTT;
 				  // boostTT.SetComponents(combinedJetsP4.BoostToCM());
