@@ -109,7 +109,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		bool tfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event&);
 		void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const pat::Electron*, const reco::GenJet*, const reco::GenJet*, math::XYZTLorentzVector combinedGenJets, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
-		int binNumber(const pat::Muon*);
+		int binNumber(const reco::GenParticle*);
 		
 		
 		cutFlowHistos m_histoMaker;
@@ -541,7 +541,7 @@ bool NNstudies::passElectronTrig(const edm::Event& iEvent) {
   return passTriggers;
 }
 
-int NNstudies::binNumber(const pat::Muon* muon){
+int NNstudies::binNumber(const reco::GenParticle* muon){
 
 	double muonPT = muon->pt();
 
