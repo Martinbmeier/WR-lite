@@ -360,7 +360,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
    		if(!(iMuon->isHighPtMuon(*myEvent.PVertex))) continue; // || !iMuon->passed(reco::Muon::TkIsoTight)) continue; //preliminary cut
 
-   		if(recoMuon==0){
+   		if(recoMuon==0 && genMuon!=0){
    			if(sqrt(dR2(recoMuon->eta(), genMuon->eta(), recoMuon->phi(), genMuon->phi())) < 0.3){
    				recoMuon=&(*(iMuon));
    			}
