@@ -376,9 +376,9 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 				// const vid::CutFlowResult* vidResult =  iElectron->userData<vid::CutFlowResult>("heepElectronID_HEEPV70");
 				// const bool heepIDVID = vidResult->cutFlowPassed();
-				// const bool tightID = iElectron.electronID("cutBasedElectronID-Fall17-94X-V2-tight");
+				const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
 				// if(heepIDVID == false){continue;}
-				// if(tightID == false){continue;}
+				if(tightID == false){continue;}
 				if(iElectron->pt()<15){continue;}
 				
 				if(recoElectron==0){ 
