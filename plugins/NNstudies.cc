@@ -383,18 +383,18 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	//electron reco
 
 		const pat::Electron* recoElectron=0;
-		int i = 0;
+		// int i = 0;
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
-				const auto el = highElectrons->ptrAt(i);
-				i++;
+				// const auto el = highElectrons->ptrAt(i);
+				// i++;
 				// const vid::CutFlowResult* vidResult =  iElectron->userData<vid::CutFlowResult>("heepElectronID_HEEPV70");
 				// const bool heepIDVID = vidResult->cutFlowPassed();
 				// const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
 				// const bool tightMVA = iElectron->electronID("")
-				std::cout << (*mvaValues)[el] << std::endl;
-				std::cout << (*mvaCategories)[el] << std::endl; 
+				std::cout << (*mvaValues)[iElectron] << std::endl;
+				std::cout << (*mvaCategories)[iElectron] << std::endl; 
 				// if(heepIDVID == false){continue;}
-				if(tightID == false){continue;}
+				// if(tightID == false){continue;}
 				if(iElectron->pt()<15){continue;}
 				
 				if(recoElectron==0){ 
