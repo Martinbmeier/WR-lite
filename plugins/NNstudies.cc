@@ -219,6 +219,14 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	edm::Handle<std::vector<pat::Electron>> highElectrons;
 	iEvent.getByToken(m_highElectronToken, highElectrons);
 
+	// edm::Handle<edm::View<reco::GsfElectron> > highElectrons;
+ //  bool isAOD = true;
+ //  iEvent.getByToken(m_highElectronToken, highElectrons);
+ //  if( !electrons.isValid() ){
+ //    isAOD = false;
+ //    iEvent.getByToken(electronsMiniAODToken_, highElectrons);
+ //  }
+
 	edm::Handle<std::vector<reco::GenParticle>> genParticles;
 	iEvent.getByToken(m_genParticleToken, genParticles);
 
@@ -391,8 +399,8 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				// const bool heepIDVID = vidResult->cutFlowPassed();
 				// const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
 				// const bool tightMVA = iElectron->electronID("")
-				std::cout << (*mvaValues)[iElectron] << std::endl;
-				std::cout << (*mvaCategories)[iElectron] << std::endl; 
+				std::cout << (*mvaValues)[&(*iterator)] << std::endl;
+				std::cout << (*mvaCategories)[&(*iterator)] << std::endl; 
 				// if(heepIDVID == false){continue;}
 				// if(tightID == false){continue;}
 				if(iElectron->pt()<15){continue;}
