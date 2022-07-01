@@ -216,7 +216,7 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	edm::Handle<std::vector<pat::Muon>> highMuons;
 	iEvent.getByToken(m_highMuonToken, highMuons);
 
-	edm::Handle<std::vector<pat::Electron>> highElectrons;
+	edm::Handle<edm::View<reco::GsfElectron> > highElectrons;
 	iEvent.getByToken(m_highElectronToken, highElectrons);
 
 	// edm::Handle<edm::View<reco::GsfElectron> > highElectrons;
@@ -406,11 +406,11 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				
 			// }
 
-			for (int i = 0; i < highElectrons.size(); i++){
-				pat::Electron iElectron = highElectrons[i];
+ 			for (size_t i = 0; i < highElectrons->size(); ++i){
+				const auto el = highElectrons->ptrAt(i);
 				// pat::Electron* el = &iElectron;
-			  std::cout << (*mvaValues)[&iElectron] << std::endl;
-			  std::cout << (*mvaCategories)[&iElectron] << std::endl; 
+			  std::cout << (*mvaValues)[el] << std::endl;
+			  std::cout << (*mvaCategories)[el] << std::endl; 
 			}
 
 				// const auto el = highElectrons->ptrAt(i);
