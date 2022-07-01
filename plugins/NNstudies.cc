@@ -34,6 +34,7 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Utilities/interface/InputTag.h"
 #include "FWCore/Utilities/interface/EDGetToken.h"
+#include "DataFormats/Common/interface/ValueMap.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/Math/interface/deltaR.h"
@@ -131,6 +132,9 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_offlineVerticesToken;
 		std::vector<std::string>  m_electronPathsToPass;
 		edm::EDGetToken m_trigResultsToken;
+
+		edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken_;
+    edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken_;
 		
 		std::string m_dataSaveFile;
 
@@ -171,7 +175,10 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_genEventInfoToken (consumes<GenEventInfoProduct> (iConfig.getParameter<edm::InputTag>("genInfo"))),
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
-	m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal"))
+	m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
+
+	mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"))),
+  mvaCategoriesMapToken_(consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap")))
 
 {
    //now do what ever initialization is needed
@@ -223,6 +230,11 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	edm::Handle<std::vector<pat::MET>> recoMET;
 	iEvent.getByToken(m_recoMETToken, recoMET);
+
+	edm::Handle<edm::ValueMap<float> > mvaValues;
+  edm::Handle<edm::ValueMap<int> > mvaCategories;
+  iEvent.getByToken(mvaValuesMapToken_,mvaValues);
+  iEvent.getByToken(mvaCategoriesMapToken_,mvaCategories);
 	
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
@@ -376,8 +388,10 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 				// const vid::CutFlowResult* vidResult =  iElectron->userData<vid::CutFlowResult>("heepElectronID_HEEPV70");
 				// const bool heepIDVID = vidResult->cutFlowPassed();
-				const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
+				// const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
 				// const bool tightMVA = iElectron->electronID("")
+				printf((*mvaValues)[iElectron])
+				printf((*mvaCategories)[iElectron])
 				// if(heepIDVID == false){continue;}
 				if(tightID == false){continue;}
 				if(iElectron->pt()<15){continue;}
@@ -581,7 +595,7 @@ math::XYZTLorentzVector metP4 = Met.p4();
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTTID1_13.csv",std::ios_base::app);
+myfile.open("test.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 		   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
