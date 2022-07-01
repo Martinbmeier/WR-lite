@@ -132,14 +132,14 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_offlineVerticesToken;
 		std::vector<std::string>  m_electronPathsToPass;
 		edm::EDGetToken m_trigResultsToken;
-
-		edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken_;
-    edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken_;
 		
 		std::string m_dataSaveFile;
 
 		bool m_isSignal;
 		bool m_genTrainData;
+
+		edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken_;
+    edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken_;
 
 		std::string  cSV_bTag1      = "pfDeepCSVJetTags:probb";
 		std::string  cSV_bTag2      = "pfDeepCSVJetTags:probbb";
