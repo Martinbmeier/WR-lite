@@ -399,8 +399,8 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				// const bool heepIDVID = vidResult->cutFlowPassed();
 				// const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
 				// const bool tightMVA = iElectron->electronID("")
-				std::cout << (*mvaValues)[&(*iElectron)] << std::endl;
-				std::cout << (*mvaCategories)[&(*iElectron)] << std::endl; 
+				std::cout << (*mvaValues)[(*iElectron)] << std::endl;
+				std::cout << (*mvaCategories)[(*iElectron)] << std::endl; 
 				// if(heepIDVID == false){continue;}
 				// if(tightID == false){continue;}
 				if(iElectron->pt()<15){continue;}
