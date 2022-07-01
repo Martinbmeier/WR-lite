@@ -383,7 +383,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	//electron reco
 
 		const pat::Electron* recoElectron=0;
-		i = 0
+		int i = 0;
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
 				const auto el = highElectrons->ptrAt(i);
 				i++;
