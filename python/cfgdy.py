@@ -774,7 +774,7 @@ process.heepIDVarValueMaps.elesMiniAOD  = 'selectedElectrons'
 process.electronMVAValueMapProducer.srcMiniAOD = cms.InputTag('selectedElectrons')
 process.heepElectrons.src = cms.InputTag('selectedElectrons')
 
-//process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
+process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
 
 ####EE L1 Prefiring Correction ####
 from PhysicsTools.PatUtils.l1ECALPrefiringWeightProducer_cfi import l1ECALPrefiringWeightProducer
@@ -799,7 +799,7 @@ elif options.era == '2018':
 
 
 process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
-                           * process.muonSelectionSeq * process.electronMVAValueMapProducer.srcMiniAOD * process.analysis ) #* process.printTree)
+                           * process.muonSelectionSeq * process.electronMVAValueMapProducer * process.analysis ) #* process.printTree)
 # process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
 #                            * process.analysis)# * process.printTree)
 #process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
