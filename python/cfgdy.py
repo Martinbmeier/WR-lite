@@ -205,10 +205,10 @@ process.source = cms.Source ("PoolSource",
 # 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/120000/11381273-2BE2-EC41-9125-FC7EFD93A3F2.root',
 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/120000/117C9220-9DA4-2C47-A7B0-00C288460587.root',
 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/120000/124552A8-AC8E-484C-804A-0A3F060D0114.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/120000/1313FAA7-09C4-284F-8172-F894722F7788.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/120000/13766D4D-5B9B-6449-A41A-CDCE839080CD.root',
+'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/120000/1385437B-E07C-1E49-9305-BC9D54E085FB.root',
 
-# 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/120000/1313FAA7-09C4-284F-8172-F894722F7788.root',
-# 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/120000/13766D4D-5B9B-6449-A41A-CDCE839080CD.root',
-# 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/120000/1385437B-E07C-1E49-9305-BC9D54E085FB.root',
 # 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/120000/13C4A89C-CE62-EF49-9757-505A6F58D79F.root',
 # 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/120000/14F8E041-7C82-C54D-A009-BD319674FFDB.root',
 # 'root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/120000/1543208D-7586-314F-A2D7-7F16F5889F46.root',
@@ -774,7 +774,7 @@ process.heepIDVarValueMaps.elesMiniAOD  = 'selectedElectrons'
 process.electronMVAValueMapProducer.srcMiniAOD = cms.InputTag('selectedElectrons')
 process.heepElectrons.src = cms.InputTag('selectedElectrons')
 
-process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
+//process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
 
 ####EE L1 Prefiring Correction ####
 from PhysicsTools.PatUtils.l1ECALPrefiringWeightProducer_cfi import l1ECALPrefiringWeightProducer
@@ -799,7 +799,7 @@ elif options.era == '2018':
 
 
 process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
-                           * process.muonSelectionSeq * process.electronMVAValueMapProducer * process.analysis ) #* process.printTree)
+                           * process.muonSelectionSeq * process.electronMVAValueMapProducer.srcMiniAOD * process.analysis ) #* process.printTree)
 # process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
 #                            * process.analysis)# * process.printTree)
 #process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence

@@ -397,12 +397,12 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				// i++;
 				// const vid::CutFlowResult* vidResult =  iElectron->userData<vid::CutFlowResult>("heepElectronID_HEEPV70");
 				// const bool heepIDVID = vidResult->cutFlowPassed();
-				// const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
+				const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
 				// const bool tightMVA = iElectron->electronID("")
-				std::cout << (*mvaValues)<<std::endl;//[&(*iElectron)] << std::endl;
-				std::cout << (*mvaCategories)<<std::endl;//[&(*iElectron)] << std::endl; 
+				// std::cout << (*mvaValues)<<std::endl;//[&(*iElectron)] << std::endl;
+				// std::cout << (*mvaCategories)<<std::endl;//[&(*iElectron)] << std::endl; 
 				// if(heepIDVID == false){continue;}
-				// if(tightID == false){continue;}
+				if(tightID == false){continue;}
 				if(iElectron->pt()<15){continue;}
 				
 				if(recoElectron==0){ 
@@ -604,7 +604,7 @@ math::XYZTLorentzVector metP4 = Met.p4();
 
 
 std::ofstream myfile;
-myfile.open("test.csv",std::ios_base::app);
+myfile.open("neuralNetDataTTID1_14.csv.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 		   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
