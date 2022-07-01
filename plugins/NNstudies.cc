@@ -377,6 +377,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				// const vid::CutFlowResult* vidResult =  iElectron->userData<vid::CutFlowResult>("heepElectronID_HEEPV70");
 				// const bool heepIDVID = vidResult->cutFlowPassed();
 				const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
+				// const bool tightMVA = iElectron->electronID("")
 				// if(heepIDVID == false){continue;}
 				if(tightID == false){continue;}
 				if(iElectron->pt()<15){continue;}
@@ -580,7 +581,7 @@ math::XYZTLorentzVector metP4 = Met.p4();
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTTID1_12.csv",std::ios_base::app);
+myfile.open("neuralNetDataTTID1_13.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 		   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
