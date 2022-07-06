@@ -412,7 +412,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				const auto el = highElectrons->ptrAt(i);
 				// pat::Electron* el = &iElectron;
 			  std::cout << "mva value: " << (*mvaValues)[el] << std::endl;
-			  std::cout <<  "mva categories" <<  (*mvaCategories)[el] << std::endl; 
+			  // std::cout <<  "mva categories" <<  (*mvaCategories)[el] << std::endl; 
 			}
 
 				// const auto el = highElectrons->ptrAt(i);
