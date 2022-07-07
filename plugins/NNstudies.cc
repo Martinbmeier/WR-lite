@@ -176,7 +176,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_genEventInfoToken (consumes<GenEventInfoProduct> (iConfig.getParameter<edm::InputTag>("genInfo"))),
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
-	m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
+	m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal"))
 
 	// mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"))),
  //  mvaCategoriesMapToken_(consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap")))
@@ -397,7 +397,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 		const pat::Electron* recoElectron=0;
 		// int i = 0;
 			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
-				const bool tightID = iElectron.electronID("cutBasedElectronID-Fall17-94X-V2-tight");
+				const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
 				// std::cout << (*mvaValues)[&(*iElectron)] << std::endl;
 				// std::cout << (*mvaCategories)[&(*iElectron)] << std::endl; 
 				// if(heepIDVID == false){continue;}
