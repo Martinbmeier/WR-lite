@@ -243,10 +243,10 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	edm::Handle<std::vector<pat::MET>> recoMET;
 	iEvent.getByToken(m_recoMETToken, recoMET);
 
-	edm::Handle<edm::ValueMap<float> > mvaValues;
-  edm::Handle<edm::ValueMap<int> > mvaCategories;
-  iEvent.getByToken(mvaValuesMapToken_,mvaValues);
-  iEvent.getByToken(mvaCategoriesMapToken_,mvaCategories);
+	// edm::Handle<edm::ValueMap<float> > mvaValues;
+ //  edm::Handle<edm::ValueMap<int> > mvaCategories;
+  // iEvent.getByToken(mvaValuesMapToken_,mvaValues);
+  // iEvent.getByToken(mvaCategoriesMapToken_,mvaCategories);
 	
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
