@@ -167,8 +167,8 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_genParticleToken(consumes<std::vector<reco::GenParticle>> (iConfig.getParameter<edm::InputTag>("genParticles"))),
 	m_recoMETToken(consumes<std::vector<pat::MET>> (iConfig.getParameter<edm::InputTag>("recoMET"))),
 	m_highMuonToken (consumes<std::vector<pat::Muon>> (iConfig.getParameter<edm::InputTag>("highMuons"))),
-	// m_highElectronToken (consumes<std::vector<pat::Electron>> (iConfig.getParameter<edm::InputTag>("highElectrons"))),
-	m_highElectronToken (consumes<edm::View<reco::GsfElectron>> (iConfig.getParameter<edm::InputTag>("highElectrons"))),
+	m_highElectronToken (consumes<std::vector<pat::Electron>> (iConfig.getParameter<edm::InputTag>("highElectrons"))),
+	// m_highElectronToken (consumes<edm::View<reco::GsfElectron>> (iConfig.getParameter<edm::InputTag>("highElectrons"))),
 	m_AK4genCHSJetsToken (consumes<std::vector<reco::GenJet>> (iConfig.getParameter<edm::InputTag>("AK4genCHSJets"))),
 	m_AK4CHSJetsToken (consumes<std::vector<pat::Jet>> (iConfig.getParameter<edm::InputTag>("AK4CHSJets"))),
 	m_packedGenParticlesToken (consumes<std::vector<pat::PackedGenParticle>> (iConfig.getParameter<edm::InputTag>("packedGenParticles"))),
@@ -178,8 +178,8 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
 	m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
 
-	mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"))),
-  mvaCategoriesMapToken_(consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap")))
+	// mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"))),
+ //  mvaCategoriesMapToken_(consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap")))
 
 {
    //now do what ever initialization is needed
@@ -217,8 +217,11 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	edm::Handle<std::vector<pat::Muon>> highMuons;
 	iEvent.getByToken(m_highMuonToken, highMuons);
 
-	edm::Handle<edm::View<reco::GsfElectron> > highElectrons;
+	edm::Handle<std::vector<pat::Electron>> highElectrons;
 	iEvent.getByToken(m_highElectronToken, highElectrons);
+
+	// edm::Handle<edm::View<reco::GsfElectron> > highElectrons;
+	// iEvent.getByToken(m_highElectronToken, highElectrons);
 
 	// edm::Handle<edm::View<reco::GsfElectron> > highElectrons;
  //  bool isAOD = true;
@@ -393,27 +396,29 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 		const pat::Electron* recoElectron=0;
 		// int i = 0;
-			// for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
-
-			// 	std::cout << (*mvaValues)[&(*iElectron)] << std::endl;
-			// 	std::cout << (*mvaCategories)[&(*iElectron)] << std::endl; 
-			// 	// if(heepIDVID == false){continue;}
-			// 	if(tightID == false){continue;}
-			// 	if(iElectron->pt()<15){continue;}
+			for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
+				const bool tightID = iElectron.electronID("cutBasedElectronID-Fall17-94X-V2-tight");
+				// std::cout << (*mvaValues)[&(*iElectron)] << std::endl;
+				// std::cout << (*mvaCategories)[&(*iElectron)] << std::endl; 
+				// if(heepIDVID == false){continue;}
+				if(tightID == false){continue;}
+				if(iElectron->pt()<15){continue;}
 				
-			// 	if(recoElectron==0){ 
-			// 			recoElectron=&(*(iElectron)); 
-			// 	}
+				if(recoElectron==0 && genElectron!=0){ 
+					if(sqrt(dR2(iElectron->eta(), genElectron->eta(), iElectron->phi(), genElectron->phi())) < 0.3){
+						recoElectron=&(*(iElectron)); 
+					}
+				}
 				
-			// }
-
- 			for (size_t i = 0; i < highElectrons->size(); ++i){
- 				
-				const auto el = highElectrons->ptrAt(i);
-				// pat::Electron* el = &iElectron;
-			  std::cout << "mva value: " << (*mvaValues)[el] << std::endl;
-			  // std::cout <<  "mva categories" <<  (*mvaCategories)[el] << std::endl; 
 			}
+
+ 		// 	for (size_t i = 0; i < highElectrons->size(); ++i){
+ 				
+			// 	const auto el = highElectrons->ptrAt(i);
+			// 	// pat::Electron* el = &iElectron;
+			//   std::cout << "mva value: " << (*mvaValues)[el] << std::endl;
+			//   // std::cout <<  "mva categories" <<  (*mvaCategories)[el] << std::endl; 
+			// }
 
 				// const auto el = highElectrons->ptrAt(i);
 				// i++;
@@ -615,7 +620,7 @@ math::XYZTLorentzVector metP4 = Met.p4();
 
 
 std::ofstream myfile;
-myfile.open("test.csv",std::ios_base::app);
+myfile.open("neuralNetDataHPT_Tight_0.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 		   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
@@ -690,9 +695,9 @@ NNstudies::beginJob() {
 
 	std::ofstream myfile;
 
-	// myfile.open("neuralNetDataTTID1_0.csv",std::ios_base::app);
-	// myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bJetP1,bJetP2,bJetP3,bJetP4,JetP1,JetP2,JetP3,JetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,muJetP1,muJetP2,muJetP3,muJetP4,eJetP1,eJetP2,eJetP3,eJetP4,combinedGenJetsP1,combinedGenJetsP2,combinedGenJetsP3,combinedGenJetsP4,METP1,METP2,METP4,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
-	// myfile.close();
+	myfile.open("neuralNetDataHPT_Tight_0.csv",std::ios_base::app);
+	myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bJetP1,bJetP2,bJetP3,bJetP4,JetP1,JetP2,JetP3,JetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,muJetP1,muJetP2,muJetP3,muJetP4,eJetP1,eJetP2,eJetP3,eJetP4,combinedGenJetsP1,combinedGenJetsP2,combinedGenJetsP3,combinedGenJetsP4,METP1,METP2,METP4,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
+	myfile.close();
 
 	edm::Service<TFileService> fs;
 
