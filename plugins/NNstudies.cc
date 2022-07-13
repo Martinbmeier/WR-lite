@@ -565,7 +565,7 @@ bool NNstudies::tfinder(const edm::Event& iEvent, const reco::GenParticle* quark
 }
 
 bool NNstudies::electronIsolation(){ 
-	return
+	return;
 }
 
 bool NNstudies::passElectronTrig(const edm::Event& iEvent) {
