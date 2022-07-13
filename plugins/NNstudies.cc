@@ -109,7 +109,8 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		bool tWfinder(const edm::Event&, const reco::GenParticle* );
 		bool tfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event&);
-		void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const pat::Electron*, const reco::GenJet*, const reco::GenJet*, math::XYZTLorentzVector combinedGenJets, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
+		// void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const pat::Electron*, const reco::GenJet*, const reco::GenJet*, math::XYZTLorentzVector combinedGenJets, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
+		void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const reco::GsfElectron*, const reco::GenJet*, const reco::GenJet*, math::XYZTLorentzVector combinedGenJets, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
 		int binNumber(const reco::GenParticle*);
 		
 		
@@ -394,12 +395,13 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 	//electron reco
 
-		const pat::Electron* recoElectron=0;
+		// const pat::Electron* recoElectron=0;
+		const reco::GsfElectron* recoElectron=0;
 		// int i = 0;
 			// for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
 			for (size_t i = 0; i < highElectrons->size(); ++i){    const auto iElectron = highElectrons->ptrAt(i);
 				// const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
-				std::cout << (*mvaValues)[&(*iElectron)] << std::endl;
+				std::cout << (*mvaValues)[iElectron] << std::endl;
 				// std::cout << (*mvaCategories)[&(*iElectron)] << std::endl; 
 				// if(heepIDVID == false){continue;}
 				// if(tightID == false){continue;}
@@ -562,7 +564,7 @@ bool NNstudies::tfinder(const edm::Event& iEvent, const reco::GenParticle* quark
 }
 
 bool NNstudies::electronIsolation(){ 
-
+	return
 }
 
 bool NNstudies::passElectronTrig(const edm::Event& iEvent) {
@@ -603,7 +605,9 @@ int NNstudies::binNumber(const reco::GenParticle* muon){
 	return 0;
 }
 
-void NNstudies::csvTable(const reco::GenParticle* genMuon, const reco::GenParticle* genElectron, const reco::GenParticle* muNu, const reco::GenParticle* eNu, const reco::GenParticle* tquark, const reco::GenParticle* antitquark, int binNumber, const pat::Muon* muon, const pat::Electron* electron, const reco::GenJet* muJet, const reco::GenJet* eJet, math::XYZTLorentzVector combinedGenJets, const pat::Jet* bJet, const pat::Jet* Jet, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
+// void NNstudies::csvTable(const reco::GenParticle* genMuon, const reco::GenParticle* genElectron, const reco::GenParticle* muNu, const reco::GenParticle* eNu, const reco::GenParticle* tquark, const reco::GenParticle* antitquark, int binNumber, const pat::Muon* muon, const pat::Electron* electron, const reco::GenJet* muJet, const reco::GenJet* eJet, math::XYZTLorentzVector combinedGenJets, const pat::Jet* bJet, const pat::Jet* Jet, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
+void NNstudies::csvTable(const reco::GenParticle* genMuon, const reco::GenParticle* genElectron, const reco::GenParticle* muNu, const reco::GenParticle* eNu, const reco::GenParticle* tquark, const reco::GenParticle* antitquark, int binNumber, const pat::Muon* muon, const reco::GsfElectron* electron, const reco::GenJet* muJet, const reco::GenJet* eJet, math::XYZTLorentzVector combinedGenJets, const pat::Jet* bJet, const pat::Jet* Jet, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
+	
 
 // ROOT::Math::Boost boostJets;
 // boostJets.SetComponents(combinedJets.BoostToCM());
