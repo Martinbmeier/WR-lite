@@ -178,7 +178,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
 	m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
 
-	mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"))),
+	mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap")))
  //  mvaCategoriesMapToken_(consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap")))
 
 {
@@ -403,7 +403,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				// std::cout << (*mvaCategories)[&(*iElectron)] << std::endl; 
 				// if(heepIDVID == false){continue;}
 				// if(tightID == false){continue;}
-				if(&(*iElectron)->pt()<15){continue;}
+				if(iElectron->pt()<15){continue;}
 				
 				if(recoElectron==0 && genElectron!=0){ 
 					if(sqrt(dR2(iElectron->eta(), genElectron->eta(), iElectron->phi(), genElectron->phi())) < 0.3){
