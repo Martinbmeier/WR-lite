@@ -399,6 +399,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 		// const pat::Electron* recoElectron=0;
 		const reco::GsfElectron* recoElectron=0;
+
 		// int i = 0;
 			// for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
 			for (size_t i = 0; i < highElectrons->size(); ++i){    const auto iElectron = highElectrons->ptrAt(i);
@@ -413,7 +414,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				float eta = iElectron->eta();
 				if (!(electronMVAcut(pt, eta, bdt))) continue;
 				
-				//isolation
+				// //isolation
 				// float R;
 				// if (pt > 50){
 				// 	if(pt < 200){
@@ -425,6 +426,36 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				// }
 				// else if(pt < 50){
 				// 	R = 10/50;
+				// }
+
+				// float area;
+				// if(eta<1.0)        area = 0.1440;
+				// else if(eta<1.479) area = 0.1562;
+				// else if(eta<2.0)   area = 0.1032;
+				// else if(eta<2.2)   area = 0.0859;
+				// else if(eta<2.3)   area = 0.1116;
+				// else if(eta<2.4)   area = 0.1321;
+				// else if(eta<2.5)   area = 0.1654;
+
+
+				// float chargeSum = 0;
+				// float neutralSum = 0;
+				// float photonSum = 0;
+				// for (std::vector<pat::PackedCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle !=packedPFCandidates->end(); iParticle++){
+				// 	float dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()))
+				// 	int id = iParticle->pdgId;
+				// 	if(dr < R){
+				// 		if(id == 22){
+				// 			photonSum += iParticle->pt();
+				// 		}
+				// 		else if(id == 130){
+				// 			neutralSum += iParticle->pt();
+				// 		}
+				// 		else if(id == 211){
+				// 			chargeSum += iParticle->pt();
+				// 		}
+				// 	}
+
 				// }
 				
 
@@ -671,7 +702,7 @@ math::XYZTLorentzVector metP4 = Met.p4();
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT_hpt_mva_3.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_hpt_mva_4.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 		   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
