@@ -109,7 +109,8 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		bool tWfinder(const edm::Event&, const reco::GenParticle* );
 		bool tfinder(const edm::Event&, const reco::GenParticle* );
 		bool passElectronTrig(const edm::Event&);
-		bool electronIsolation();
+		bool electronMVAcut(float pt, float eta, float bdt);
+		// bool electronIso(const edm::Event&);
 		// void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const pat::Electron*, const reco::GenJet*, const reco::GenJet*, math::XYZTLorentzVector combinedGenJets, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
 		void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const reco::GsfElectron*, const reco::GenJet*, const reco::GenJet*, math::XYZTLorentzVector combinedGenJets, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
 		int binNumber(const reco::GenParticle*);
@@ -402,14 +403,32 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 			// for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
 			for (size_t i = 0; i < highElectrons->size(); ++i){    const auto iElectron = highElectrons->ptrAt(i);
 				// const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
-				std::cout << "electron number: " << i << std::endl;
-				std::cout << "pt: " << iElectron->pt() << std::endl;
-				std::cout << "mva values: " << (*mvaValues)[iElectron] << std::endl;
 				// std::cout << (*mvaCategories)[&(*iElectron)] << std::endl; 
 				// if(heepIDVID == false){continue;}
 				// if(tightID == false){continue;}
-				if(iElectron->pt()<15){continue;}
+
+				//mva cuts
+				float bdt = (*mvaValues)[iElectron];
+				float pt = iElectron->pt();
+				float eta = iElectron->eta();
+				if (!(electronMVAcut(pt, eta, bdt))) continue;
 				
+				//isolation
+				// float R;
+				// if (pt > 50){
+				// 	if(pt < 200){
+				// 		R = 10/pt;
+				// 	}
+				// 	else{ 
+				// 		R = 10/200;
+				// 	}
+				// }
+				// else if(pt < 50){
+				// 	R = 10/50;
+				// }
+				
+
+
 				if(recoElectron==0 && genElectron!=0){ 
 					if(sqrt(dR2(iElectron->eta(), genElectron->eta(), iElectron->phi(), genElectron->phi())) < 0.3){
 						recoElectron=&(*(iElectron)); 
@@ -566,7 +585,27 @@ bool NNstudies::tfinder(const edm::Event& iEvent, const reco::GenParticle* quark
 		else{return false;}
 }
 
-bool NNstudies::electronIsolation(){ 
+bool NNstudies::electronMVAcut(float pt, float eta, float bdt){ 
+	if(pt < 10) return false;
+	if(eta<0.8){
+		if(pt < 25){
+			if (bdt < (4.277 + 0.112 * (pt - 25))) return false;
+		}
+		else if( bdt < 4.277) return false; 
+	}
+	else if(eta < 1.479){
+		if(pt < 25){
+			if(bdt < (3.152 + 0.060 * (pt-25))) return false;
+		}
+		else if(bdt < 3.152) return false;
+	}
+	else if(eta<2.5){
+		if(pt < 25){
+			if(bdt < (2.359 + 0.087 * (pt-25))) return false;
+		}
+		else if(bdt < 2.359) return false;
+	}
+
 	return true;
 }
 
@@ -632,7 +671,7 @@ math::XYZTLorentzVector metP4 = Met.p4();
 
 
 std::ofstream myfile;
-myfile.open("test.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_hpt_mva_0.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 		   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
@@ -707,7 +746,7 @@ NNstudies::beginJob() {
 
 	std::ofstream myfile;
 
-	myfile.open("test.csv",std::ios_base::app);
+	myfile.open("neuralNetDataTT_hpt_mva_0.csv",std::ios_base::app);
 	myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bJetP1,bJetP2,bJetP3,bJetP4,JetP1,JetP2,JetP3,JetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,muJetP1,muJetP2,muJetP3,muJetP4,eJetP1,eJetP2,eJetP3,eJetP4,combinedGenJetsP1,combinedGenJetsP2,combinedGenJetsP3,combinedGenJetsP4,METP1,METP2,METP4,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
 	myfile.close();
 
