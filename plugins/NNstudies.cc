@@ -402,7 +402,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 			// for(std::vector<pat::Electron>::const_iterator iElectron = highElectrons->begin(); iElectron != highElectrons->end(); iElectron++){	
 			for (size_t i = 0; i < highElectrons->size(); ++i){    const auto iElectron = highElectrons->ptrAt(i);
 				// const bool tightID = iElectron->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
-				std::coout << "electron number: " << i << std::endl;
+				std::cout << "electron number: " << i << std::endl;
 				std::cout << "pt: " << iElectron->pt() << std::endl;
 				std::cout << "mva values: " << (*mvaValues)[iElectron] << std::endl;
 				// std::cout << (*mvaCategories)[&(*iElectron)] << std::endl; 
