@@ -779,12 +779,12 @@ process.selectedElectrons = cms.EDFilter("PATElectronSelector",
     src = cms.InputTag("slimmedElectrons"),
     cut = cms.string("pt>5 && abs(eta)")
 )
-process.egmGsfElectronIDs.physicsObjectSrc = cms.InputTag('selectedElectrons')
-process.heepIDVarValueMaps.elesMiniAOD  = 'selectedElectrons'
-process.electronMVAValueMapProducer.srcMiniAOD = cms.InputTag('selectedElectrons')
-process.heepElectrons.src = cms.InputTag('selectedElectrons')
+# process.egmGsfElectronIDs.physicsObjectSrc = cms.InputTag('selectedElectrons')
+# process.heepIDVarValueMaps.elesMiniAOD  = 'selectedElectrons'
+# process.electronMVAValueMapProducer.srcMiniAOD = cms.InputTag('selectedElectrons')
+# process.heepElectrons.src = cms.InputTag('selectedElectrons')
 
-process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
+# process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
 
 ####EE L1 Prefiring Correction ####
 from PhysicsTools.PatUtils.l1ECALPrefiringWeightProducer_cfi import l1ECALPrefiringWeightProducer
@@ -808,7 +808,7 @@ elif options.era == '2018':
       SkipWarnings = False)
 
 
-process.totalPath = cms.Path(process.selectedElectrons  * process.heepSequence  #process.egmGsfElectronIDSequence
+process.totalPath = cms.Path(process.selectedElectrons  * process.egmGsfElectronIDSequence #* process.heepSequence 
                            * process.muonSelectionSeq * process.analysis ) #* process.printTree)
 # process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
 #                            * process.analysis)# * process.printTree)
