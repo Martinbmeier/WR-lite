@@ -55,6 +55,7 @@
 #include "DataFormats/METReco/interface/GenMETCollection.h"
 #include "DataFormats/METReco/interface/GenMET.h"
 #include "Math/GenVector/Boost.h"
+#include "JetMETCorrections/JetCorrector/interface/JetCorrector.h"
 
 #include "DataFormats/PatCandidates/interface/VIDCutFlowResult.h"
 
@@ -136,6 +137,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_offlineVerticesToken;
 		std::vector<std::string>  m_electronPathsToPass;
 		edm::EDGetToken m_trigResultsToken;
+		edm::EDGetTokenT<reco::JetCorrector> mJetCorrector;
 		// edm::EDGetToken m_rhoToken;
 		
 		std::string m_dataSaveFile;
@@ -182,6 +184,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
 	m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
+	m_JetCorrector (consumes<reco::JetCorrector>(edm::InputTag("ak4PFCHSL1FastL2L3Corrector"))),
 	// m_rhoToken (consumes<double> (iConfig.getParameter<double>("rho"))),
 
 	mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap")))
@@ -253,6 +256,9 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
  //  edm::Handle<edm::ValueMap<int> > mvaCategories;
     iEvent.getByToken(mvaValuesMapToken_,mvaValues);
   // iEvent.getByToken(mvaCategoriesMapToken_,mvaCategories);
+
+	edm::Handle<reco::JetCorrector> corrector;
+	iEvent.getByToken(mJetCorrector, corrector);
 
     // edm::Handle<edm::View<double>> rho;
     // iEvent.getByLabel(m_rhoToken,rho);
@@ -413,6 +419,10 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				// std::cout << (*mvaCategories)[&(*iElectron)] << std::endl; 
 				// if(heepIDVID == false){continue;}
 				// if(tightID == false){continue;}
+				if(genElectron!=0){
+					if(sqrt(dR2(iElectron->eta(), genElectron->eta(), iElectron->phi(), genElectron->phi())) > 0.3) continue;
+				}
+				if(recoElectron!=0) continue;
 
 				//mva cuts
 				float bdt = (*mvaValues)[iElectron];
@@ -472,12 +482,14 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				// 	Imini = (chargeSum - neutralSum + photonSum + rho * area * (R/0.3)^2) / iElectron->pt();
 				// }
 
+				// double 
+				// for(std::vector<pat::Jet>::const_iterator iJet = JetsAK4->begin(); iJet != JetsAK4->end(); iJet++) {
 
-				if(recoElectron==0 && genElectron!=0){ 
-					if(sqrt(dR2(iElectron->eta(), genElectron->eta(), iElectron->phi(), genElectron->phi())) < 0.3){
-						recoElectron=&(*(iElectron)); 
-					}
-				}
+				// }
+
+				//if(recoElectron==0){ 
+					recoElectron=&(*(iElectron)); 
+				//}
 				
 			}
 
@@ -694,7 +706,7 @@ int NNstudies::binNumber(const reco::GenParticle* muon){
 
 void NNstudies::countTable( int count){
 	std::ofstream myCountfile;
-	myCountfile.open("count1.csv",std::ios_base::app);
+	myCountfile.open("count3.csv",std::ios_base::app);
 	myCountfile << count << "\n ";
 	myCountfile.close();
 }
@@ -723,7 +735,7 @@ math::XYZTLorentzVector metP4 = Met.p4();
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT_hpt_mva_2.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_hpt_mva_3.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 	   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
@@ -798,9 +810,9 @@ NNstudies::beginJob() {
 
 	std::ofstream myfile;
 
-	myfile.open("neuralNetDataTT_hpt_mva_0.csv",std::ios_base::app);
-	myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bJetP1,bJetP2,bJetP3,bJetP4,JetP1,JetP2,JetP3,JetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,muJetP1,muJetP2,muJetP3,muJetP4,eJetP1,eJetP2,eJetP3,eJetP4,combinedGenJetsP1,combinedGenJetsP2,combinedGenJetsP3,combinedGenJetsP4,METP1,METP2,METP4,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
-	myfile.close();
+	// myfile.open("neuralNetDataTT_hpt_mva_0.csv",std::ios_base::app);
+	// myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bJetP1,bJetP2,bJetP3,bJetP4,JetP1,JetP2,JetP3,JetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,muJetP1,muJetP2,muJetP3,muJetP4,eJetP1,eJetP2,eJetP3,eJetP4,combinedGenJetsP1,combinedGenJetsP2,combinedGenJetsP3,combinedGenJetsP4,METP1,METP2,METP4,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
+	// myfile.close();
 
 	edm::Service<TFileService> fs;
 
