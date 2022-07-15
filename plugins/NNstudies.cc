@@ -482,10 +482,18 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				// 	Imini = (chargeSum - neutralSum + photonSum + rho * area * (R/0.3)^2) / iElectron->pt();
 				// }
 
-				// double 
+				// double jetdR = 1000;
+				// double newjetdR;
+				// pat::Jet* electronJet;
 				// for(std::vector<pat::Jet>::const_iterator iJet = JetsAK4->begin(); iJet != JetsAK4->end(); iJet++) {
-
+				// 	newjetdR = sqrt(dR2(iElectron->eta(), iJet->eta(), iElectron->phi(), iJet->phi()));
+				// 	if (newjetdR < jetdR){
+				// 		jetdR = newjetdR;
+				// 		electronJet = &(*(iJet));
+				// 	}
 				// }
+
+
 
 				//if(recoElectron==0){ 
 					recoElectron=&(*(iElectron)); 
@@ -706,7 +714,7 @@ int NNstudies::binNumber(const reco::GenParticle* muon){
 
 void NNstudies::countTable( int count){
 	std::ofstream myCountfile;
-	myCountfile.open("count3.csv",std::ios_base::app);
+	myCountfile.open("count4.csv",std::ios_base::app);
 	myCountfile << count << "\n ";
 	myCountfile.close();
 }
@@ -735,7 +743,7 @@ math::XYZTLorentzVector metP4 = Met.p4();
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT_hpt_mva_3.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_hpt_mva_4.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 	   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
