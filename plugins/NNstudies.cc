@@ -113,6 +113,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		// bool electronIso(const edm::Event&);
 		// void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const pat::Electron*, const reco::GenJet*, const reco::GenJet*, math::XYZTLorentzVector combinedGenJets, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
 		void csvTable(const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, const reco::GenParticle*, int binNumber, const pat::Muon*, const reco::GsfElectron*, const reco::GenJet*, const reco::GenJet*, math::XYZTLorentzVector combinedGenJets, const pat::Jet*, const pat::Jet*, math::XYZTLorentzVector combinedJets, const pat::MET, double weight);
+		void countTable(int count);
 		int binNumber(const reco::GenParticle*);
 		
 		
