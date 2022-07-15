@@ -137,12 +137,12 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_offlineVerticesToken;
 		std::vector<std::string>  m_electronPathsToPass;
 		edm::EDGetToken m_trigResultsToken;
-		edm::EDGetToken m_JetCorrector;
-		// edm::EDGetToken m_rhoToken;
 		
 		std::string m_dataSaveFile;
+		edm::EDGetToken m_JetCorrector;
+		// edm::EDGetToken m_rhoToken;
 
-		bool m_isSignal;
+		// bool m_isSignal;
 		bool m_genTrainData;
 
 		edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken_;
