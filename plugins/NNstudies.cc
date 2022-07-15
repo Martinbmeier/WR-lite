@@ -135,7 +135,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_offlineVerticesToken;
 		std::vector<std::string>  m_electronPathsToPass;
 		edm::EDGetToken m_trigResultsToken;
-		edm::EDGetToken m_rhoToken;
+		// edm::EDGetToken m_rhoToken;
 		
 		std::string m_dataSaveFile;
 
@@ -181,7 +181,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
 	m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
-	m_rhoToken (consumes<double> (iConfig.getParameter<double>("rho"))),
+	// m_rhoToken (consumes<double> (iConfig.getParameter<double>("rho"))),
 
 	mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap")))
  //  mvaCategoriesMapToken_(consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap")))
@@ -253,8 +253,8 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     iEvent.getByToken(mvaValuesMapToken_,mvaValues);
   // iEvent.getByToken(mvaCategoriesMapToken_,mvaCategories);
 
-    edm::Handle<edm::View<double>> rho;
-    iEvent.getByLabel(m_rhoToken,rho);
+    // edm::Handle<edm::View<double>> rho;
+    // iEvent.getByLabel(m_rhoToken,rho);
 	
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
@@ -420,56 +420,56 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				if (!(electronMVAcut(pt, eta, bdt))) continue;
 				
 				//isolation
-				float R;
-				if (pt > 50){
-					if(pt < 200){
-						R = 10/pt;
-					}
-					else{ 
-						R = 10/200;
-					}
-				}
-				else if(pt < 50){
-					R = 10/50;
-				}
+				// float R;
+				// if (pt > 50){
+				// 	if(pt < 200){
+				// 		R = 10/pt;
+				// 	}
+				// 	else{ 
+				// 		R = 10/200;
+				// 	}
+				// }
+				// else if(pt < 50){
+				// 	R = 10/50;
+				// }
 
-				float area;
-				if(eta<1.0)        area = 0.1440;
-				else if(eta<1.479) area = 0.1562;
-				else if(eta<2.0)   area = 0.1032;
-				else if(eta<2.2)   area = 0.0859;
-				else if(eta<2.3)   area = 0.1116;
-				else if(eta<2.4)   area = 0.1321;
-				else if(eta<2.5)   area = 0.1654;
+				// float area;
+				// if(eta<1.0)        area = 0.1440;
+				// else if(eta<1.479) area = 0.1562;
+				// else if(eta<2.0)   area = 0.1032;
+				// else if(eta<2.2)   area = 0.0859;
+				// else if(eta<2.3)   area = 0.1116;
+				// else if(eta<2.4)   area = 0.1321;
+				// else if(eta<2.5)   area = 0.1654;
 
 
-				float chargeSum = 0;
-				float neutralSum = 0;
-				float photonSum = 0;
-				for (std::vector<pat::PackedCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle !=packedPFCandidates->end(); iParticle++){
-					float dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()))
-					int id = iParticle->pdgId;
-					if(dr < R){
-						if(id == 22){
-							photonSum += iParticle->pt();
-						}
-						else if(id == 130){
-							neutralSum += iParticle->pt();
-						}
-						else if(id == 211){
-							chargeSum += iParticle->pt();
-						}
-					}
+				// float chargeSum = 0;
+				// float neutralSum = 0;
+				// float photonSum = 0;
+				// for (std::vector<pat::PackedCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle !=packedPFCandidates->end(); iParticle++){
+				// 	float dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()))
+				// 	int id = iParticle->pdgId;
+				// 	if(dr < R){
+				// 		if(id == 22){
+				// 			photonSum += iParticle->pt();
+				// 		}
+				// 		else if(id == 130){
+				// 			neutralSum += iParticle->pt();
+				// 		}
+				// 		else if(id == 211){
+				// 			chargeSum += iParticle->pt();
+				// 		}
+				// 	}
 
-				}
+				// }
 				
-				float Imini;
-				if(0.0 > (neutralSum + photonSum + rho * area * (R/0.3)^2)){
-					Imini = chargeSum / iElectron->pt();
-				}
-				else{
-					Imini = (chargeSum - neutralSum + photonSum + rho * area * (R/0.3)^2) / iElectron->pt();
-				}
+				// float Imini;
+				// if(0.0 > (neutralSum + photonSum + rho * area * (R/0.3)^2)){
+				// 	Imini = chargeSum / iElectron->pt();
+				// }
+				// else{
+				// 	Imini = (chargeSum - neutralSum + photonSum + rho * area * (R/0.3)^2) / iElectron->pt();
+				// }
 
 
 				if(recoElectron==0 && genElectron!=0){ 
