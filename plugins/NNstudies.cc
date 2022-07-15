@@ -137,7 +137,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_offlineVerticesToken;
 		std::vector<std::string>  m_electronPathsToPass;
 		edm::EDGetToken m_trigResultsToken;
-		edm::EDGetTokenT<reco::JetCorrector> m_JetCorrector;
+		edm::EDGetToken m_JetCorrector;
 		// edm::EDGetToken m_rhoToken;
 		
 		std::string m_dataSaveFile;
@@ -218,7 +218,7 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	//bool angularSeparation=false; 
 
 	eventBits2 iBit; 
-  eventInfo myEvent; 
+    eventInfo myEvent; 
 	
 	edm::Handle<GenEventInfoProduct> eventInfo;
 	iEvent.getByToken(m_genEventInfoToken, eventInfo);
