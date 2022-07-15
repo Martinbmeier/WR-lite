@@ -137,7 +137,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_offlineVerticesToken;
 		std::vector<std::string>  m_electronPathsToPass;
 		edm::EDGetToken m_trigResultsToken;
-		edm::EDGetTokenT<reco::JetCorrector> mJetCorrector;
+		edm::EDGetTokenT<reco::JetCorrector> m_JetCorrector;
 		// edm::EDGetToken m_rhoToken;
 		
 		std::string m_dataSaveFile;
@@ -184,7 +184,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
 	m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
-	m_JetCorrector (consumes<reco::JetCorrector>(edm::InputTag("ak4PFCHSL1FastL2L3Corrector"))),
+	m_JetCorrector (consumes<reco::JetCorrector> (iConfig.getParameter<edm::InputTag>("jetCorrector"))),
 	// m_rhoToken (consumes<double> (iConfig.getParameter<double>("rho"))),
 
 	mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap")))
