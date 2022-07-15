@@ -761,8 +761,9 @@ process.analysis = cms.EDAnalyzer('NNstudies',
                         recoMET = cms.InputTag("slimmedMETs"),
                         packedGenParticles = cms.InputTag("packedGenParticles"),
                         packedPFCandidates = cms.InputTag("packedPFCandidates"),
+                        jetCorrector = cms.InputTag("ak4PFCHSL1FastL2L3Corrector"),
                         mvaValuesMap = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17IsoV2RawValues"),
-                        jetCorrector = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
+                        
                         #rho = cms.InputTag("fixedGridRhoAll")
                         # mvaCategoriesMap = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17NoIsoV1Categories")
 
