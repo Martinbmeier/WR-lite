@@ -537,6 +537,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 	}
 
 		m_eventsWeight->Fill(0.5, eventCount);
+		countTable(eventCount);
 
 		// if(leptonCount == 2){
 
@@ -688,6 +689,12 @@ int NNstudies::binNumber(const reco::GenParticle* muon){
 	}
 	if(muonPT > binEdges[16]){return 17;}
 	return 0;
+}
+
+void NNstudies::countTable( int count){
+	myCountfile.open("count0.csv",std::ios_base::app);
+	myCountfile << count << "\n ";
+	myCountfile.close();
 }
 
 // void NNstudies::csvTable(const reco::GenParticle* genMuon, const reco::GenParticle* genElectron, const reco::GenParticle* muNu, const reco::GenParticle* eNu, const reco::GenParticle* tquark, const reco::GenParticle* antitquark, int binNumber, const pat::Muon* muon, const pat::Electron* electron, const reco::GenJet* muJet, const reco::GenJet* eJet, math::XYZTLorentzVector combinedGenJets, const pat::Jet* bJet, const pat::Jet* Jet, math::XYZTLorentzVector combinedJets, const pat::MET Met, double weight) {
