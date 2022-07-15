@@ -183,7 +183,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_genEventInfoToken (consumes<GenEventInfoProduct> (iConfig.getParameter<edm::InputTag>("genInfo"))),
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
-	m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
+	//m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
 	m_JetCorrector (consumes<reco::JetCorrector> (iConfig.getParameter<edm::InputTag>("jetCorrector"))),
 	// m_rhoToken (consumes<double> (iConfig.getParameter<double>("rho"))),
 
