@@ -693,6 +693,7 @@ int NNstudies::binNumber(const reco::GenParticle* muon){
 }
 
 void NNstudies::countTable( int count){
+	std::ofstream myCountfile;
 	myCountfile.open("count0.csv",std::ios_base::app);
 	myCountfile << count << "\n ";
 	myCountfile.close();
