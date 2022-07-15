@@ -761,7 +761,7 @@ process.analysis = cms.EDAnalyzer('NNstudies',
                         packedGenParticles = cms.InputTag("packedGenParticles"),
                         packedPFCandidates = cms.InputTag("packedPFCandidates"),
                         mvaValuesMap = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17IsoV2RawValues"),
-                        rho = cms.InputTag("fixedGridRhoAll")
+                        #rho = cms.InputTag("fixedGridRhoAll")
                         # mvaCategoriesMap = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17NoIsoV1Categories")
 
 )
@@ -778,8 +778,8 @@ my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.mvaElectronID
 for idmod in my_id_modules:
       setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 #
-import RecoJets.Configuration.RecoPFJets_cff
-process.fixedGridRhoAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoAll.clone()
+#import RecoJets.Configuration.RecoPFJets_cff
+#process.fixedGridRhoAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoAll.clone()
 
 # recoPFJetsTask   =cms.Task(fixedGridRhoAll)
     
@@ -816,7 +816,7 @@ elif options.era == '2018':
       SkipWarnings = False)
 
 
-process.totalPath = cms.Path(process.selectedElectrons  * process.egmGsfElectronIDSequence * process.fixedGridRhoAll #* process.heepSequence 
+process.totalPath = cms.Path(process.selectedElectrons  * process.egmGsfElectronIDSequence #* process.fixedGridRhoAll #* process.heepSequence 
                            * process.muonSelectionSeq * process.analysis ) #* process.printTree)
 # process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
 #                            * process.analysis)# * process.printTree)
