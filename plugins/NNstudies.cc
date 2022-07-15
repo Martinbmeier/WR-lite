@@ -258,7 +258,7 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   // iEvent.getByToken(mvaCategoriesMapToken_,mvaCategories);
 
 	edm::Handle<reco::JetCorrector> corrector;
-	iEvent.getByToken(mJetCorrector, corrector);
+	iEvent.getByToken(m_JetCorrector, corrector);
 
     // edm::Handle<edm::View<double>> rho;
     // iEvent.getByLabel(m_rhoToken,rho);
