@@ -185,7 +185,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
 	//m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
 	m_JetCorrector (consumes<reco::JetCorrector> (iConfig.getParameter<edm::InputTag>("jetCorrector"))),
-	m_rhoToken (consumes<double> (iConfig.getParameter<double>("rho"))),
+	m_rhoToken (consumes<double> (iConfig.getParameter<edm::InputTag>("rho"))),
 
 	mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap")))
  //  mvaCategoriesMapToken_(consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap")))
@@ -430,7 +430,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				float eta = abs(iElectron->eta());
 				if (!(electronMVAcut(pt, eta, bdt))) continue;
 				
-				isolation
+				//isolation
 				float R;
 				if (pt > 50){
 					if(pt < 200){
@@ -457,7 +457,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				float chargeSum = 0;
 				float neutralSum = 0;
 				float photonSum = 0;
-				for (std::vector<pat::PackedCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle !=packedPFCandidates->end(); iParticle++){
+				for (std::vector<pat::PackedCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle != packedPFCandidates->end(); iParticle++){
 					float dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()))
 					int id = iParticle->pdgId;
 					if(dr < R){
