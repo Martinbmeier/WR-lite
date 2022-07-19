@@ -458,7 +458,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				float neutralSum = 0;
 				float photonSum = 0;
 				for (std::vector<reco::PackedCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle != packedPFCandidates->end(); iParticle++){
-					float dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()))
+					double dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()))
 					int id = iParticle->pdgId;
 					if(dr < R){
 						if(id == 22){
@@ -474,7 +474,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 				}
 				
-				float Imini;
+				double Imini;
 				if(0.0 > (neutralSum + photonSum + rho * area * (R/0.3)^2)){
 					Imini = chargeSum / iElectron->pt();
 				}
