@@ -459,7 +459,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				double photonSum = 0;
 				for (std::vector<reco::PFCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle != packedPFCandidates->end(); iParticle++){
 					double dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()));
-					auto id = iParticle->pdgId;
+					auto* id = iParticle->pdgId;
 					if(dr < R){
 						if(id == 22){
 							photonSum += iParticle->pt();
