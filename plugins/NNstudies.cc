@@ -262,7 +262,7 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     edm::Handle<double> rho_;
     iEvent.getByToken(m_rhoToken,rho_);
-    double rho = *(rho_.product())
+    double rho = *(rho_.product());
 	
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
@@ -480,7 +480,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 					Imini = chargeSum / iElectron->pt();
 				}
 				else{
-					Imini = (chargeSum - neutralSum + photonSum + rho * area * (R/0.3)^2) / iElectron->pt();
+					Imini = (chargeSum - neutralSum + photonSum + rho * area * (R/0.3)**2.0) / iElectron->pt();
 				}
 
 				double jetdR = 1000;
