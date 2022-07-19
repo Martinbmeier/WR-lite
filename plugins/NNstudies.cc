@@ -485,7 +485,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 				double jetdR = 1000;
 				double newjetdR;
-				pat::Jet* electronJet;
+				const pat::Jet* electronJet;
 				for(std::vector<pat::Jet>::const_iterator iJet = JetsAK4->begin(); iJet != JetsAK4->end(); iJet++) {
 					newjetdR = sqrt(dR2(iElectron->eta(), iJet->eta(), iElectron->phi(), iJet->phi()));
 					if (newjetdR < jetdR){
