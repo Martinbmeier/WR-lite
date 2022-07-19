@@ -432,7 +432,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				if (!(electronMVAcut(pt, eta, bdt))) continue;
 				
 				//isolation
-				double R;
+				double R = 0;
 				if (pt > 50){
 					if(pt < 200){
 						R = 10/pt;
