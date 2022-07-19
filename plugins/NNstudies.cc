@@ -476,11 +476,11 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				}
 				
 				double Imini;
-				if(0.0 > (neutralSum + photonSum + rho * area * (R/0.3)^2)){
+				if(0.0 > (neutralSum + photonSum + rho * area * (R/0.3)^2.0)){
 					Imini = chargeSum / iElectron->pt();
 				}
 				else{
-					Imini = (chargeSum - neutralSum + photonSum + rho * area * (R/0.3)**2.0) / iElectron->pt();
+					Imini = (chargeSum - neutralSum + photonSum + rho * area * (R/0.3)^2.0) / iElectron->pt();
 				}
 
 				double jetdR = 1000;
