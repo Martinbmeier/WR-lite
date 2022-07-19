@@ -261,7 +261,7 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	iEvent.getByToken(m_JetCorrector, corrector);
 
     edm::Handle<edm::View<double>> rho;
-    iEvent.getByLabel(m_rhoToken,rho);
+    iEvent.getByToken(m_rhoToken,rho);
 	
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
@@ -457,7 +457,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				float chargeSum = 0;
 				float neutralSum = 0;
 				float photonSum = 0;
-				for (std::vector<pat::PackedCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle != packedPFCandidates->end(); iParticle++){
+				for (std::vector<reco::PackedCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle != packedPFCandidates->end(); iParticle++){
 					float dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()))
 					int id = iParticle->pdgId;
 					if(dr < R){
@@ -495,7 +495,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 				p_ratio = iElectron->pt() / (iElectron->p4() + (electronJet->p4() - iElectron->p4()).scaleEnergy(corrector->correction(electronJet->p4()))).pt();
 
-				p_rel = (electronJet->p4() - iElectron->p4()) * iElectron->p4() / (electronJet->p4() - iElectron->p4()).Mag();
+				p_rel = (electronJet->p4() - iElectron->p4()) * iElectron->p4() / (electronJet->p4() - iElectron->p4()).mag();
 
 				if (Imini < 0.07 && (p_ratio > 0.78 || p_rel > 8.0)){
 					recoElectron=&(*(iElectron)); 
