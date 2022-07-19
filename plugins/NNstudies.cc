@@ -140,7 +140,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		
 		std::string m_dataSaveFile;
 		edm::EDGetToken m_JetCorrector;
-		// edm::EDGetToken m_rhoToken;
+		edm::EDGetToken m_rhoToken;
 
 		// bool m_isSignal;
 		bool m_genTrainData;
@@ -493,9 +493,9 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 					}
 				}
 
-				p_ratio = iElectron->pt() / (iElectron->p4() + (electronJet->p4() - iElectron->p4()).scaleEnergy(corrector->correction(electronJet->p4()))).pt()
+				p_ratio = iElectron->pt() / (iElectron->p4() + (electronJet->p4() - iElectron->p4()).scaleEnergy(corrector->correction(electronJet->p4()))).pt();
 
-				p_rel = (electronJet->p4() - iElectron->p4()) * iElectron->p4() / (electronJet->p4() - iElectron->p4()).Mag()
+				p_rel = (electronJet->p4() - iElectron->p4()) * iElectron->p4() / (electronJet->p4() - iElectron->p4()).Mag();
 
 				if (Imini < 0.07 && (p_ratio > 0.78 || p_rel > 8.0)){
 					recoElectron=&(*(iElectron)); 
