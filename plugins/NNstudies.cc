@@ -496,7 +496,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 				double p_ratio = iElectron->pt() / (iElectron->p4() + (electronJet->p4() - iElectron->p4()).scaleEnergy(corrector->correction(electronJet->p4()))).pt();
 
-				double p_rel = (electronJet->p4() - iElectron->p4()).Dot(iElectron->p4()) / (electronJet->p4() - iElectron->p4()).Mag2();
+				double p_rel = (electronJet->p4() - iElectron->p4()).Dot(iElectron->p4()) / (electronJet->p4() - iElectron->p4()).mag2();
 
 				if (Imini < 0.07 && (p_ratio > 0.78 || p_rel > 8.0)){
 					recoElectron=&(*(iElectron)); 
