@@ -260,7 +260,7 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	edm::Handle<reco::JetCorrector> corrector;
 	iEvent.getByToken(m_JetCorrector, corrector);
 
-    edm::Handle<double> rho_;
+    edm::Handle<double> rho;
     iEvent.getByToken(m_rhoToken,rho);
 	
   
