@@ -494,7 +494,11 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 					}
 				}
 
-				double p_ratio = iElectron->pt() / (iElectron->p4() + (electronJet->p4() - iElectron->p4()).scaleEnergy(corrector->correction(electronJet->p4()))).pt();
+
+				double JetElectronp4 = corrector->correction(electronJet->p4())*((electronJet->p4() - iElectron->p4()).E());
+				math::XYZTLorentzVector correctedJetElectronp4 = (electronJet->p4() - iElectron->p4()).setE(JetElectronp4);
+
+				double p_ratio = iElectron->pt() / (iElectron->p4() + correctedJetElectronp4).pt();
 
 				double p_rel = (electronJet->p4() - iElectron->p4()).Dot(iElectron->p4()) / (electronJet->p4() - iElectron->p4()).mag2();
 
