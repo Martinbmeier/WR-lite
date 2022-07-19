@@ -185,7 +185,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
 	//m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
 	m_JetCorrector (consumes<reco::JetCorrector> (iConfig.getParameter<edm::InputTag>("jetCorrector"))),
-	// m_rhoToken (consumes<double> (iConfig.getParameter<double>("rho"))),
+	m_rhoToken (consumes<double> (iConfig.getParameter<double>("rho"))),
 
 	mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap")))
  //  mvaCategoriesMapToken_(consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap")))
@@ -260,8 +260,8 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	edm::Handle<reco::JetCorrector> corrector;
 	iEvent.getByToken(m_JetCorrector, corrector);
 
-    // edm::Handle<edm::View<double>> rho;
-    // iEvent.getByLabel(m_rhoToken,rho);
+    edm::Handle<edm::View<double>> rho;
+    iEvent.getByLabel(m_rhoToken,rho);
 	
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
@@ -430,73 +430,80 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				float eta = abs(iElectron->eta());
 				if (!(electronMVAcut(pt, eta, bdt))) continue;
 				
-				//isolation
-				// float R;
-				// if (pt > 50){
-				// 	if(pt < 200){
-				// 		R = 10/pt;
-				// 	}
-				// 	else{ 
-				// 		R = 10/200;
-				// 	}
-				// }
-				// else if(pt < 50){
-				// 	R = 10/50;
-				// }
+				isolation
+				float R;
+				if (pt > 50){
+					if(pt < 200){
+						R = 10/pt;
+					}
+					else{ 
+						R = 10/200;
+					}
+				}
+				else if(pt < 50){
+					R = 10/50;
+				}
 
-				// float area;
-				// if(eta<1.0)        area = 0.1440;
-				// else if(eta<1.479) area = 0.1562;
-				// else if(eta<2.0)   area = 0.1032;
-				// else if(eta<2.2)   area = 0.0859;
-				// else if(eta<2.3)   area = 0.1116;
-				// else if(eta<2.4)   area = 0.1321;
-				// else if(eta<2.5)   area = 0.1654;
+				float area;
+				if(eta<1.0)        area = 0.1440;
+				else if(eta<1.479) area = 0.1562;
+				else if(eta<2.0)   area = 0.1032;
+				else if(eta<2.2)   area = 0.0859;
+				else if(eta<2.3)   area = 0.1116;
+				else if(eta<2.4)   area = 0.1321;
+				else if(eta<2.5)   area = 0.1654;
 
 
-				// float chargeSum = 0;
-				// float neutralSum = 0;
-				// float photonSum = 0;
-				// for (std::vector<pat::PackedCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle !=packedPFCandidates->end(); iParticle++){
-				// 	float dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()))
-				// 	int id = iParticle->pdgId;
-				// 	if(dr < R){
-				// 		if(id == 22){
-				// 			photonSum += iParticle->pt();
-				// 		}
-				// 		else if(id == 130){
-				// 			neutralSum += iParticle->pt();
-				// 		}
-				// 		else if(id == 211){
-				// 			chargeSum += iParticle->pt();
-				// 		}
-				// 	}
+				float chargeSum = 0;
+				float neutralSum = 0;
+				float photonSum = 0;
+				for (std::vector<pat::PackedCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle !=packedPFCandidates->end(); iParticle++){
+					float dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()))
+					int id = iParticle->pdgId;
+					if(dr < R){
+						if(id == 22){
+							photonSum += iParticle->pt();
+						}
+						else if(id == 130){
+							neutralSum += iParticle->pt();
+						}
+						else if(id == 211){
+							chargeSum += iParticle->pt();
+						}
+					}
 
-				// }
+				}
 				
-				// float Imini;
-				// if(0.0 > (neutralSum + photonSum + rho * area * (R/0.3)^2)){
-				// 	Imini = chargeSum / iElectron->pt();
-				// }
-				// else{
-				// 	Imini = (chargeSum - neutralSum + photonSum + rho * area * (R/0.3)^2) / iElectron->pt();
-				// }
+				float Imini;
+				if(0.0 > (neutralSum + photonSum + rho * area * (R/0.3)^2)){
+					Imini = chargeSum / iElectron->pt();
+				}
+				else{
+					Imini = (chargeSum - neutralSum + photonSum + rho * area * (R/0.3)^2) / iElectron->pt();
+				}
 
-				// double jetdR = 1000;
-				// double newjetdR;
-				// pat::Jet* electronJet;
-				// for(std::vector<pat::Jet>::const_iterator iJet = JetsAK4->begin(); iJet != JetsAK4->end(); iJet++) {
-				// 	newjetdR = sqrt(dR2(iElectron->eta(), iJet->eta(), iElectron->phi(), iJet->phi()));
-				// 	if (newjetdR < jetdR){
-				// 		jetdR = newjetdR;
-				// 		electronJet = &(*(iJet));
-				// 	}
-				// }
+				double jetdR = 1000;
+				double newjetdR;
+				pat::Jet* electronJet;
+				for(std::vector<pat::Jet>::const_iterator iJet = JetsAK4->begin(); iJet != JetsAK4->end(); iJet++) {
+					newjetdR = sqrt(dR2(iElectron->eta(), iJet->eta(), iElectron->phi(), iJet->phi()));
+					if (newjetdR < jetdR){
+						jetdR = newjetdR;
+						electronJet = &(*(iJet));
+					}
+				}
 
+				p_ratio = iElectron->pt() / (iElectron->p4() + (electronJet->p4() - iElectron->p4()).scaleEnergy(corrector->correction(electronJet->p4()))).pt()
+
+				p_rel = (electronJet->p4() - iElectron->p4()) * iElectron->p4() / (electronJet->p4() - iElectron->p4()).Mag()
+
+				if (Imini < 0.07 && (p_ratio > 0.78 || p_rel > 8.0)){
+					recoElectron=&(*(iElectron)); 
+				}
 
 
 				//if(recoElectron==0){ 
-					recoElectron=&(*(iElectron)); 
+				//	recoElectron=&(*(iElectron)); 
 				//}
 				
 			}
@@ -714,7 +721,7 @@ int NNstudies::binNumber(const reco::GenParticle* muon){
 
 void NNstudies::countTable( int count){
 	std::ofstream myCountfile;
-	myCountfile.open("count8.csv",std::ios_base::app);
+	myCountfile.open("count_iso_0.csv",std::ios_base::app);
 	myCountfile << count << "\n ";
 	myCountfile.close();
 }
@@ -743,7 +750,7 @@ math::XYZTLorentzVector metP4 = Met.p4();
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT_hpt_mva_8.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_hpt_mva_iso_0.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 	   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
@@ -818,9 +825,9 @@ NNstudies::beginJob() {
 
 	std::ofstream myfile;
 
-	// myfile.open("neuralNetDataTT_hpt_mva_0.csv",std::ios_base::app);
-	// myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bJetP1,bJetP2,bJetP3,bJetP4,JetP1,JetP2,JetP3,JetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,muJetP1,muJetP2,muJetP3,muJetP4,eJetP1,eJetP2,eJetP3,eJetP4,combinedGenJetsP1,combinedGenJetsP2,combinedGenJetsP3,combinedGenJetsP4,METP1,METP2,METP4,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
-	// myfile.close();
+	myfile.open("neuralNetDataTT_hpt_mva_iso_0.csv",std::ios_base::app);
+	myfile<<"muonP1,muonP2,muonP3,muonP4,electronP1,electronP2,electronP3,electronP4,bJetP1,bJetP2,bJetP3,bJetP4,JetP1,JetP2,JetP3,JetP4,combinedJetsP1,combinedJetsP2,combinedJetsP3,combinedJetsP4,muJetP1,muJetP2,muJetP3,muJetP4,eJetP1,eJetP2,eJetP3,eJetP4,combinedGenJetsP1,combinedGenJetsP2,combinedGenJetsP3,combinedGenJetsP4,METP1,METP2,METP4,eventWeight,binNumber,genMuonP1,genMuonP2,genMuonP3,genMuonP4,genElectronP1,genElectronP2,genElectronP3,genElectronP4,muNuP1,muNuP2,muNuP3,muNuP4,eNuP1,eNuP2,eNuP3,eNuP4,antitquarkP1,antitquarkP2,antitquarkP3,antitquarkP4,tquarkP1,tquarkP2,tquarkP3,tquarkP4\n";
+	myfile.close();
 
 	edm::Service<TFileService> fs;
 
