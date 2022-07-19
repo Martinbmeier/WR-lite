@@ -425,13 +425,13 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				if(recoElectron!=0) continue;
 
 				//mva cuts
-				float bdt = (*mvaValues)[iElectron];
-				float pt = iElectron->pt();
-				float eta = abs(iElectron->eta());
+				double bdt = (*mvaValues)[iElectron];
+				double pt = iElectron->pt();
+				double eta = abs(iElectron->eta());
 				if (!(electronMVAcut(pt, eta, bdt))) continue;
 				
 				//isolation
-				float R;
+				double R;
 				if (pt > 50){
 					if(pt < 200){
 						R = 10/pt;
@@ -444,7 +444,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 					R = 10/50;
 				}
 
-				float area;
+				double area;
 				if(eta<1.0)        area = 0.1440;
 				else if(eta<1.479) area = 0.1562;
 				else if(eta<2.0)   area = 0.1032;
@@ -454,11 +454,11 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				else if(eta<2.5)   area = 0.1654;
 
 
-				float chargeSum = 0;
-				float neutralSum = 0;
-				float photonSum = 0;
-				for (std::vector<reco::PackedCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle != packedPFCandidates->end(); iParticle++){
-					double dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()))
+				double chargeSum = 0;
+				double neutralSum = 0;
+				double photonSum = 0;
+				for (std::vector<reco::PFCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle != packedPFCandidates->end(); iParticle++){
+					double dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()));
 					int id = iParticle->pdgId;
 					if(dr < R){
 						if(id == 22){
@@ -493,9 +493,9 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 					}
 				}
 
-				p_ratio = iElectron->pt() / (iElectron->p4() + (electronJet->p4() - iElectron->p4()).scaleEnergy(corrector->correction(electronJet->p4()))).pt();
+				double p_ratio = iElectron->pt() / (iElectron->p4() + (electronJet->p4() - iElectron->p4()).scaleEnergy(corrector->correction(electronJet->p4()))).pt();
 
-				p_rel = (electronJet->p4() - iElectron->p4()) * iElectron->p4() / (electronJet->p4() - iElectron->p4()).mag();
+				double p_rel = (electronJet->p4() - iElectron->p4()) * iElectron->p4() / (electronJet->p4() - iElectron->p4()).mag();
 
 				if (Imini < 0.07 && (p_ratio > 0.78 || p_rel > 8.0)){
 					recoElectron=&(*(iElectron)); 
