@@ -445,7 +445,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 					R = 10/50;
 				}
 
-				double area;
+				double area = 0;
 				if(eta<1.0)        area = 0.1440;
 				else if(eta<1.479) area = 0.1562;
 				else if(eta<2.0)   area = 0.1032;
@@ -475,7 +475,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 				}
 				
-				double Imini;
+				double Imini = 0;
 				if(0.0 > (neutralSum + photonSum + rho * area * pow((R/0.3),2.0))){
 					Imini = chargeSum / iElectron->pt();
 				}
@@ -485,7 +485,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 
 				double jetdR = 1000;
 				double newjetdR;
-				const pat::Jet* electronJet;
+				const pat::Jet* electronJet = 0;
 				for(std::vector<pat::Jet>::const_iterator iJet = JetsAK4->begin(); iJet != JetsAK4->end(); iJet++) {
 					newjetdR = sqrt(dR2(iElectron->eta(), iJet->eta(), iElectron->phi(), iJet->phi()));
 					if (newjetdR < jetdR){
