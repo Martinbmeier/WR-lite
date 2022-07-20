@@ -417,7 +417,6 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 		}
 
 	//electron reco
-		std::cout << rho << std::endl;
 
 		// const pat::Electron* recoElectron=0;
 		const reco::GsfElectron* recoElectron=0;
