@@ -778,11 +778,11 @@ for idmod in my_id_modules:
       setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 #
 import RecoJets.Configuration.RecoPFJets_cff
-# process.fixedGridRhoAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoAll.clone()
-from RecoJets.JetProducers.fixedGridRhoProducer_cfi import fixedGridRhoAll
+process.fixedGridRhoAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoAll.clone()
+# from RecoJets.JetProducers.fixedGridRhoProducer_cfi import fixedGridRhoAll
 
-recoPFJetsTask   =cms.Task(fixedGridRhoAll)
-recoPFJets   = cms.Sequence(recoPFJetsTask)
+# recoPFJetsTask   =cms.Task(fixedGridRhoAll)
+# recoPFJets   = cms.Sequence(recoPFJetsTask)
     
 process.selectedElectrons = cms.EDFilter("PATElectronSelector",
     src = cms.InputTag("slimmedElectrons"),
@@ -817,7 +817,7 @@ elif options.era == '2018':
       SkipWarnings = False)
 
 
-process.totalPath = cms.Path(process.selectedElectrons  * process.egmGsfElectronIDSequence * process.ak4PFCHSL1FastL2L3CorrectorChain *  process.ak4PFCHSL1FastL2L3ResidualCorrectorChain #* process.recoPFJets #* process.heepSequence 
+process.totalPath = cms.Path(process.selectedElectrons  * process.egmGsfElectronIDSequence * process.ak4PFCHSL1FastL2L3CorrectorChain *  process.ak4PFCHSL1FastL2L3ResidualCorrectorChain * process.fixedGridRhoAll #* process.heepSequence 
                            * process.muonSelectionSeq * process.analysis ) #* process.printTree)
 # process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
 #                            * process.analysis)# * process.printTree)
