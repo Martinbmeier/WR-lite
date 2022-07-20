@@ -186,7 +186,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	//m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
 	m_JetCorrector (consumes<reco::JetCorrector> (iConfig.getParameter<edm::InputTag>("jetCorrector"))),
 	// rhoToken (consumes<edm::View<double>> (iConfig.getParameter<edm::InputTag>("rho"))),
-	// rhoToken (consumes<double> (iConfig.getParameter<edm::InputTag>("rho"))),
+	rhoToken (consumes<double> (iConfig.getParameter<edm::InputTag>("rho"))),
 
 
 	mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap")))
@@ -417,6 +417,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 		}
 
 	//electron reco
+		std::cout << rho << std::endl;
 
 		// const pat::Electron* recoElectron=0;
 		const reco::GsfElectron* recoElectron=0;
