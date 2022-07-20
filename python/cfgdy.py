@@ -780,7 +780,7 @@ for idmod in my_id_modules:
 # import RecoJets.Configuration.RecoPFJets_cff
 # process.fixedGridRhoAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoAll.clone()
 # process.fixedGridRhoFastjetAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoFastjetAll.clone()
-# from RecoJets.JetProducers.fixedGridRhoProducerFastjet_cfi import fixedGridRhoFastjetAll
+from RecoJets.JetProducers.fixedGridRhoProducerFastjet_cfi import fixedGridRhoFastjetAll
 
 process.fixedGridRhoFastjetAll = cms.EDProducer("FixedGridRhoProducerFastjet",
     pfCandidatesTag = cms.InputTag("packedPFCandidates"),
@@ -826,7 +826,7 @@ elif options.era == '2018':
       SkipWarnings = False)
 
 
-process.totalPath = cms.Path(process.selectedElectrons  * process.egmGsfElectronIDSequence * process.ak4PFCHSL1FastL2L3CorrectorChain *  process.ak4PFCHSL1FastL2L3ResidualCorrectorChain * process.fixedGridRhoFastjetAll #* process.heepSequence 
+process.totalPath = cms.Path(process.selectedElectrons  * process.egmGsfElectronIDSequence * process.fixedGridRhoFastjetAll #process.ak4PFCHSL1FastL2L3CorrectorChain *  process.ak4PFCHSL1FastL2L3ResidualCorrectorChain * process.fixedGridRhoFastjetAll #* process.heepSequence 
                            * process.muonSelectionSeq * process.analysis ) #* process.printTree)
 # process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
 #                            * process.analysis)# * process.printTree)
