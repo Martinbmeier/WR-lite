@@ -140,7 +140,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		
 		std::string m_dataSaveFile;
 		edm::EDGetToken m_JetCorrector;
-		edm::EDGetToken rhoToken;
+		// edm::EDGetToken rhoToken;
 
 		// bool m_isSignal;
 		bool m_genTrainData;
@@ -185,7 +185,9 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
 	//m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
 	m_JetCorrector (consumes<reco::JetCorrector> (iConfig.getParameter<edm::InputTag>("jetCorrector"))),
-	rhoToken (consumes<edm::View<double>> (iConfig.getParameter<edm::InputTag>("rho"))),
+	// rhoToken (consumes<edm::View<double>> (iConfig.getParameter<edm::InputTag>("rho"))),
+	// rhoToken (consumes<double> (iConfig.getParameter<edm::InputTag>("rho"))),
+
 
 	mvaValuesMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap")))
  //  mvaCategoriesMapToken_(consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap")))
@@ -265,9 +267,10 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     // event.getByLabel("fixedGridRhoAll",rho_);
     // double rho = *(rho_.product());
 
-    edm::Handle<edm::View<double>> rhoToken;
-    iEvent.getByLabel(InputTag("fixedGridRhoAll"), rhoToken);
-    double rho = *(rhoToken.product());
+    // edm::Handle<edm::View<double>> rhoToken;
+    edm::Handle<double> rhotoken;
+    iEvent.getByLabel(InputTag("fixedGridRhoAll"), rhotoken);
+    double rho = *(rhotoken.product());
 	
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
