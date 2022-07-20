@@ -179,7 +179,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_AK4genCHSJetsToken (consumes<std::vector<reco::GenJet>> (iConfig.getParameter<edm::InputTag>("AK4genCHSJets"))),
 	m_AK4CHSJetsToken (consumes<std::vector<pat::Jet>> (iConfig.getParameter<edm::InputTag>("AK4CHSJets"))),
 	m_packedGenParticlesToken (consumes<std::vector<pat::PackedGenParticle>> (iConfig.getParameter<edm::InputTag>("packedGenParticles"))),
-	m_packedPFCandidatesToken (consumes<std::vector<reco::PFCandidate>> (iConfig.getParameter<edm::InputTag>("packedPFCandidates"))),
+	m_packedPFCandidatesToken (consumes<std::vector<pat::PackedCandidate>> (iConfig.getParameter<edm::InputTag>("packedPFCandidates"))),
 	m_genEventInfoToken (consumes<GenEventInfoProduct> (iConfig.getParameter<edm::InputTag>("genInfo"))),
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
@@ -248,7 +248,7 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	edm::Handle<std::vector<pat::PackedGenParticle>> packedGenParticles;
 	iEvent.getByToken(m_packedGenParticlesToken, packedGenParticles);
 
-	edm::Handle<std::vector<reco::PFCandidate>> packedPFCandidates;
+	edm::Handle<std::vector<pat::PackedCandidate>> packedPFCandidates;
 	iEvent.getByToken(m_packedPFCandidatesToken, packedPFCandidates);
 
 	edm::Handle<std::vector<pat::MET>> recoMET;
@@ -467,7 +467,7 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				double chargeSum = 0;
 				double neutralSum = 0;
 				double photonSum = 0;
-				for (std::vector<reco::PFCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle != packedPFCandidates->end(); iParticle++){
+				for (std::vector<pat::PackedCandidate>::const_iterator iParticle = packedPFCandidates->begin(); iParticle != packedPFCandidates->end(); iParticle++){
 					double dr = sqrt(dR2(iElectron->eta(), iParticle->eta(), iElectron->phi(), iParticle->phi()));
 					int id = iParticle->pdgId();
 					if(dr < R){

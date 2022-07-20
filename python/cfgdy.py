@@ -817,7 +817,7 @@ elif options.era == '2018':
       SkipWarnings = False)
 
 
-process.totalPath = cms.Path(process.selectedElectrons  * process.egmGsfElectronIDSequence * process.ak4PFCHSL1FastL2L3CorrectorChain *  process.ak4PFCHSL1FastL2L3ResidualCorrectorChain# * process.fixedGridRhoAll #* process.heepSequence 
+process.totalPath = cms.Path(process.selectedElectrons  * process.egmGsfElectronIDSequence * process.ak4PFCHSL1FastL2L3CorrectorChain *  process.ak4PFCHSL1FastL2L3ResidualCorrectorChain * process.fixedGridRhoAll #* process.heepSequence 
                            * process.muonSelectionSeq * process.analysis ) #* process.printTree)
 # process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
 #                            * process.analysis)# * process.printTree)
