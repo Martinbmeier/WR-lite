@@ -777,10 +777,16 @@ my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.mvaElectronID
 for idmod in my_id_modules:
       setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 #
-import RecoJets.Configuration.RecoPFJets_cff
+# import RecoJets.Configuration.RecoPFJets_cff
 # process.fixedGridRhoAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoAll.clone()
-process.fixedGridRhoFastjetAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoFastjetAll.clone()
+# process.fixedGridRhoFastjetAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoFastjetAll.clone()
 # from RecoJets.JetProducers.fixedGridRhoProducerFastjet_cfi import fixedGridRhoFastjetAll
+
+process.fixedGridRhoFastjetAll = cms.EDProducer("FixedGridRhoProducerFastjet",
+    pfCandidatesTag = cms.InputTag("packedPFCandidates"),
+    maxRapidity = cms.double(5.0),
+    gridSpacing = cms.double(0.55)
+)
 
 # from RecoJets.JetProducers.fixedGridRhoProducer_cfi import fixedGridRhoAll
 
