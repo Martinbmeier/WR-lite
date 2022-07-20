@@ -269,7 +269,7 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     // edm::Handle<edm::View<double>> rhoToken;
     edm::Handle<double> rhotoken;
-    iEvent.getByLabel(InputTag("fixedGridRhoAll"), rhotoken);
+    iEvent.getByLabel("fixedGridRhoAll", rhotoken);
     double rho = *(rhotoken.product());
 	
   
