@@ -140,7 +140,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		
 		std::string m_dataSaveFile;
 		edm::EDGetToken m_JetCorrector;
-		// edm::EDGetToken rhoToken;
+		edm::EDGetToken rhoToken;
 
 		// bool m_isSignal;
 		bool m_genTrainData;
