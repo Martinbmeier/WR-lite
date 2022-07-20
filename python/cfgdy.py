@@ -778,9 +778,9 @@ for idmod in my_id_modules:
       setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 #
 import RecoJets.Configuration.RecoPFJets_cff
-process.fixedGridRhoAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoAll.clone()
+# process.fixedGridRhoAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoAll.clone()
 
-recoPFJetsTask   =cms.Task(fixedGridRhoAll)
+# recoPFJetsTask   =cms.Task(fixedGridRhoAll)
     
 process.selectedElectrons = cms.EDFilter("PATElectronSelector",
     src = cms.InputTag("slimmedElectrons"),
