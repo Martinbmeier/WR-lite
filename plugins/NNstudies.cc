@@ -140,7 +140,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		
 		std::string m_dataSaveFile;
 		edm::EDGetToken m_JetCorrector;
-		edm::EDGetToken m_rhoToken;
+		edm::EDGetToken rhoToken;
 
 		// bool m_isSignal;
 		bool m_genTrainData;
@@ -267,7 +267,7 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     edm::Handle<edm::View<double>> rhoToken;
     iEvent.getByLabel(InputTag("fixedGridRhoAll"), rhoToken);
-    rho = *(rhoToken.product());
+    double rho = *(rhoToken.product());
 	
   
 	float eventCount = eventInfo->weight()/fabs(eventInfo->weight());
