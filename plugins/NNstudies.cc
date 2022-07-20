@@ -139,7 +139,7 @@ class NNstudies : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 		edm::EDGetToken m_trigResultsToken;
 		
 		std::string m_dataSaveFile;
-		edm::EDGetToken m_JetCorrector;
+		// edm::EDGetToken m_JetCorrector;
 		edm::EDGetToken rhoToken;
 
 		// bool m_isSignal;
@@ -184,7 +184,7 @@ NNstudies::NNstudies(const edm::ParameterSet& iConfig)
 	m_offlineVerticesToken (consumes<std::vector<reco::Vertex>> (iConfig.getParameter<edm::InputTag>("vertices"))),
 	m_dataSaveFile (iConfig.getUntrackedParameter<std::string>("trainFile")),
 	//m_isSignal (iConfig.getUntrackedParameter<bool>("isSignal")),
-	m_JetCorrector (consumes<reco::JetCorrector> (iConfig.getParameter<edm::InputTag>("jetCorrector"))),
+	// m_JetCorrector (consumes<reco::JetCorrector> (iConfig.getParameter<edm::InputTag>("jetCorrector"))),
 	// rhoToken (consumes<edm::View<double>> (iConfig.getParameter<edm::InputTag>("rho"))),
 	rhoToken (consumes<double> (iConfig.getParameter<edm::InputTag>("rho"))),
 
@@ -255,12 +255,12 @@ NNstudies::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	iEvent.getByToken(m_recoMETToken, recoMET);
 
 	edm::Handle<edm::ValueMap<float> > mvaValues;
- //  edm::Handle<edm::ValueMap<int> > mvaCategories;
+ 	// edm::Handle<edm::ValueMap<int> > mvaCategories;
     iEvent.getByToken(mvaValuesMapToken_,mvaValues);
-  // iEvent.getByToken(mvaCategoriesMapToken_,mvaCategories);
+  	// iEvent.getByToken(mvaCategoriesMapToken_,mvaCategories);
 
-	edm::Handle<reco::JetCorrector> corrector;
-	iEvent.getByToken(m_JetCorrector, corrector);
+	// edm::Handle<reco::JetCorrector> corrector;
+	// iEvent.getByToken(m_JetCorrector, corrector);
 
     // edm::Handle<double> rho_;
     //iEvent.getByToken(m_rhoToken,rho_);
@@ -504,10 +504,11 @@ for (std::vector<reco::GenParticle>::const_iterator iParticle = genParticles->be
 				}
 
 
-				double JetElectronp4 = corrector->correction(electronJet->p4())*((electronJet->p4() - iElectron->p4()).E());
-				math::XYZTLorentzVector correctedJetElectronp4 = (electronJet->p4() - iElectron->p4()).SetE(JetElectronp4);
+				// double JetElectronp4 = corrector->correction(electronJet->p4())*((electronJet->p4() - iElectron->p4()).E());
+				// math::XYZTLorentzVector correctedJetElectronp4 = (electronJet->p4() - iElectron->p4()).SetE(JetElectronp4);
 
-				double p_ratio = iElectron->pt() / (iElectron->p4() + correctedJetElectronp4).pt();
+				// double p_ratio = iElectron->pt() / (iElectron->p4() + correctedJetElectronp4).pt();
+				double p_ratio = iElectron->pt() / electronJet->pt();
 
 				double p_rel = (electronJet->p4() - iElectron->p4()).Dot(iElectron->p4()) / (electronJet->p4() - iElectron->p4()).mag2();
 
