@@ -779,7 +779,8 @@ for idmod in my_id_modules:
 #
 import RecoJets.Configuration.RecoPFJets_cff
 # process.fixedGridRhoAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoAll.clone()
-from RecoJets.JetProducers.fixedGridRhoProducerFastjet_cfi import fixedGridRhoFastjetAll
+process.fixedGridRhoFastjetAll = RecoJets.Configuration.RecoPFJets_cff.fixedGridRhoFastjetAll.clone()
+# from RecoJets.JetProducers.fixedGridRhoProducerFastjet_cfi import fixedGridRhoFastjetAll
 
 # from RecoJets.JetProducers.fixedGridRhoProducer_cfi import fixedGridRhoAll
 
