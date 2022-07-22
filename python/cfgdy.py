@@ -688,8 +688,8 @@ process.printTree = cms.EDAnalyzer("ParticleTreeDrawer",
                                    src = cms.InputTag("prunedGenParticles"),    
                                    printP4 = cms.untracked.bool(False),
                                    printPtEtaPhi = cms.untracked.bool(True),
-                                   printVertex = cms.untracked.bool(False),
-                                   printStatus = cms.untracked.bool(False),
+                                   printVertex = cms.untracked.bool(True),
+                                   printStatus = cms.untracked.bool(True),
                                    printIndex = cms.untracked.bool(False),
                                    #status = cms.untracked.vint32( 3 )
                                    )
@@ -831,7 +831,7 @@ elif options.era == '2018':
 
 
 process.totalPath = cms.Path(process.selectedElectrons  * process.egmGsfElectronIDSequence * process.fixedGridRhoFastjetAll #* process.ak4PFCHSL1FastL2L3CorrectorChain *  process.ak4PFCHSL1FastL2L3ResidualCorrectorChain * process.fixedGridRhoFastjetAll #* process.heepSequence 
-                           * process.muonSelectionSeq * process.analysis ) #* process.printTree)
+                           * process.muonSelectionSeq * process.analysis  * process.printTree)
 # process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
 #                            * process.analysis)# * process.printTree)
 #process.totalPath = cms.Path(process.selectedElectrons * process.heepSequence
