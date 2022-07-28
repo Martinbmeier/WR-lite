@@ -740,7 +740,7 @@ int NNstudies::binNumber(const reco::GenParticle* muon){
 
 void NNstudies::countTable( int count){
 	std::ofstream myCountfile;
-	myCountfile.open("count_full_1.csv",std::ios_base::app);
+	myCountfile.open("count_full_2.csv",std::ios_base::app);
 	myCountfile << count << "\n ";
 	myCountfile.close();
 }
@@ -769,7 +769,7 @@ math::XYZTLorentzVector metP4 = Met.p4();
 
 
 std::ofstream myfile;
-myfile.open("neuralNetDataTT_full_1.csv",std::ios_base::app);
+myfile.open("neuralNetDataTT_full_2.csv",std::ios_base::app);
 myfile << muonP4.Px() << ", "
 	   << muonP4.Py() << ", "
        << muonP4.Pz() << ", "
